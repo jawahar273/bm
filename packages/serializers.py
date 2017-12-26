@@ -8,7 +8,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('name', 'kg', 'quanity', 'items_list')
+        fields = ('name', 'amount', 'items_list')
 
 
 class ItemsListSerializer(serializers.ModelSerializer):

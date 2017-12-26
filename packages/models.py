@@ -22,20 +22,15 @@ class ItemsList(models.Model):
     # items = models.ForeignKey(Item, blank=True, null=True)
 
     def __str__(self):
-        return 'Bill-{}: {}, {}'.format(self.id, self.name, self.date)
+        return 'Group-{}: {}, {}'.format(self.id, self.name, self.date)
 
 
 class Item(models.Model):
 
     items_list = models.ForeignKey(ItemsList, related_name='items')
     name = models.CharField(max_length=20)
-    kg = models.FloatField(default=0,
-                           validators=[MinValueValidator(0),
-                                       MaxValueValidator(100),
-                                       onlyFiveRangeValidator]
-                           )
-    quanity = models.PositiveSmallIntegerField(default=1)
+
+    amount = models.DecimalField(max_digits=6, decimal_places=2, default=1)
 
     def __str__(self):
-        return '{}, {} x {}'.format(self.name, self.quanity,
-                                    self.kg)
+        return '{}, {} x {}'.format(self.name, self.amount)
