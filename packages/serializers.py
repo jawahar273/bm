@@ -1,20 +1,28 @@
 
 from rest_framework import serializers
+from drf_writable_nested import WritableNestedModelSerializer
 
 from packages.models import ItemsList, Item
+
+from packages.serializers_childs.filter_nested_items import FilterNestedItems
 
 
 class ItemSerializer(serializers.ModelSerializer):
 
+    amount = serializers.DecimalField(max_digits=6, decimal_places=2)
+
     class Meta:
+        # list_serializer_class = FilterNestedItems
         model = Item
-        fields = ('name', 'amount', 'items_list')
+        fields = ('amount', 'id')
 
 
-class ItemsListSerializer(serializers.ModelSerializer):
+class ItemsListSerializer(WritableNestedModelSerializer):
 
     items = ItemSerializer(many=True, required=False)
 
+
     class Meta:
         model = ItemsList
-        fields = ('name', 'place', 'group', 'date', 'items')
+        fields = ('id', 'name', 'place', 'group', 'date', 'items')
+        

@@ -28,9 +28,8 @@ class ItemsList(models.Model):
 class Item(models.Model):
 
     items_list = models.ForeignKey(ItemsList, related_name='items')
-    name = models.CharField(max_length=20)
 
     amount = models.DecimalField(max_digits=6, decimal_places=2, default=1)
 
     def __str__(self):
-        return '{}, {} x {}'.format(self.name, self.amount)
+        return '{}'.format(self.amount)
