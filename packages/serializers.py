@@ -14,13 +14,15 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         # list_serializer_class = FilterNestedItems
         model = Item
-        fields = ('amount', 'id')
+        fields = ('amount', 'name')
 
 
 class ItemsListSerializer(WritableNestedModelSerializer):
 
     items = ItemSerializer(many=True, required=False)
 
+    def NewObject(self):
+        return "df"
 
     class Meta:
         model = ItemsList

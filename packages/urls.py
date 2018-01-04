@@ -16,5 +16,3 @@ urlpatterns = [
  ]
 
 urlpatterns += router.urls
-# from IPython import embed
-# embed()

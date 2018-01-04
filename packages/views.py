@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 # from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
 from rest_framework import viewsets
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework.decorators import detail_route, list_route
 
 from packages.models import Item, ItemsList
 from packages.serializers import ItemSerializer, ItemsListSerializer
@@ -15,6 +15,7 @@ from packages.serializers import ItemSerializer, ItemsListSerializer
 
 from IPython import embed
 
+
 # Create your views here.
 class ItemsListCreateView(viewsets.ModelViewSet):
 
@@ -22,9 +23,17 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     queryset = ItemsList.objects.order_by('-date')
 
     # def list(request, data, **kwargs):
-    #     print(request, data)
-    #     embed()
-    #     return Response(request)
+    #     '''
+    #        @deprated
+    #        get the list of the items
+    #     '''
+    #     response = {'status_code': 403, 'detail': 'method not allowed'}
+    #     # embed()
+    #     return Response(response, headers=headers, status=403)
+
+    @list_route()
+    def run(self, request):
+        return Response({'jfkd': '394'})
 
 
 
