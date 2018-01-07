@@ -119,8 +119,9 @@ MANAGERS = ADMINS
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # Uses django-environ to accept uri format
 # See: https://django-environ.readthedocs.io/en/latest/#supported-types
+
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='mysql://jawahar:jon2speed@localhost:3306/bm'),
+    'default': env.db('DATABASE_URL', default='postgres://jawahar:jon2speed@localhost/bm'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 

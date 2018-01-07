@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 
 from packages.models import Item, ItemsList
-from packages.serializers import ItemSerializer, ItemsListSerializer
+from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListSerializerOnlyForListFun
 
 # from rest_framework.views import APIView
 
@@ -19,7 +19,6 @@ from IPython import embed
 # Create your views here.
 class ItemsListCreateView(viewsets.ModelViewSet):
 
-    serializer_class = ItemsListSerializer
     queryset = ItemsList.objects.order_by('-date')
 
     # def list(request, data, **kwargs):
@@ -31,9 +30,17 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     #     # embed()
     #     return Response(response, headers=headers, status=403)
 
-    @list_route()
-    def run(self, request):
-        return Response({'jfkd': '394'})
+    def get_serializer_class(self, *args, **kwargs):
+        if self.action == 'list':
+            # embed()
+            serializer_class = ItemsListSerializerOnlyForListFun
+        else:
+            serializer_class = ItemsListSerializer
+        return serializer_class
+
+    # def update_amount(self):
+    #     if ('post', 'put', 'patch') in self.action.lower():
+    #         ItemsList
 
 
 
