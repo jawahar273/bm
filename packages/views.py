@@ -19,7 +19,7 @@ from IPython import embed
 # Create your views here.
 class ItemsListCreateView(viewsets.ModelViewSet):
 
-    queryset = ItemsList.objects.order_by('-date')
+    queryset = ItemsList.objects.all()
 
     # def list(request, data, **kwargs):
     #     '''

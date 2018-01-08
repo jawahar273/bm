@@ -23,6 +23,10 @@ class ItemsList(models.Model):
     def __str__(self):
         return 'Group ID-{}: {}, {}'.format(self.id, self.name, self.date)
 
+    class Meta:
+        ordering = ['-id']
+        get_latest_by = ['-date']
+
 
 
 class Item(models.Model):
