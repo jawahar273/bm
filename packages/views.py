@@ -31,9 +31,10 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     #     return Response(response, headers=headers, status=403)
 
     def get_serializer_class(self, *args, **kwargs):
+        serializer_class = None
         if self.action == 'list':
-            # embed()
             serializer_class = ItemsListSerializerOnlyForListFun
+            # embed()
         else:
             serializer_class = ItemsListSerializer
         return serializer_class
