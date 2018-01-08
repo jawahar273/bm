@@ -27,6 +27,7 @@ class ItemsListSerializer(WritableNestedModelSerializer):
     def get_total_amount(self, object):
 
         # if (object.items.total_amount == 0):
+        # embed()
 
         def flat(e): 
             return (i[0] for i in e)
@@ -41,12 +42,10 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
-    # total_amount = serializers.SerializerMethodField()
+    entry_link_item = serializers.SerializerMethodField('geli')
 
-    # def get_total_amount(self, object):
-    #     e = ItemsList.objects.annotate(total_amount=Sum('items__amount'))
-    #     embed()
-    #     return e
+    def geli(self, object):
+        return 'entry/{}'.format(object.id)
     class Meta:
         model = ItemsList
-        fields =  ('id', 'name', 'place', 'group', 'date', 'total_amount')
+        fields =  ('id', 'name', 'place', 'group', 'date', 'entry_link_item', 'total_amount')
