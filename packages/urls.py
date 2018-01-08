@@ -7,8 +7,8 @@ from packages.views import (ItemsListCreateView,
 
 router = routers.DefaultRouter()
 router.register('itemslist', ItemsListCreateView, base_name='itemslist')
-router.register('item',
-                ItemCreateView)
+# router.register('item',
+#                 ItemCreateView)
 
 schema_view = get_swagger_view(title='Deliver API')
 urlpatterns = [
@@ -16,5 +16,3 @@ urlpatterns = [
  ]
 
 urlpatterns += router.urls
-# from IPython import embed
-# embed()

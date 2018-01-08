@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'rest_auth',  # for django-rest-auth
     'rest_auth.registration',  # for django-rest-auth
     'rest_framework_swagger',
+    'corsheaders',
 ]
 
 # Apps specific for this project go here.
@@ -73,6 +74,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,8 +119,9 @@ MANAGERS = ADMINS
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # Uses django-environ to accept uri format
 # See: https://django-environ.readthedocs.io/en/latest/#supported-types
+
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='mysql://root:12345@localhost:3306/bm'),
+    'default': env.db('DATABASE_URL', default='postgres://jawahar:jon2speed@localhost/bm'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
@@ -293,5 +296,17 @@ ADMIN_URL = r'^admin/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-    )
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'EXCEPTION_HANDLER': 'packages.serializers_childs.package_rest_exceptionHandling.custom_exception_handler',
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+  '127.0.0.1',
+  # 'localhost:4300',
+)
+SHOW_REQUEST_HEADERS = True
