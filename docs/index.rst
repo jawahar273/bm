@@ -10,7 +10,8 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-
+   
+   readme
    install
    deploy
    docker_ec2
