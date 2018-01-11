@@ -19,3 +19,18 @@ Issues with the above approach:
 4. Undocumented: No mention in the documentation, or it's too hard for me to find
 */
 $('.form-group').removeClass('row');
+    	console.log('fdjsaklfjdlkasfj');
+        $(document).ready(function(e) {
+          // e.defaultPrevent(); 
+        var url_elements = window.location.pathname.split('/');
+        if (url_elements.length == 5){
+            var uid = url_elements[url_elements.length - 3];
+            if (uid !== undefined){
+                $('input[name=uid]').val(uid);
+            }
+            var token = url_elements[url_elements.length - 2];
+            if (token !== undefined){
+                $('input[name=token]').val(token);
+            }
+        }
+        });

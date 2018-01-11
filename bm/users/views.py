@@ -2,9 +2,12 @@ from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+import requests as post_man
+from django.shortcuts import render
+from  allauth.account import views as allauth_views
 
 from .models import User
-
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -43,3 +46,21 @@ class UserListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
+def redirect_after_email_confirm(request):
+    return render(request, 'account/after_email_validation_confirm.html')
+
+def change_password(request, uidb64, token):
+    return render(request, 'account/password_rest_confirm_form.html')
+
+class LoginAfterPasswordChangeView(allauth_views.PasswordChangeView):
+    template_name = 'account/password_rest_done.html'
+    @property
+    def success_url(self):
+        return reverse_lazy('change_password_done')
+
+login_after_password_change = LoginAfterPasswordChangeView.as_view()
+
+def change_password_done(requests):
+    return render(requests, 'account/password_rest_done.html')
