@@ -13,9 +13,9 @@ stages:
 .script: &build_script
   - python3 --version
   - ls
-  - python3 manage.py runserver
 
 job1:
   stage: build
   script: *build_script
-  only: master
+  only:
+    - master
