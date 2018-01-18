@@ -1,0 +1,21 @@
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install python3.6 python3-pip 
+  - pip3 install virtualenv
+
+
+stages:
+  - build
+  - test
+  - deploy
+
+
+.script: &build_script
+  - python3 --version
+  - ls
+  - python3 manage.py runserver
+
+job1:
+  stage: build
+  script: *build_script
+  only: master

@@ -72,6 +72,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -296,6 +297,8 @@ ADMIN_URL = r'^admin/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
+        # permission related issue 
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -310,16 +313,43 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'packages.serializers_childs.package_rest_exceptionHandling.custom_exception_handler',
 }
 
+# permission related issue 
+# from django.conf import settings
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+    # 'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),
+    # 'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),
+    'DOC_EXPANSION': None,
+    'APIS_SORTER': None,
+    'OPERATIONS_SORTER': None,
+    'JSON_EDITOR': False,
+    'SHOW_REQUEST_HEADERS': False,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get',
+        'post',
+        'put',
+        'delete',
+        'patch'
+    ],
+'VALIDATOR_URL': '',
+}
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
   '127.0.0.1',
-  # 'localhost:4300',
+  'localhost:4300',
 )
 SHOW_REQUEST_HEADERS = True
 
 # allauth setting keys
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION ="mandatory"
 ACCOUNT_EMAIL_MAX_LENGTH = 40
 TEMPLATE_EXTENSION = 'html'

@@ -3,11 +3,19 @@ from django.db.models import Sum
 from rest_framework import serializers
 from drf_writable_nested import WritableNestedModelSerializer
 
-from packages.models import ItemsList, Item
+from packages.models import ItemsList, Item, MonthBudgetAmount
 
 from packages.serializers_childs.filter_nested_items import FilterNestedItems
 
-from IPython import embed
+# from IPython import embed
+
+class MonthBudgetAmountSerializer(serializers.ModelSerializer):
+    class Meta:
+        # list_serializer_class = FilterNestedItems
+        model = MonthBudgetAmount
+        fields = ('budget_amount', 'month_year')
+        def get_month(self, obj):
+             return '{0}-{1}'.format(obj.month_year.year, obj.month_year.month)
 
 class ItemSerializer(serializers.ModelSerializer):
 
@@ -42,10 +50,10 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
-    entry_link_item = serializers.SerializerMethodField('geli')
+    # entry_link_item = serializers.SerializerMethodField('geli')
 
-    def geli(self, object):
-        return 'entry/{}'.format(object.id)
+    # def geli(self, object):
+    #     return 'entry/{}'.format(object.id)
     class Meta:
         model = ItemsList
-        fields =  ('id', 'name', 'place', 'group', 'date', 'entry_link_item', 'total_amount')
+        fields =  ('id', 'name', 'place', 'group', 'date', 'total_amount')
