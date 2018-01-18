@@ -1,8 +1,7 @@
 before_script:
-  - apt-get install software-properties-common
-  - sudo add-apt-repository ppa:deadsnakes/ppa
+  - lsb_release -a
   - apt-get update
-  - apt-get install python3.6 python3-pip 
+  - apt-get install python3-pip 
   - pip3 install virtualenv
 
 
