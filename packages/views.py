@@ -20,11 +20,13 @@ from IPython import embed
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
     lookup_field = 'month_year'
-    queryset =  MonthBudgetAmount.objects.all()#.filter(month_year__month=today.month, month_year__year=today.year)
+    # queryset =  MonthBudgetAmount.objects.all()#.filter(month_year__month=today.month, month_year__year=today.year)
     # today = datetime.date.today()
     serializer_class = MonthBudgetAmountSerializer
     filter_fields = ('budget_amount',)
     # filter_backends = (DjangoFilterBackend)
+    def get_queryset(self):
+        return MonthBudgetAmount.objects.filter(user_id=self.request.user.id)
 
     def retrieve(self, request, month_year=None):
         # embed()
@@ -34,7 +36,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
             return Response({'detail': 'Wrong date fomate'}, status=status.HTTP_400_BAD_REQUEST)
         month_year = month_year.rsplit('-', 1)[0]
         month_year = datetime.datetime.strptime(month_year, "%Y-%m").date()
-        queryset = MonthBudgetAmount.objects.filter(month_year = month_year)
+        queryset = MonthBudgetAmount.objects.filter(month_year = month_year, user_id=request.user.id)
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
         return Response(serializers.data)
@@ -65,7 +67,7 @@ def get_range_mba(request, start, end=None):
     # whole date fomate
     checking_start = re.search(regex_date, start)
     if checking_start and end and re.search(regex_date, end) : # check based on regex expression
-       response = MonthBudgetAmount.objects.filter(date__range=(start, end))
+       response = MonthBudgetAmount.objects.filter(date__range=(start, end), user_id=request.user.id)
        serializers = MonthBudgetAmountSerializer(data=response, many=True)
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
@@ -86,30 +88,9 @@ def get_range_mba(request, start, end=None):
 
 class ItemsListCreateView(viewsets.ModelViewSet):
 
-    queryset = ItemsList.objects.all()
-    # cm = current month; smy = start month & year
-    # emy = end month & year
-    # filter_fields = ('date', )
-    # @list_route()
-    # def get_months(self, request, _date=None):
-    #     '''
-    #        get the list of the items
-    #     '''
-    #     # _date = self.request.query_params.get('date')
-    #     queryset = None
-    #     if _date :
-    #         print(_date)
-    #         # embed()
-    #         if _date.find('~') >= 0: # range btwn 2 diffrent dates
-    #            date1, date2 = _date.split('~')
-    #            queryset = ItemsList.objects.filter(date__range=(date1, date2))
-    #         elif (_date):
-    #             _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-    #             queryset = ItemsList.objects.filter(date = _date)
-    #     return queryset
-
-
-        
+    # queryset = ItemsList.objects.all()
+    def get_queryset(self):
+        return ItemsList.objects.filter(user_id=self.request.user.id)
 
     def get_serializer_class(self, *args, **kwargs):
         serializer_class = None
@@ -133,7 +114,7 @@ class ItemCreateView(viewsets.ModelViewSet):
 
 @api_view(['get'])
 def get_months(request, start, end=None):
-    # embed()
+    embed()
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
@@ -146,7 +127,7 @@ def get_months(request, start, end=None):
     # whole date fomate
     checking_start = re.search(regex_date, start)
     if checking_start and end and re.search(regex_date, end) : # check based on regex expression
-       response = ItemsList.objects.filter(date__range=(start, end))
+       response = ItemsList.objects.filter(date__range=(start, end), user_id=request.user.id)
        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
@@ -154,7 +135,7 @@ def get_months(request, start, end=None):
         _date = start.rsplit('-', 1)[0]
         _date = datetime.datetime.strptime(_date, '%Y-%m').date()
         # embed()
-        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, )
+        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user_id=request.user.id)
         serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
         serializers.is_valid()
         return Response(serializers.data, status=status_code)

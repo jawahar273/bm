@@ -10,6 +10,7 @@ from packages.serializers_childs.filter_nested_items import FilterNestedItems
 # from IPython import embed
 
 class MonthBudgetAmountSerializer(serializers.ModelSerializer):
+
     class Meta:
         # list_serializer_class = FilterNestedItems
         model = MonthBudgetAmount
@@ -47,6 +48,7 @@ class ItemsListSerializer(WritableNestedModelSerializer):
     class Meta:
         model = ItemsList
         fields = ('id', 'name', 'place', 'group', 'date', 'items', 'total_amount')
+        # fields = ('__all__')
         
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
