@@ -13,9 +13,26 @@ stages:
 .script: &build_script
   - python3 --version
   - ls
+  - virtualenv -p /usr/bin/python3 test-dev
+  - source test-dev/bin/activate
+  - pip3 install -r requirements/local.txt
+  - hostname
 
-job1:
+
+dev:
   stage: build
   script: *build_script
+  only:
+    - master
+
+.script: &build_script2
+  - virtualenv -p /usr/bin/python3 test-prod
+  - source test-prod/bin/activate
+  - pip3 install -r requirements/production.txt
+  - ifconfig
+
+prod:
+  stage: build
+  script: *build_script2
   only:
     - master
