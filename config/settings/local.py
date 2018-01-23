@@ -44,7 +44,7 @@ CACHES = {
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
 INSTALLED_APPS += ['debug_toolbar', 'fixmydjango']
 
-INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', ]
+INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', 'jawahar.pythonanywhere.com' ]
 
 DEBUG_TOOLBAR_CONFIG = {
     'DISABLE_PANELS': [

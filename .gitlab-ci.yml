@@ -17,6 +17,8 @@ stages:
   - source test-dev/bin/activate
   - pip3 install -r requirements/local.txt
   - hostname
+  # - python3 manager.py runserver_plus
+  
 
 
 dev:
