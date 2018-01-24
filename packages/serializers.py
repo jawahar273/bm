@@ -14,7 +14,7 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
     class Meta:
         # list_serializer_class = FilterNestedItems
         model = MonthBudgetAmount
-        fields = ('budget_amount', 'month_year', 'user_id')
+        fields = ('budget_amount', 'month_year','user_id', )
         def get_month(self, obj):
             embed()
             return '{0}-{1}'.format(obj.month_year.year, obj.month_year.month)
@@ -27,7 +27,6 @@ class ItemSerializer(serializers.ModelSerializer):
         # list_serializer_class = FilterNestedItems
         model = Item
         fields = ('amount', 'name')
-
 
 class ItemsListSerializer(WritableNestedModelSerializer):
 
@@ -48,8 +47,12 @@ class ItemsListSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = ItemsList
-        fields = ('id', 'name', 'place', 'group', 'date', 'items', 'total_amount', 'user_id')
+        fields = ('id', 'name', 'place', 'group', 'date', 'items', 'total_amount', 'user_id', )
         # fields = ('__all__')
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret.pop('user_id')
+        return ret
         
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
