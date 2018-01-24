@@ -20,6 +20,7 @@ class MonthBudgetAmount(models.Model):
     month_year = models.DateField(default=start_date)
     user_id = models.ForeignKey(USERMODEL, blank=True, related_name='mba_USERMODEL',
               on_delete=models.CASCADE)
+
     def __str__(self):
         return 'Time line: {}- Budget Amount {}'.format(self.month_year, self.budget_amount)        
 

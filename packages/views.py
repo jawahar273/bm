@@ -4,6 +4,8 @@
 import re
 import datetime
 
+from django.http import Http404
+
 from rest_framework.response import Response
 
 # from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
@@ -11,12 +13,14 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route, api_view
 from django_filters.rest_framework import DjangoFilterBackend
+
 from packages.models import Item, ItemsList, MonthBudgetAmount
 from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListSerializerOnlyForListFun, MonthBudgetAmountSerializer
 
 # from rest_framework.views import APIView
 
-from IPython import embed
+from IPython import embed as pry
+
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
     lookup_field = 'month_year'
@@ -28,17 +32,61 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
     def get_queryset(self):
         return MonthBudgetAmount.objects.filter(user_id=self.request.user.id)
 
-    def retrieve(self, request, month_year=None):
+    def get_valid_date_or_error_response(self, month_year=None):
+
         regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
 
         if not re.search(regex_date, month_year):
             return Response({'detail': 'Wrong date fomate'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def save_or_error_response(self, save_object):
+        if not save_object.is_valid():
+            return Response({'detail': 'wrong data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not save_object.save():
+            return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(save_object.data)
+
+    def return_only_monthYear(self, month_year=None):
         month_year = month_year.rsplit('-', 1)[0]
-        month_year = datetime.datetime.strptime(month_year, "%Y-%m").date()
+        return datetime.datetime.strptime(month_year, "%Y-%m").date()
+    
+    def create_or_update_entry(self, custom_request_data):
+        serializers = MonthBudgetAmountSerializer(data=custom_request_data)
+        return self.save_or_error_response(serializers)
+
+    def retrieve(self, request, month_year=None):
+        self.get_valid_date_or_error_response(month_year)
+        month_year = self.return_only_monthYear(month_year)
         queryset = MonthBudgetAmount.objects.filter(month_year = month_year, user_id=request.user.id)
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
         return Response(serializers.data)
+
+    def create(self, request):
+        # self.get_valid_date_or_error_response(month_year)
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+    def update(self, request, month_year=None):
+        self.get_valid_date_or_error_response(month_year)
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+    def partial_update(self, request, month_year=None):
+        self.get_valid_date_or_error_response(month_year)
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+
+    # def destroy(self, request, month_year=None):
+    #     get_valid_date_or_error_response(month_year)
+
+    #     return Response(serializers.data)
+
 
     # def get_queryset(self):
     #     queryset = MonthBudgetAmount.objects.all()
@@ -70,12 +118,6 @@ def get_range_mba(request, start, end=None):
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
     elif checking_start and not end:
-        # _date = start.rsplit('-', 1)[0]
-        # _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        # # embed()
-        # response = MonthBudgetAmount.objects.filter(date__month = _date.month, date__year = _date.year, )
-        # serializers = MonthBudgetAmountSerializer(data=response, many=True)
-        # serializers.is_valid()
         response = { 'detail': 'need ranges of date'}
         status_code = status.HTTP_400_BAD_REQUEST 
         return Response(serializers.data, status=status_code)
@@ -98,10 +140,43 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             serializer_class = ItemsListSerializer
         return serializer_class
 
-    # def update_amount(self):
-    #     if ('post', 'put', 'patch') in self.action.lower():
-    #         ItemsList
+    def save_or_error_response(self, save_object):
+        if not save_object.is_valid():
+            return Response({'detail': 'wrong data given'}, status=status.HTTP_400_BAD_REQUEST)
 
+        if not save_object.save():
+            return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(save_object.data)
+
+    def create_or_update_entry(self, custom_request_data):
+        serializers = ItemsListSerializer(data=custom_request_data)
+        return self.save_or_error_response(serializers)
+
+    def create(self, request):
+        # self.get_valid_date_or_error_response(month_year)
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+    def update(self, request, pk=None):
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+    def partial_update(self, request, pk=None):
+        request.data.update({'user_id': request.user.id})
+
+        return self.create_or_update_entry(request.data)
+
+    def destroy(self, request, pk=None):
+        # request.data.update({'user_id': request.user.id})
+        try:
+            to_detete = self.get_object()
+            self.perform_destroy(to_detete)
+
+        except Http404 as e:
+            Response({'detail': 'content not found', status=status.HTTP_404_NOT_FOUND})
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ItemCreateView(viewsets.ModelViewSet):
