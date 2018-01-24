@@ -17,11 +17,14 @@ class MonthBudgetAmount(models.Model):
     start_date = datetime.date(year=datetime.date.today().year, month=datetime.date.today().month, day=1) 
     
     budget_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    month_year = models.DateField(default=start_date, unique=True)
+    month_year = models.DateField(default=start_date)
     user_id = models.ForeignKey(USERMODEL, blank=True, related_name='mba_USERMODEL',
               on_delete=models.CASCADE)
     def __str__(self):
         return 'Time line: {}- Budget Amount {}'.format(self.month_year, self.budget_amount)        
+
+    class Meta:
+        unique_together = ('month_year', 'user_id')
 
 
 class ItemsList(models.Model):

@@ -29,7 +29,6 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return MonthBudgetAmount.objects.filter(user_id=self.request.user.id)
 
     def retrieve(self, request, month_year=None):
-        # embed()
         regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
 
         if not re.search(regex_date, month_year):
@@ -42,7 +41,6 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return Response(serializers.data)
 
     # def get_queryset(self):
-    #     embed()
     #     queryset = MonthBudgetAmount.objects.all()
     #     # airline = self.request.query_params.get('airline')
     #     _budget_amount = self.request.query_params.get('budget_amount')
@@ -96,7 +94,6 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         serializer_class = None
         if self.action == 'list':
             serializer_class = ItemsListSerializerOnlyForListFun
-            # embed()
         else:
             serializer_class = ItemsListSerializer
         return serializer_class
@@ -114,7 +111,6 @@ class ItemCreateView(viewsets.ModelViewSet):
 
 @api_view(['get'])
 def get_months(request, start, end=None):
-    embed()
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
@@ -134,7 +130,6 @@ def get_months(request, start, end=None):
     elif start and not end:
         _date = start.rsplit('-', 1)[0]
         _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        # embed()
         response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user_id=request.user.id)
         serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
         serializers.is_valid()
