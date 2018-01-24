@@ -175,7 +175,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             self.perform_destroy(to_detete)
 
         except Http404 as e:
-            Response({'detail': 'content not found', status=status.HTTP_404_NOT_FOUND})
+            Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
