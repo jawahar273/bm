@@ -179,12 +179,6 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-    # def update_amount(self):
-    #     if ('post', 'put', 'patch') in self.action.lower():
-    #         ItemsList
-
-
-
 class ItemCreateView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
