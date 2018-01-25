@@ -316,5 +316,5 @@ jp-1/
 migrations/
 testProd/
 testPro/
-
+customize_production_settings.py
 env.sh

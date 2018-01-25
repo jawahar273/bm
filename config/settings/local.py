@@ -42,7 +42,7 @@ CACHES = {
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
-INSTALLED_APPS += ['debug_toolbar', ]
+INSTALLED_APPS += ['debug_toolbar', 'rest_framework_swagger',]
 
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', 'jawahar.pythonanywhere.com' ]
 
@@ -75,3 +75,40 @@ if DEBUG:
     EMAIL_HOST_PASSWORD = ''
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
+
+# REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] =  (
+#         'rest_framework.authentication.BasicAuthentication',
+#         # permission related issue 
+#         'rest_framework.authentication.TokenAuthentication',
+#     )
+# permission related issue 
+# from django.conf import settings
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+    # 'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),
+    # 'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),
+    'DOC_EXPANSION': None,
+    'APIS_SORTER': None,
+    'OPERATIONS_SORTER': None,
+    'JSON_EDITOR': False,
+    'SHOW_REQUEST_HEADERS': False,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get',
+        'post',
+        'put',
+        'delete',
+        'patch'
+    ],
+'VALIDATOR_URL': '',
+}
+
+CORS_ORIGIN_WHITELIST = (
+  '127.0.0.1',
+  'localhost:4300',
+)
