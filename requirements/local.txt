@@ -20,4 +20,5 @@ pytest-sugar==0.9.
 
 psycopg2==2.7.3.2
 
-fixmydjango
+django-rest-swagger
+
