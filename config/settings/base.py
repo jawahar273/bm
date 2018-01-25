@@ -297,7 +297,7 @@ ADMIN_URL = r'^admin/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-        # permission related issue 
+        # permission related issue
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -313,7 +313,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'packages.serializers_childs.package_rest_exceptionHandling.custom_exception_handler',
 }
 
-# permission related issue 
+# permission related issue
 # from django.conf import settings
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -355,5 +355,5 @@ ACCOUNT_EMAIL_MAX_LENGTH = 40
 TEMPLATE_EXTENSION = 'html'
 CONFIRM_EMAIL_ON_GET = False
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "verfied-success"
-OLD_PASSWORD_FIELD_ENABLED = True 
+OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
