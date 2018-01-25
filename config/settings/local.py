@@ -76,13 +76,11 @@ if DEBUG:
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        # permission related issue 
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-}
+# REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] =  (
+#         'rest_framework.authentication.BasicAuthentication',
+#         # permission related issue 
+#         'rest_framework.authentication.TokenAuthentication',
+#     )
 # permission related issue 
 # from django.conf import settings
 SWAGGER_SETTINGS = {
