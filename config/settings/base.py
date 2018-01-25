@@ -314,10 +314,7 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-  '127.0.0.1',
-  'localhost:4300',
-)
+
 SHOW_REQUEST_HEADERS = True
 
 # allauth setting keys
