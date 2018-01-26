@@ -227,7 +227,5 @@ ADMIN_URL = env('DJANGO_ADMIN_URL')
 
 from .customize_production_settings import *
 
-CORS_ORIGIN_WHITELIST = (
-  ALLOWED_HOSTS,
-)
+CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
 
