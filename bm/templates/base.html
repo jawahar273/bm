@@ -1,17 +1,31 @@
-{% load static i18n %}<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}bm{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en-US">
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <![endif]-->
+<head>
+
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	
+	<!-- SEO -->
+	<title>BM Server Demo</title>
+	<meta property="title" content="BM - Manage your spending" />
+	<meta property="description" content="We always forget the spending to keep track of the spending we need help from somthing that always helps us. This page is for BM server demo" />
+	<meta property="url" content="https://github.com/jawahar273/bm" />
+	<meta name="robots" content="index, follow" />
+	<meta name="referrer" content="always" />
+
+	<!-- Social & Open Graph -->
+	<meta property="og:title" content="BM - Manage your spending" />
+	<meta property="og:description" content="We always forget the spending to keep track of the spending we need help from somthing that always helps us." />
+	<meta property="og:url" content="https://github.com/jawahar273/bm" />
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href=" {% static 'images/favicon.png' %}" sizes="32x32">
+
+	<!-- Styles -->
+
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
 
     {% block css %}
     <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
@@ -21,67 +35,87 @@
     
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
+    <link href="{% static 'css/split.min.css' %}" rel="stylesheet"  media='screen'>
     
     {% endblock %}
 
-  </head>
+</head>
 
-  <body>
-   
-    <div class="m-b-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">bm</a>
+<body id="fullsingle" class="page-template-page-fullsingle-split">
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
-            </li>
-            {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
 
-    </div>
+<div class="fs-split">
 
-    <div class="container">
+	<!-- Image Side -->
+	<div class="split-image">
 
+	</div>
+
+	<!-- Content Side -->
+	<div class="split-content">
       {% if messages %}
           {% for message in messages %}
               <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
           {% endfor %}
       {% endif %}
 
+		<div class="split-content-vertically-center">
+		
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
+
+
+			<div class="split-intro">
+				
+				<h1>Jawahar</h1>
+
+				<span class="tagline">BM server demo</span>
+
+			</div>
+
+			<div class="split-bio">
+				
+				<p>
+					This hosting will give the idea about the working of the BM django service.
+				</p>
+
+			</div>
+
+
       {% endblock content %}
 
-    </div> <!-- /container -->
+			<div class="split-lists">
+				
+				<div class="split-list" style="justify-content: center;">
 
+					<h3>Connect</h3>
+
+					<ul>
+						<li><a href="https://medium.com/@jawahar273">Blog</a></li>
+						<li><a href="https://github.com/jawahar273/bm">github</a></li>
+					</ul>
+
+				</div>
+
+		
+			</div>
+
+			<div class="split-credit">
+
+				<p>&copy;2017  <a href="https://onepagelove.com/split" style="color: white;">credit</a> - <a href="https://onepagelove.com/split">Split Template</a> by <a href="https://onepagelove.com">One Page Love</a></p>
+
+				<!-- 
+				To edit this credit you can remove the CC3.0 license for only $5 here: https://onepagelove.com/split 
+				this really helps contribute towards us developing more templates and means the world to me!
+				Cheers, Rob (@robhope)
+				-->
+
+			</div>		
+
+		</div>
+
+	</div>
+
+</div>
     {% block modal %}{% endblock modal %}
 
     <!-- Le javascript
@@ -101,6 +135,5 @@
       
 
     {% endblock javascript %}
-  </body>
+</body>
 </html>
- 

@@ -8,7 +8,9 @@ budget management project
      :alt: Built with Cookiecutter Django
 
 
+.. note:: 
 
+   remember: use `dev-base.html`(by renaming it to `base.html`) for development coz it is consitence for development.
 
 Settings
 --------

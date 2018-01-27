@@ -43,7 +43,7 @@ urlpatterns = [
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', 
        TemplateView.as_view(template_name='account/password_rest_confirm_form.html'), name="password_reset_confirm" ),
     url(r'^done', change_password_done, name='change_password_done'),
-    url(r'^$', TemplateView.as_view(template_name='home.html'),
+    url(r'^$', TemplateView.as_view(template_name='pages/home.html'),
            name='home'),
     # url(r'^', include('django.contrib.auth.urls')),
     # url(r'', )
@@ -58,8 +58,8 @@ if settings.DEBUG:
         url(r'^403/$', default_views.permission_denied, kwargs={'exception': Exception('Permission Denied')}),
         url(r'^404/$', default_views.page_not_found, kwargs={'exception': Exception('Page not Found')}),
         url(r'^500/$', default_views.server_error),
-        url(r'^$', TemplateView.as_view(template_name='pages/home.html'),
-           name='home'),
+        # url(r'^$', TemplateView.as_view(template_name='pages/home.html'),
+        #    name='home'),
         url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'),
            name='about'),
  
