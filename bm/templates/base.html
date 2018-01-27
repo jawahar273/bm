@@ -38,7 +38,15 @@
     <link href="{% static 'css/split.min.css' %}" rel="stylesheet"  media='screen'>
     
     {% endblock %}
-
+    <style type="text/css">
+    .alert-warning,.alert-primary,.alert-danger {
+    	font-size: 18px;
+        width: inherit;
+		height: inherit;
+		padding: initial;
+		padding-left: 20px;
+    }
+    </style>
 </head>
 
 <body id="fullsingle" class="page-template-page-fullsingle-split">
@@ -53,14 +61,20 @@
 
 	<!-- Content Side -->
 	<div class="split-content">
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
+
 
 		<div class="split-content-vertically-center">
-		
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"> 
+
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    				<span aria-hidden="true">&times;</span>
+  				</button>
+              	{{ message }}
+              </div>
+          {% endfor %}
+      {% endif %}
       {% block content %}
 
 

@@ -9,7 +9,10 @@ from django.contrib.auth import views as auth_views
 from allauth.account.views import confirm_email
 
 
-from bm.users.views import redirect_after_email_confirm, change_password, login_after_password_change, change_password_done
+from bm.users.views import (redirect_after_email_confirm, change_password,
+                            login_after_password_change, 
+                            change_password_done, 
+                            display_home_page)
 api_url = []
 if settings.DEBUG:
     from rest_framework_swagger.views import get_swagger_view
@@ -40,7 +43,7 @@ urlpatterns = [
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', 
        TemplateView.as_view(template_name='account/password_rest_confirm_form.html'), name="password_reset_confirm" ),
     url(r'^done', change_password_done, name='change_password_done'),
-    url(r'^$', TemplateView.as_view(template_name='pages/home.html'),
+    url(r'^$', display_home_page,
            name='home',),
     # url(r'^', include('django.contrib.auth.urls')),
     # url(r'', )

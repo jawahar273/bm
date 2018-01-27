@@ -10,7 +10,7 @@ from  allauth.account import views as allauth_views
 from .models import User
 
 def display_home_page(request):
-    messages.add(request, messages.WARNING, 'Mail Gun has a problem so, unverifed mail are allowed')
+    messages.warning(request, 'Mail Gun has a problem so, unverifed mail are allowed')
     return render(request, 'pages/home.html')
 
 class UserDetailView(LoginRequiredMixin, DetailView):
