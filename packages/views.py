@@ -19,7 +19,6 @@ from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListS
 
 # from rest_framework.views import APIView
 
-from IPython import embed as pry
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):

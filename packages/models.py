@@ -6,8 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 USERMODEL = get_user_model()
-# import IPython as ip
-# ip.embed()
+
 def onlyFiveRangeValidator(val):
     if(val % 1 == 0 or val % 1 == 0.5):
         ValidationError('given value "{}" is not multiple of 5'.format(val))

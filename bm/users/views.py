@@ -3,11 +3,15 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-import requests as post_man
+from django.contrib import messages
 from django.shortcuts import render
 from  allauth.account import views as allauth_views
 
 from .models import User
+
+def display_home_page(request):
+    messages.add(request, messages.WARNING, 'Mail Gun has a problem so, unverifed mail are allowed')
+    return render(request, 'pages/home.html')
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User

@@ -304,7 +304,7 @@ pip-selfcheck.json
 mailhog
 
 
-bm/media/
+# bm/media/
 
 ## removing virtual env in bm
 bm/bin/

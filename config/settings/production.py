@@ -228,4 +228,3 @@ ADMIN_URL = env('DJANGO_ADMIN_URL')
 from .customize_production_settings import *
 
 CORS_ORIGIN_WHITELIST = ('https://jawahar273.github.io/bm-client')
-

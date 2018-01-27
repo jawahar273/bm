@@ -1,5 +1,4 @@
 
-from IPython import embed
 
 from rest_framework import serializers
 
