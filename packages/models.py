@@ -17,14 +17,14 @@ class MonthBudgetAmount(models.Model):
     
     budget_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     month_year = models.DateField(default=start_date)
-    user_id = models.ForeignKey(USERMODEL, blank=True, related_name='mba_USERMODEL',
+    user = models.ForeignKey(USERMODEL, blank=True, related_name='mba_USERMODEL',
               on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Time line: {}- Budget Amount {}'.format(self.month_year, self.budget_amount)        
 
     class Meta:
-        unique_together = ('month_year', 'user_id')
+        unique_together = ('month_year', 'user')
 
 
 class ItemsList(models.Model):
@@ -34,7 +34,7 @@ class ItemsList(models.Model):
     date = models.DateField(default=datetime.date.today)
     total_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
-    user_id = models.ForeignKey(USERMODEL, blank=True, related_name='itemlist_USERMODEL',
+    user = models.ForeignKey(USERMODEL, blank=True, related_name='itemlist_USERMODEL',
               on_delete=models.CASCADE)
 
     def __str__(self):
