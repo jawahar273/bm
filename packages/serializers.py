@@ -15,7 +15,7 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
         model = MonthBudgetAmount
         fields = ('budget_amount', 'month_year','user', )
         def get_month(self, obj):
-            return '{0}-{1}'.format(obj.month_year.year, obj.month_year.month)
+            return 'user: {}-{}-{}'.format( obj.user,obj.month_year.year, obj.month_year.month)
 
 class ItemSerializer(serializers.ModelSerializer):
 

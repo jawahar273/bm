@@ -21,7 +21,7 @@ class MonthBudgetAmount(models.Model):
               on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'Time line: {}- Budget Amount {}'.format(self.month_year, self.budget_amount)        
+        return 'Time line: {}- Budget Amount {} user {}'.format(self.month_year, self.budget_amount, self.user)        
 
     class Meta:
         unique_together = ('month_year', 'user')
