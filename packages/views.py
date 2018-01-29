@@ -29,7 +29,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
     filter_fields = ('budget_amount',)
     # filter_backends = (DjangoFilterBackend)
     def get_queryset(self):
-        return MonthBudgetAmount.objects.filter(user_id=self.request.user.id)
+        return MonthBudgetAmount.objects.filter(user=self.request.user.id)
 
     def get_valid_date_or_error_response(self, month_year=None):
 
@@ -55,28 +55,35 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return self.save_or_error_response(serializers)
 
     def retrieve(self, request, month_year=None):
-        self.get_valid_date_or_error_response(month_year)
+
+        serializers = self.get_valid_date_or_error_response(month_year)
+        if serializers:
+            return serializers
+
         month_year = self.return_only_monthYear(month_year)
-        queryset = MonthBudgetAmount.objects.filter(month_year = month_year, user_id=request.user.id)
+        queryset = MonthBudgetAmount.objects.filter(month_year = month_year, user=request.user.id)
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
         return Response(serializers.data)
 
     def create(self, request):
         # self.get_valid_date_or_error_response(month_year)
-        request.data.update({'user_id': request.user.id})
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def update(self, request, month_year=None):
         self.get_valid_date_or_error_response(month_year)
-        request.data.update({'user_id': request.user.id})
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def partial_update(self, request, month_year=None):
-        self.get_valid_date_or_error_response(month_year)
-        request.data.update({'user_id': request.user.id})
+        
+        serializers = self.get_valid_date_or_error_response(month_year)
+        if serializers:
+            return serializers
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
@@ -112,7 +119,7 @@ def get_range_mba(request, start, end=None):
     # whole date fomate
     checking_start = re.search(regex_date, start)
     if checking_start and end and re.search(regex_date, end) : # check based on regex expression
-       response = MonthBudgetAmount.objects.filter(date__range=(start, end), user_id=request.user.id)
+       response = MonthBudgetAmount.objects.filter(date__range=(start, end), user=request.user.id)
        serializers = MonthBudgetAmountSerializer(data=response, many=True)
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
@@ -129,7 +136,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
     # queryset = ItemsList.objects.all()
     def get_queryset(self):
-        return ItemsList.objects.filter(user_id=self.request.user.id)
+        return ItemsList.objects.filter(user=self.request.user.id)
 
     def get_serializer_class(self, *args, **kwargs):
         serializer_class = None
@@ -153,22 +160,22 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
     def create(self, request):
         # self.get_valid_date_or_error_response(month_year)
-        request.data.update({'user_id': request.user.id})
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def update(self, request, pk=None):
-        request.data.update({'user_id': request.user.id})
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def partial_update(self, request, pk=None):
-        request.data.update({'user_id': request.user.id})
+        request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def destroy(self, request, pk=None):
-        # request.data.update({'user_id': request.user.id})
+        # request.data.update({'user': request.user.id})
         try:
             to_detete = self.get_object()
             self.perform_destroy(to_detete)
@@ -197,14 +204,14 @@ def get_months(request, start, end=None):
     # whole date fomate
     checking_start = re.search(regex_date, start)
     if checking_start and end and re.search(regex_date, end) : # check based on regex expression
-       response = ItemsList.objects.filter(date__range=(start, end), user_id=request.user.id)
+       response = ItemsList.objects.filter(date__range=(start, end), user=request.user.id)
        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
     elif start and not end:
         _date = start.rsplit('-', 1)[0]
         _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user_id=request.user.id)
+        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user=request.user.id)
         serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
         serializers.is_valid()
         return Response(serializers.data, status=status_code)

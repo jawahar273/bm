@@ -49,7 +49,7 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         # fields = ('__all__')
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret.pop('user_id')
+        ret.pop('user')
         return ret
         
 
