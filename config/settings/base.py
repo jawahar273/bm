@@ -309,6 +309,9 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'packages.serializers_childs.package_rest_exceptionHandling.custom_exception_handler',
 }
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'bm.users.serializer.UserSerializer'
+}
 
 CORS_ORIGIN_ALLOW_ALL = True
 
