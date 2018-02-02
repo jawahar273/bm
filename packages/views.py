@@ -40,7 +40,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
     def save_or_error_response(self, save_object):
         if not save_object.is_valid():
-            return Response({'detail': 'wrong data'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'wrong data given'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
             return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
@@ -50,8 +50,12 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         month_year = month_year.rsplit('-', 1)[0]
         return datetime.datetime.strptime(month_year, "%Y-%m").date()
     
-    def create_or_update_entry(self, custom_request_data):
-        serializers = MonthBudgetAmountSerializer(data=custom_request_data)
+    def create_or_update_entry(self, custom_request_data, update=None):
+        serializers = None
+        if update:
+           serializers = MonthBudgetAmountSerializer(update, data=custom_request_data)
+        else:
+           serializers = MonthBudgetAmountSerializer(data=custom_request_data)
         return self.save_or_error_response(serializers)
 
     def retrieve(self, request, month_year=None):
@@ -73,10 +77,15 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return self.create_or_update_entry(request.data)
 
     def update(self, request, month_year=None):
-        self.get_valid_date_or_error_response(month_year)
-        request.data.update({'user': request.user.id})
 
-        return self.create_or_update_entry(request.data)
+        serializers = self.get_valid_date_or_error_response(month_year)
+        if serializers:
+            return serializers
+
+        request.data.update({'user': request.user.id})
+        request.data.update({'month_year': month_year})      
+        return self.create_or_update_entry(request.data, self.get_object())
+
 
     def partial_update(self, request, month_year=None):
         
@@ -85,7 +94,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
             return serializers
         request.data.update({'user': request.user.id})
 
-        return self.create_or_update_entry(request.data)
+        return self.create_or_update_entry(request.data, self.get_object())
 
 
     # def destroy(self, request, month_year=None):

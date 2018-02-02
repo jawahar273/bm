@@ -1,6 +1,7 @@
 
 from django.db.models import Sum
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from drf_writable_nested import WritableNestedModelSerializer
 
 from packages.models import ItemsList, Item, MonthBudgetAmount
@@ -17,6 +18,12 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
         fields = ('budget_amount', 'month_year','user', )
         def get_month(self, obj):
             return 'user: {}-{}-{}'.format( obj.user,obj.month_year.year, obj.month_year.month)
+        validators = [
+          UniqueTogetherValidator(
+            queryset=MonthBudgetAmount.objects.all(),
+            fields=('user', 'month_year')
+          )
+        ]
 
 class ItemSerializer(serializers.ModelSerializer):
 
