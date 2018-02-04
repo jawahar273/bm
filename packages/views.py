@@ -163,8 +163,13 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(save_object.data)
 
-    def create_or_update_entry(self, custom_request_data):
-        serializers = ItemsListSerializer(data=custom_request_data)
+    def create_or_update_entry(self, custom_request_data, update=None):
+        serializers = None
+        if update:
+           serializers = ItemsListSerializer(update, data=custom_request_data)
+        else:
+           serializers = ItemsListSerializer(data=custom_request_data)
+
         return self.save_or_error_response(serializers)
 
     def create(self, request):
@@ -176,12 +181,12 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         request.data.update({'user': request.user.id})
 
-        return self.create_or_update_entry(request.data)
+        return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, pk=None):
         request.data.update({'user': request.user.id})
 
-        return self.create_or_update_entry(request.data)
+        return self.create_or_update_entry(request.data, self.get_object())
 
     def destroy(self, request, pk=None):
         # request.data.update({'user': request.user.id})
@@ -193,6 +198,34 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['get'])
+def get_items_list_by_month(request, start, end=None):
+    response = None
+    status_code = status.HTTP_200_OK
+    # %Y-%m-%d formate checking. 
+    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    # whole date fomate
+    checking_start = re.search(regex_date, start)
+    if checking_start and end and re.search(regex_date, end) : # check based on regex expression
+       response = ItemsList.objects.filter(date__range=(start, end), user=request.user.id)
+       serializers = ItemsListSerializer(data=response, many=True)
+       serializers.is_valid()
+       return Response(serializers.data, status=status_code)
+    elif checking_start and not end:
+        response = { 'detail': 'need ranges of date'}
+        status_code = status.HTTP_400_BAD_REQUEST 
+        return Response(serializers.data, status=status_code)
+    else:
+        response = { 'detail': 'Wrong date formate please check it again'}
+        status_code = status.HTTP_400_BAD_REQUEST 
+        return Response(response, status=status_code)  
+
+@api_view(['get'])
+def get_all_group_in_itemslist(request):
+    status_code = status_code.HTTP_200_OK
+    response = None
+    response = ItemsList.objects.filter(user=request.user.id).distinct().values_list('group')
+    return Response(list(response), status=status_code)
 
 class ItemCreateView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer

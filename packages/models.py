@@ -40,6 +40,10 @@ class ItemsList(models.Model):
     def __str__(self):
         return 'Group ID-{}: {}, {}'.format(self.id, self.name, self.date)
 
+    def save(self, *args, **kwargs):
+        self.group = self.group.lower()
+        super().save(args, kwargs)
+
     class Meta:
         ordering = ['-id']
         get_latest_by = ['-date']

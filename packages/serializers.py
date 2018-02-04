@@ -9,7 +9,6 @@ from packages.models import ItemsList, Item, MonthBudgetAmount
 from packages.serializers_childs.filter_nested_items import FilterNestedItems
 
 
-
 class MonthBudgetAmountSerializer(serializers.ModelSerializer):
 
     class Meta:
