@@ -3,6 +3,7 @@ import urllib, hashlib
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
+from .models import UserProfileSettings
 
 User = get_user_model()
 
@@ -21,3 +22,11 @@ class UserSerializer(UserDetailsSerializer):
 
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + ('profile_url',)
+        read_only_fields =UserDetailsSerializer.Meta.read_only_fields + ('username',)
+
+class UserProfileSettingsSerializer(object):
+    """docstring for UserProfileSettingsSerializer"""
+    class Meta:
+        fields = '__all__'
+        read_only_fields = ('email',)
+            

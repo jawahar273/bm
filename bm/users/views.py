@@ -1,17 +1,30 @@
+
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import render
+
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 from  allauth.account import views as allauth_views
 
-from .models import User
+from .models import User, UserProfileSettings
+from .serializer import UserProfileSettingsSerializer
+
 
 def display_home_page(request):
-    messages.warning(request, 'Mail Gun has a problem so, unverifed mail are allowed')
+    messages.warning(request, 'Mail Gun has a problem so, no new account are allowed to register')
     return render(request, 'pages/home.html')
+
+class UserProfileSettingsView(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return UserProfileSettings.objects.filter(user=self.request.user.id)
+    serializer_class = UserProfileSettingsSerializer
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -68,3 +81,5 @@ login_after_password_change = LoginAfterPasswordChangeView.as_view()
 
 def change_password_done(requests):
     return render(requests, 'account/password_rest_done.html')
+
+# unrelated

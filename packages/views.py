@@ -2,21 +2,21 @@
 
 # from rest_framework.views import APIView
 import re
-import datetime
+import datetime, os
 
 from django.http import Http404
+from django.conf import settings
 
 from rest_framework.response import Response
 
 # from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route, list_route, api_view
 from django_filters.rest_framework import DjangoFilterBackend
 
 from packages.models import Item, ItemsList, MonthBudgetAmount
 from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListSerializerOnlyForListFun, MonthBudgetAmountSerializer
-
+from packages.utlity import flatter_list
 # from rest_framework.views import APIView
 
 
@@ -120,6 +120,8 @@ def get_range_mba(request, start, end=None):
     '''
      both the argument are nessary and pass the month and year with '01' as 
      starting date.
+     .. deprecated::
+        this function is deprecated and will be removed.
     '''
     response = []
     status_code = status.HTTP_200_OK
@@ -198,34 +200,17 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['get'])
-def get_items_list_by_month(request, start, end=None):
-    response = None
-    status_code = status.HTTP_200_OK
-    # %Y-%m-%d formate checking. 
-    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
-    # whole date fomate
-    checking_start = re.search(regex_date, start)
-    if checking_start and end and re.search(regex_date, end) : # check based on regex expression
-       response = ItemsList.objects.filter(date__range=(start, end), user=request.user.id)
-       serializers = ItemsListSerializer(data=response, many=True)
-       serializers.is_valid()
-       return Response(serializers.data, status=status_code)
-    elif checking_start and not end:
-        response = { 'detail': 'need ranges of date'}
-        status_code = status.HTTP_400_BAD_REQUEST 
-        return Response(serializers.data, status=status_code)
-    else:
-        response = { 'detail': 'Wrong date formate please check it again'}
-        status_code = status.HTTP_400_BAD_REQUEST 
-        return Response(response, status=status_code)  
 
 @api_view(['get'])
 def get_all_group_in_itemslist(request):
-    status_code = status_code.HTTP_200_OK
+    '''
+     get the list of group/catagories items from itemsList object
+    '''
+    status_code = status.HTTP_200_OK
     response = None
     response = ItemsList.objects.filter(user=request.user.id).distinct().values_list('group')
-    return Response(list(response), status=status_code)
+    response = flatter_list(response)
+    return Response(response, status=status_code)
 
 class ItemCreateView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
@@ -233,31 +218,45 @@ class ItemCreateView(viewsets.ModelViewSet):
 
 
 @api_view(['get'])
-def get_months(request, start, end=None):
+def itemlist_get_by_months(request, start, end):
+    '''
+     get the list of items based on the month from starting and ending. Extenstion for 
+     ItemsList object.
+     old-method-name: get_months
+    '''
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
 
-    # if len(start) == 7:
-    #     regex_date = r'(19|20)\d\d([-])(0[1-9]|1[012])'
-    #     checking_start = re.search(regex_date, start)
-    # else:
+    # def native_date(month_year):
+    #     # month_year = month_year.rsplit('-', 1)[0]
+    #     return datetime.datetime.strptime(month_year, "%Y-%m-%d").date()
+    
     regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
+
     if checking_start and end and re.search(regex_date, end) : # check based on regex expression
        response = ItemsList.objects.filter(date__range=(start, end), user=request.user.id)
+
        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
        serializers.is_valid()
        return Response(serializers.data, status=status_code)
-    elif start and not end:
-        _date = start.rsplit('-', 1)[0]
-        _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user=request.user.id)
-        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
-        serializers.is_valid()
-        return Response(serializers.data, status=status_code)
+    elif checking_start and not end:
+        response = { 'detail': 'Need both date ranges'}
+        status_code = status.HTTP_400_BAD_REQUEST 
+        return Response(response, status=status_code)
     else:
         response = { 'detail': 'Wrong date formate please check it again'}
         status_code = status.HTTP_400_BAD_REQUEST 
         return Response(response, status=status_code)
+
+@api_view(['get'])
+def get_currency(request):
+    '''
+     get the currency symbole and representation from json
+    '''
+    import json
+    file_location = os.path.join(settings.STATIC_ROOT, 'js', '')
+    with open(file_location+'commmon-currency.json') as file:
+        return Response(json.loads(file.read()), status=status.HTTP_200_OK)

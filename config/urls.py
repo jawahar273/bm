@@ -6,18 +6,21 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from django.contrib.auth import views as auth_views
 
+from rest_framework import routers
 from allauth.account.views import confirm_email
-
 
 from bm.users.views import (redirect_after_email_confirm, change_password,
                             login_after_password_change, 
                             change_password_done, 
-                            display_home_page)
+                            display_home_page, UserProfileSettingsView)
+rest_router = routers.DefaultRouter()
+# rest_router.register('package/settings', UserProfileSettingsView, base_name='packages_profile_settings')
+
 api_url = []
 if settings.DEBUG:
     from rest_framework_swagger.views import get_swagger_view
     schema_view = get_swagger_view(title='Deliver API')
-    api_url += [url(r'^doc$', schema_view)]
+    api_url += [url(r'^docs$', schema_view)]
 
 
 api_url += [
@@ -27,11 +30,9 @@ api_url += [
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^accounts-rest/registration/account-confirm-email/(?P<key>[-:\w]+)/$', confirm_email, name='account_confirm_email'),
-
 ]
+# api_url.extend(rest_router.urls)
 
-# import IPython
-# IPython.embed()
 
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
