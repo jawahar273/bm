@@ -13,10 +13,10 @@ Contents:
    
    readme
    install
+   packages/index
    deploy
    docker_ec2
    tests
-
 
 
 Indices and tables

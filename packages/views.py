@@ -1,6 +1,4 @@
-# from django.shortcuts import render
 
-# from rest_framework.views import APIView
 import re
 import datetime, os
 
@@ -9,7 +7,6 @@ from django.conf import settings
 
 from rest_framework.response import Response
 
-# from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route, list_route, api_view
 from django_filters.rest_framework import DjangoFilterBackend
@@ -17,11 +14,24 @@ from django_filters.rest_framework import DjangoFilterBackend
 from packages.models import Item, ItemsList, MonthBudgetAmount
 from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListSerializerOnlyForListFun, MonthBudgetAmountSerializer
 from packages.utlity import flatter_list
-# from rest_framework.views import APIView
 
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
+    '''
+    All the filter are based on current loged in user.
+    :model:`packages.MonthBudgetAmount`
+
+    retrieve:
+    Retrive a specifi object based on the month and year as it primary key.
+
+    list:
+    Get all the object inside the model.
+
+    update:
+    Get the specific object and the udpate field, change the value. 
+
+    '''
     lookup_field = 'month_year'
     # queryset =  MonthBudgetAmount.objects.all()#.filter(month_year__month=today.month, month_year__year=today.year)
     # today = datetime.date.today()

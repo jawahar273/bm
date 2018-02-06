@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from rest_framework import routers
-# from rest_framework_swagger.views import get_swagger_view
 
 from packages.views import (ItemsListCreateView,
                             ItemCreateView, MonthBudgetAmountView, itemlist_get_by_months,
@@ -11,10 +10,8 @@ router = routers.DefaultRouter()
 router.register('itemslist', ItemsListCreateView, base_name='itemslist')
 router.register('mba', MonthBudgetAmountView, base_name='mba')
 
-# router.register('item',
-#                 ItemCreateView)
 regex_date_valid = r'[0-9\-]{10}'
-# schema_view = get_swagger_view(title='Deliver API')
+
 urlpatterns = [
    url(r'^itemslist/(?P<start>{})/(?P<end>{})/$'.format(regex_date_valid, regex_date_valid), itemlist_get_by_months, name="itemslist_get_by_month"),
    url(r'^get_group_items/$', get_all_group_in_itemslist, name="get_group_list"),
@@ -22,4 +19,3 @@ urlpatterns = [
    url(r'currency', get_currency, name='currency' )
  ]
 urlpatterns.extend(router.urls)
-# urlpatterns += router.urls

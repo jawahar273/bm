@@ -18,15 +18,54 @@ from .serializer import UserProfileSettingsSerializer
 
 
 def display_home_page(request):
+    '''
+    An index function to show the home.
+    '''
     messages.warning(request, 'Mail Gun has a problem so, no new account are allowed to register')
     return render(request, 'pages/home.html')
 
+def redirect_after_email_confirm(request):
+    '''
+    Allow for redirection in server side from email.
+    '''
+    return render(request, 'account/after_email_validation_confirm.html')
+
+def change_password(request, uidb64, token):
+    '''
+    After rest is confirm to a html.
+    '''
+    return render(request, 'account/password_rest_confirm_form.html')
+
+class LoginAfterPasswordChangeView(allauth_views.PasswordChangeView):
+    template_name = 'account/password_rest_done.html'
+    @property
+    def success_url(self):
+        return reverse_lazy('change_password_done')
+
+login_after_password_change = LoginAfterPasswordChangeView.as_view()
+
+def change_password_done(requests):
+    '''
+    Display nessary html after reset is done.
+    '''
+    return render(requests, 'account/password_rest_done.html')
+
+
+
 class UserProfileSettingsView(viewsets.ModelViewSet):
+    '''
+    .. deprecated::
+       This class may deprecated after review as it not useful in production
+    '''
     def get_queryset(self):
         return UserProfileSettings.objects.filter(user=self.request.user.id)
     serializer_class = UserProfileSettingsSerializer
 
 class UserDetailView(LoginRequiredMixin, DetailView):
+    '''
+    .. deprecated::
+       This class may deprecated after review as it not useful in production
+    '''
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
@@ -34,6 +73,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
+    '''
+    .. deprecated::
+       This class may deprecated after review as it not useful in production
+    '''
     permanent = False
 
     def get_redirect_url(self):
@@ -59,27 +102,12 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class UserListView(LoginRequiredMixin, ListView):
+    '''
+    .. deprecated::
+       This class may deprecated after review as it not useful in production
+    '''
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
-
-def redirect_after_email_confirm(request):
-    return render(request, 'account/after_email_validation_confirm.html')
-
-def change_password(request, uidb64, token):
-    return render(request, 'account/password_rest_confirm_form.html')
-
-class LoginAfterPasswordChangeView(allauth_views.PasswordChangeView):
-    template_name = 'account/password_rest_done.html'
-    @property
-    def success_url(self):
-        return reverse_lazy('change_password_done')
-
-login_after_password_change = LoginAfterPasswordChangeView.as_view()
-
-def change_password_done(requests):
-    return render(requests, 'account/password_rest_done.html')
-
-# unrelated
