@@ -257,7 +257,7 @@ def get_currency(request):
         return Response(json.loads(file.read()), status=status.HTTP_200_OK)
 
 
-@api_view(['get', 'post', 'update'])
+@api_view(['get', 'post', 'put', 'delete'])
 def PackageSettingsView(request):
 
     # serializer_class =  PackageSettingsSerializer
@@ -298,10 +298,21 @@ def PackageSettingsView(request):
     #     return Response({'detail': 'This method is not allowed'}, status=status.HTTP_403_FORBIDDEN)
 
 
-    if request.method == 'UPDATE':
+    if request.method == 'PUT':
         request.data.update({'user': request.user.id})
         _set_query = PackageSettings.objects.filter(user=request.user.id)[0]
         return self.create_or_update_entry(request.data, _set_query)
+
+    if request.method == 'DELETE':
+        # request.data.update({'user': request.user.id})
+        return Response({'detail': 'method is under review'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        try:
+            to_detete = PackageSettings.objects.filter(user=request.user.id)[0]
+            self.perform_destroy(to_detete)
+
+        except Http404 as e:
+            Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
