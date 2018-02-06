@@ -79,4 +79,12 @@ class Item(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.amount)
 
-    
+class PackageSettings(models.Model):
+    """
+       this setting field may not stable until their is fixed ones.
+    """
+    user = models.ForeignKey(USERMODEL, blank=True, related_name='package_settings',
+              on_delete=models.CASCADE)
+    currency_details = models.TextField(max_length=100, default='')
+    active_patym = models.CharField(max_length=1)
+

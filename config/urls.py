@@ -12,7 +12,7 @@ from allauth.account.views import confirm_email
 from bm.users.views import (redirect_after_email_confirm, change_password,
                             login_after_password_change, 
                             change_password_done, 
-                            display_home_page, UserProfileSettingsView)
+                            display_home_page)
 rest_router = routers.DefaultRouter()
 # rest_router.register('package/settings', UserProfileSettingsView, base_name='packages_profile_settings')
 

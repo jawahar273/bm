@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from drf_writable_nested import WritableNestedModelSerializer
 
-from packages.models import ItemsList, Item, MonthBudgetAmount
+from packages.models import ItemsList, Item, MonthBudgetAmount, PackageSettings
 
 from packages.serializers_childs.filter_nested_items import FilterNestedItems
 
@@ -68,3 +68,18 @@ class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
     class Meta:
         model = ItemsList
         fields =  ('id', 'name', 'place', 'group', 'date', 'total_amount')
+
+
+class PackageSettingsSerializer(serializers.ModelSerializer):
+    '''
+    The profile setting is not stable yet.
+    '''
+    STATUS_PAYTM = ( 
+        ('y', 'YES'),
+        ('n', 'NO')
+      )
+    active_paytm = serializers.ChoiceField(STATUS_PAYTM)
+    class Meta:
+        fields = '__all__'
+        model = PackageSettings
+            

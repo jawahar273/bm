@@ -13,9 +13,7 @@ from rest_framework.decorators import api_view
 
 from  allauth.account import views as allauth_views
 
-from .models import User, UserProfileSettings
-from .serializer import UserProfileSettingsSerializer
-
+from .models import User
 
 def display_home_page(request):
     '''
@@ -51,15 +49,6 @@ def change_password_done(requests):
     return render(requests, 'account/password_rest_done.html')
 
 
-
-class UserProfileSettingsView(viewsets.ModelViewSet):
-    '''
-    .. deprecated::
-       This class may deprecated after review as it not useful in production
-    '''
-    def get_queryset(self):
-        return UserProfileSettings.objects.filter(user=self.request.user.id)
-    serializer_class = UserProfileSettingsSerializer
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     '''

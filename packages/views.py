@@ -11,8 +11,12 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route, list_route, api_view
 from django_filters.rest_framework import DjangoFilterBackend
 
-from packages.models import Item, ItemsList, MonthBudgetAmount
-from packages.serializers import ItemSerializer, ItemsListSerializer, ItemsListSerializerOnlyForListFun, MonthBudgetAmountSerializer
+from packages.models import Item, ItemsList, MonthBudgetAmount, PackageSettings
+from packages.serializers import (ItemSerializer,
+                                  ItemsListSerializer,
+                                  ItemsListSerializerOnlyForListFun,
+                                  MonthBudgetAmountSerializer,
+                                  PackageSettingsSerializer)
 from packages.utlity import flatter_list
 
 
@@ -53,7 +57,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
             return Response({'detail': 'wrong data given'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
-            return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(save_object.data)
 
     def return_only_monthYear(self, month_year=None):
@@ -107,24 +111,6 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return self.create_or_update_entry(request.data, self.get_object())
 
 
-    # def destroy(self, request, month_year=None):
-    #     get_valid_date_or_error_response(month_year)
-
-    #     return Response(serializers.data)
-
-
-    # def get_queryset(self):
-    #     queryset = MonthBudgetAmount.objects.all()
-    #     # airline = self.request.query_params.get('airline')
-    #     _budget_amount = self.request.query_params.get('budget_amount')
-
-    #     if _budget_amount and self.action =='retrieve':
-    #         queryset = queryset.filter(workspace_id=workspace, budget_amount=_budget_amount)
-    #     elif airline:
-    #         queryset = queryset.filter(workspace__airline_id=airline)
-
-    #     return queryset
-
 @api_view(['get'])
 def get_range_mba(request, start, end=None):
     '''
@@ -172,7 +158,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             return Response({'detail': 'wrong data given'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
-            return Response({'detail': 'unable to save the requeset data'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(save_object.data)
 
     def create_or_update_entry(self, custom_request_data, update=None):
@@ -192,7 +178,6 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         request.data.update({'user': request.user.id})
-
         return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, pk=None):
@@ -270,3 +255,112 @@ def get_currency(request):
     file_location = os.path.join(settings.STATIC_ROOT, 'js', '')
     with open(file_location+'commmon-currency.json') as file:
         return Response(json.loads(file.read()), status=status.HTTP_200_OK)
+
+
+@api_view(['get', 'post', 'update'])
+def PackageSettingsView(request):
+
+    # serializer_class =  PackageSettingsSerializer
+    # lookup_field = ''
+
+    def get_queryset(self):
+        return PackageSettings.objects.filter(user=self.request.user.id)
+
+    def save_or_error_response(self, save_object):
+        if not save_object.is_valid():
+            return Response({'detail': 'not a valid settings'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not save_object.save():
+            return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(save_object.data)
+
+    def create_or_update_entry(self, custom_request_data, update=None):
+        serializers = None
+        if update:
+           serializers = PackageSettingsSerializer(update, data=custom_request_data)
+        else:
+           serializers = PackageSettingsSerializer(data=custom_request_data)
+
+    if request.method == 'GET':
+        queryset = PackageSettings.objects.filter(user=self.request.user.id)
+        serializers = PackageSettingsSerializer(data=queryset)
+        if serializers.is_valid():
+            return Response({'detail': 'setting not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+        # return Response({'detail': 'This method is not allowed'}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'POST':
+        request.data.update({'user': request.user.id})
+        return self.create_or_update_entry(request.data)
+    
+    # def retrive(self, request, pk=None):
+    #     return Response({'detail': 'This method is not allowed'}, status=status.HTTP_403_FORBIDDEN)
+
+
+    if request.method == 'UPDATE':
+        request.data.update({'user': request.user.id})
+        _set_query = PackageSettings.objects.filter(user=request.user.id)[0]
+        return self.create_or_update_entry(request.data, _set_query)
+
+
+
+# class PackageSettingsView(viewsets.ModelViewSet):
+
+#     serializer_class =  PackageSettingsSerializer
+#     # lookup_field = ''
+
+#     def get_queryset(self):
+#         return PackageSettings.objects.filter(user=self.request.user.id)
+
+#     def save_or_error_response(self, save_object):
+#         if not save_object.is_valid():
+#             return Response({'detail': 'not a valid settings'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         if not save_object.save():
+#             return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(save_object.data)
+
+#     def create_or_update_entry(self, custom_request_data, update=None):
+#         serializers = None
+#         if update:
+#            serializers = PackageSettingsSerializer(update, data=custom_request_data)
+#         else:
+#            serializers = PackageSettingsSerializer(data=custom_request_data)
+
+#     def list(self, request):
+#         queryset = PackageSettings.objects.filter(user=self.request.user.id)
+#         serializers = PackageSettingsSerializer(data=queryset)
+#         if serializers.is_valid():
+#             return Response({'detail': 'setting not found'}, status=status.HTTP_404_NOT_FOUND)
+#         return Response(serializers.data, status=status.HTTP_200_OK)
+
+#         # return Response({'detail': 'This method is not allowed'}, status=status.HTTP_403_FORBIDDEN)
+
+#     def create(self, request):
+#         request.data.update({'user': request.user.id})
+#         return self.create_or_update_entry(request.data)
+    
+#     def retrive(self, request, pk=None):
+#         return Response({'detail': 'This method is not allowed'}, status=status.HTTP_403_FORBIDDEN)
+
+
+#     def update(self, request, pk=None):
+#         request.data.update({'user': request.user.id})
+#         _set_query = PackageSettings.objects.filter(user=request.user.id)[0]
+#         return self.create_or_update_entry(request.data, _set_query)
+
+#     def partial_update(self, request, pk=None):
+#         request.data.update({'user': request.user.id})
+#         _set_query = PackageSettings.objects.filter(user=request.user.id)[0]
+#         return self.create_or_update_entry(request.data, _set_query)
+
+#     def destroy(self, request, pk=None):
+#         # request.data.update({'user': request.user.id})
+#         try:
+#             to_detete = PackageSettings.objects.filter(user=request.user.id)[0]
+#             self.perform_destroy(to_detete)
+
+#         except Http404 as e:
+#             Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
+#         return Response(status=status.HTTP_204_NO_CONTENT)
