@@ -61,10 +61,6 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
-    # entry_link_item = serializers.SerializerMethodField('geli')
-
-    # def geli(self, object):
-    #     return 'entry/{}'.format(object.id)
     class Meta:
         model = ItemsList
         fields =  ('id', 'name', 'place', 'group', 'date', 'total_amount')
@@ -74,12 +70,8 @@ class PackageSettingsSerializer(serializers.ModelSerializer):
     '''
     The profile setting is not stable yet.
     '''
-    STATUS_PAYTM = ( 
-        ('y', 'YES'),
-        ('n', 'NO')
-      )
-    active_paytm = serializers.ChoiceField(STATUS_PAYTM)
+
     class Meta:
-        fields = '__all__'
         model = PackageSettings
+        fields = '__all__'
             

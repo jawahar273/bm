@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from packages.models import ItemsList, Item
+from packages.models import ItemsList, Item, PackageSettings, MonthBudgetAmount
 
 # Register your models here.
-admin.site.register([ItemsList, Item])
+admin.site.register([ItemsList, Item, PackageSettings, MonthBudgetAmount])

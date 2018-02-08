@@ -318,3 +318,4 @@ testProd/
 testPro/
 customize_production_settings.py
 env.sh
+fixtures/*-dev.json

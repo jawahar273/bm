@@ -2,8 +2,21 @@ import datetime
 from django.contrib.auth import get_user_model
 #from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
-
 from django.db import models
+from django.dispatch import receiver
+from allauth.account.signals import user_signed_up
+
+from .utlity import PaymentTypeNumber
+
+@receiver(user_signed_up)
+def after_user_signed_up(sender, request, user, **kwargs):
+    '''
+    Active when user register/sign up with creating a setting 
+    object
+    '''
+    temp = PackageSettings(user=user)
+    temp.save()
+
 
 USERMODEL = get_user_model()
 
@@ -33,7 +46,7 @@ class MonthBudgetAmount(models.Model):
         unique_together = ('month_year', 'user')
 
     def __str__(self):
-        return 'Time line: {}- Budget Amount {} user {}'.format(self.month_year, self.budget_amount, self.user)        
+        return '{}`s Time line: {}'.format(self.user, self.month_year)        
 
 
 class ItemsList(models.Model):
@@ -44,14 +57,15 @@ class ItemsList(models.Model):
     process. Parent Model
     :model: `auth.User`.
     '''
+    user = models.ForeignKey(USERMODEL, blank=True, related_name='itemlist_USERMODEL',
+              on_delete=models.CASCADE)
     name = models.CharField(max_length=20, unique=True, )
     place = models.CharField(max_length=20)
     group = models.CharField(max_length=10, blank=True)
     date = models.DateField(default=datetime.date.today)
     total_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
+    payment_type = models.PositiveSmallIntegerField(default=PaymentTypeNumber.pay_method('default'))
 
-    user = models.ForeignKey(USERMODEL, blank=True, related_name='itemlist_USERMODEL',
-              on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-id']
@@ -63,8 +77,6 @@ class ItemsList(models.Model):
     def save(self, *args, **kwargs):
         self.group = self.group.lower()
         super().save(args, kwargs)
-
-
 
 
 class Item(models.Model):
@@ -79,12 +91,15 @@ class Item(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.amount)
 
+
 class PackageSettings(models.Model):
-    """
-       this setting field may not stable until their is fixed ones.
-    """
+    '''
+    This setting field may not stable until their is fixed ones.
+    '''
     user = models.ForeignKey(USERMODEL, blank=True, related_name='package_settings',
               on_delete=models.CASCADE)
-    currency_details = models.TextField(max_length=100, default='')
-    active_patym = models.CharField(max_length=1)
-
+    currency_details = models.TextField(max_length=100, default='', blank=True)
+    force_mba_update = models.CharField(default='Y', max_length=1)
+    # force ask about monthly budget model in client.
+    def __str__(self):
+        return '{}`s package setting'.format(self.user.username)
