@@ -256,25 +256,20 @@ def get_currency(request):
         return Response(json.loads(file.read()), status=status.HTTP_200_OK)
 
 
+
 @api_view(['get', 'put', 'delete'])
 def PackageSettingsView(request):
 
     def save_or_error_response(save_object):
-        import IPython
-        IPython.embed()
         if not save_object.is_valid():
             return Response({'detail': 'not a valid settings'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
             return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(save_object.data)
-        
+
     def create_or_update_entry(custom_request_data, update=None):
-        serializers = None
-        if update:
-           serializers = PackageSettingsSerializer(update, data=custom_request_data)
-        else:
-           serializers = PackageSettingsSerializer(data=custom_request_data)
+        serializers = PackageSettingsSerializer(update, data=custom_request_data)
         import IPython
         IPython.embed()
         return save_or_error_response(serializers)
@@ -291,8 +286,13 @@ def PackageSettingsView(request):
 
     if request.method == 'PUT':
         request.data.update({'user': request.user.id})
-        _set_query = PackageSettings.objects.filter(user__id=request.user.id).values()[0]
-        return create_or_update_entry(request.data, _set_query)
+        queryset = PackageSettings.objects.filter(user__id=request.user.id).first()#.values()[0]
+        # queryset['user'] = queryset.pop('user_id')
+        # request.data['id'] = User.objects.get(queryset['id'])
+        # import IPython
+        # IPython.embed()
+
+        return create_or_update_entry(request.data, queryset)
 
     if request.method == 'DELETE':
         # request.data.update({'user': request.user.id})

@@ -66,7 +66,7 @@ class ItemsList(models.Model):
     group = models.CharField(max_length=10, blank=True)
     date = models.DateField(default=datetime.date.today)
     total_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    payment_type = models.PositiveSmallIntegerField(default=PaymentTypeNumber.pay_method('default'))
+    entry_type = models.PositiveSmallIntegerField(default=PaymentTypeNumber.pay_method('default'))
 
 
     class Meta:
@@ -100,6 +100,6 @@ class PackageSettings(models.Model):
     # force ask about monthly budget model in client.
     force_mba_update = models.CharField(default='Y', max_length=1)
     temp = PacConDynFields.dict_json()
-    active_paytm = models.CharField(default=temp['default']['id'], max_length=5)
+    active_paytm = models.CharField(default='N', max_length=1)
     def __str__(self):
         return '{}`s package setting'.format(self.user.username)
