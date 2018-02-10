@@ -259,7 +259,6 @@ def get_currency(request):
 @api_view(['get', 'put', 'delete'])
 def PackageSettingsView(request):
 
-
     def save_or_error_response(save_object):
         if not save_object.is_valid():
             return Response({'detail': 'not a valid settings'}, status=status.HTTP_400_BAD_REQUEST)
@@ -279,10 +278,10 @@ def PackageSettingsView(request):
         queryset = PackageSettings.objects.filter(user__id=request.user.id).values()[0]
         queryset['user'] = queryset.pop('user_id')
         serializers = PackageSettingsSerializer(data=queryset)
-        import IPython
-        IPython.embed()
         if not serializers.is_valid():
             return Response({'detail': 'setting not found'}, status=status.HTTP_404_NOT_FOUND)
+        # import json
+        # serializers.data['new_settings'] = json.dumps(serializers.data['new_settings'])
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     if request.method == 'PUT':
@@ -301,6 +300,37 @@ def PackageSettingsView(request):
             Response({'detail': 'content not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+
+@api_view(['get'])
+def get_months(request, start, end=None):
+    response = []
+    status_code = status.HTTP_200_OK
+    # %Y-%m-%d formate checking. 
+
+    # if len(start) == 7:
+    #     regex_date = r'(19|20)\d\d([-])(0[1-9]|1[012])'
+    #     checking_start = re.search(regex_date, start)
+    # else:
+    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    # whole date fomate
+    checking_start = re.search(regex_date, start)
+    if checking_start and end and re.search(regex_date, end) : # check based on regex expression
+       response = ItemsList.objects.filter(date__range=(start, end), user_id=request.user.id)
+       serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
+       serializers.is_valid()
+       return Response(serializers.data, status=status_code)
+    elif start and not end:
+        _date = start.rsplit('-', 1)[0]
+        _date = datetime.datetime.strptime(_date, '%Y-%m').date()
+        response = ItemsList.objects.filter(date__month = _date.month, date__year = _date.year, user_id=request.user.id)
+        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
+        serializers.is_valid()
+        return Response(serializers.data, status=status_code)
+    else:
+        response = { 'detail': 'Wrong date formate please check it again'}
+        status_code = status.HTTP_400_BAD_REQUEST 
+        return Response(response, status=status_code)
 
 
 # class PackageSettingsView(viewsets.ModelViewSet):

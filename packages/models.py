@@ -5,8 +5,10 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
+from jsonfield import JSONField
 
 from .utlity import PaymentTypeNumber
+from .config import PacConDynFields
 
 @receiver(user_signed_up)
 def after_user_signed_up(sender, request, user, **kwargs):
@@ -101,5 +103,6 @@ class PackageSettings(models.Model):
     currency_details = models.TextField(max_length=100, default='', blank=True)
     force_mba_update = models.CharField(default='Y', max_length=1)
     # force ask about monthly budget model in client.
+    new_settings = JSONField(default=PacConDynFields.dict_json())
     def __str__(self):
         return '{}`s package setting'.format(self.user.username)

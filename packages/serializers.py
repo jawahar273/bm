@@ -1,3 +1,4 @@
+import json
 
 from django.db.models import Sum
 from rest_framework import serializers
@@ -58,7 +59,6 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         ret = super().to_representation(instance)
         ret.pop('user')
         return ret
-        
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
     class Meta:
@@ -70,8 +70,14 @@ class PackageSettingsSerializer(serializers.ModelSerializer):
     '''
     The profile setting is not stable yet.
     '''
+    new_settings = serializers.JSONField()
 
     class Meta:
         model = PackageSettings
-        fields = '__all__'
-            
+        fields = ('currency_details', 'force_mba_update', 'new_settings')
+
+    def to_representation(self, instance):
+        # to avoid the extra encoding in the string(return)..
+        ret = super(PackageSettingsSerializer, self).to_representation(instance)
+        ret['new_settings'] = json.loads(ret['new_settings'])
+        return ret
