@@ -1,6 +1,5 @@
 # to class some setting for the package app
 
-import json
 
 class PacConDynFields:
     '''
@@ -9,9 +8,10 @@ class PacConDynFields:
     which is directly send as json fields.
     '''
     settings = {
-      'active_paytm': 'N' # 'Y' or 'N' only
+      'default': {'id': 0},
+      'paytm': {'id': 1}
     }
 
     @staticmethod
     def dict_json():
-       return json.dumps(PacConDynFields.settings)
+       return PacConDynFields.settings

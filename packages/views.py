@@ -260,19 +260,24 @@ def get_currency(request):
 def PackageSettingsView(request):
 
     def save_or_error_response(save_object):
+        import IPython
+        IPython.embed()
         if not save_object.is_valid():
             return Response({'detail': 'not a valid settings'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
             return Response({'detail': 'unable to save the request data'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(save_object.data)
-
+        
     def create_or_update_entry(custom_request_data, update=None):
         serializers = None
         if update:
            serializers = PackageSettingsSerializer(update, data=custom_request_data)
         else:
            serializers = PackageSettingsSerializer(data=custom_request_data)
+        import IPython
+        IPython.embed()
+        return save_or_error_response(serializers)
 
     if request.method == 'GET':
         queryset = PackageSettings.objects.filter(user__id=request.user.id).values()[0]

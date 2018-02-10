@@ -76,10 +76,6 @@ class ItemsList(models.Model):
     def __str__(self):
         return 'Group ID-{}: {}, {}'.format(self.id, self.name, self.date)
 
-    def save(self, *args, **kwargs):
-        self.group = self.group.lower()
-        super().save(args, kwargs)
-
 
 class Item(models.Model):
     '''
@@ -101,8 +97,9 @@ class PackageSettings(models.Model):
     user = models.ForeignKey(USERMODEL, blank=True, related_name='package_settings',
               on_delete=models.CASCADE)
     currency_details = models.TextField(max_length=100, default='', blank=True)
-    force_mba_update = models.CharField(default='Y', max_length=1)
     # force ask about monthly budget model in client.
-    new_settings = JSONField(default=PacConDynFields.dict_json())
+    force_mba_update = models.CharField(default='Y', max_length=1)
+    temp = PacConDynFields.dict_json()
+    active_paytm = models.CharField(default=temp['default']['id'], max_length=5)
     def __str__(self):
         return '{}`s package setting'.format(self.user.username)
