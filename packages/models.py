@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
-from jsonfield import JSONField
 
 from .utlity import PaymentTypeNumber
 from .config import PacConDynFields
