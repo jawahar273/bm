@@ -270,8 +270,6 @@ def PackageSettingsView(request):
 
     def create_or_update_entry(custom_request_data, update=None):
         serializers = PackageSettingsSerializer(update, data=custom_request_data)
-        import IPython
-        IPython.embed()
         return save_or_error_response(serializers)
 
     if request.method == 'GET':
