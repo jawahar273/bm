@@ -219,12 +219,7 @@ def itemlist_get_by_months(request, start, end):
      old-method-name: get_months
     '''
     response = []
-    status_code = status.HTTP_200_OK
-    # %Y-%m-%d formate checking. 
-
-    # def native_date(month_year):
-    #     # month_year = month_year.rsplit('-', 1)[0]
-    #     return datetime.datetime.strptime(month_year, "%Y-%m-%d").date()
+    # %Y-%m-%d formate checking.
     
     regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
@@ -235,6 +230,7 @@ def itemlist_get_by_months(request, start, end):
 
        serializers = ItemsListSerializerOnlyForListFun(data=response, many=True)
        serializers.is_valid()
+       status_code = status.HTTP_200_OK
        return Response(serializers.data, status=status_code)
     elif checking_start and not end:
         response = { 'detail': 'Need both date ranges'}
