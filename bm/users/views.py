@@ -19,7 +19,7 @@ def display_home_page(request):
     '''
     An index function to show the home.
     '''
-    messages.warning(request, 'Mail Gun has a problem so, no new account are allowed to register')
+    messages.warning(request, 'Mail Gun has a problem so,  no new account are allowed to register')
     return render(request, 'pages/home.html')
 
 def redirect_after_email_confirm(request):
