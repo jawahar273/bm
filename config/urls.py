@@ -7,7 +7,8 @@ from django.views import defaults as default_views
 from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
-from allauth.account.views import confirm_email
+# from allauth.account.views import confirm_email
+from allauth.account.views import confirm_email as allauthemailconfirmation
 
 from bm.users.views import (redirect_after_email_confirm, change_password,
                             login_after_password_change, 
@@ -28,8 +29,8 @@ api_url += [
        name='account_change_password'),
    url(r'^package/', include('packages.urls', namespace='packages')),
     url(r'^rest-auth/', include('rest_auth.urls')),
+    # url(r'^rest-auth/registration/confirm-email/(?P<key>\w+)/$', allauthemailconfirmation, name='account_confirm_email'),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>[-:\w]+)/$', confirm_email, name='account_confirm_email'),
 ]
 # api_url.extend(rest_router.urls)
 

@@ -1,11 +1,14 @@
 # to class some setting for the package app
 
-
-class PacConDynFields:
-    '''
-    Due large name nessary this class name is reduce from `PackageConfigDynamicFilds`.
-    The fileds are design in key as it name and value as its default values
-    which is directly send as json fields.
+class PaymentTypeNumber:
+    ''' 
+    +------------+-------------------+
+    | Payment Type Name   |  Value   |
+    +============+===================+
+    | default Payment     |    0     |
+    +------------+-------------------+
+    | Paytm  Payment      |    1     |
+    +------------+-------------------+
     '''
     settings = {
       'default': {'id': 0},
@@ -13,5 +16,5 @@ class PacConDynFields:
     }
 
     @staticmethod
-    def dict_json():
-       return PacConDynFields.settings
+    def paytm_type():
+       return PaymentTypeNumber.settings

@@ -317,5 +317,5 @@ migrations/
 testProd/
 testPro/
 customize_production_settings.py
-env.sh
+env*.sh
 fixtures/*-dev.json
