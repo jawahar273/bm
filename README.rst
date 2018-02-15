@@ -1,4 +1,4 @@
-bm
+BM
 ==
 
 budget management project
@@ -8,9 +8,9 @@ budget management project
      :alt: Built with Cookiecutter Django
 
 
-.. note:: 
+.. note::
 
-   remember: use `dev-base.html`(by renaming it to `base.html`) for development coz it is consitence for development.
+   Remember: use `dev-base.html`(by renaming it to `base.html`) for development coz it is consitence for development.
 
 Settings
 --------
@@ -102,7 +102,9 @@ Sentry
 Sentry is an error logging aggregator service. You can sign up for a free account at  https://sentry.io/signup/?code=cookiecutter  or download and host it yourself.
 The system is setup with reasonable defaults, including 404 logging and integration with the WSGI applic
 
-> Important part for working
+.. note::
+
+   Important part for working
 
 Seeds for DB
 ^^^^^^^^^^^^
