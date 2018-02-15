@@ -1,0 +1,11 @@
+[
+  {
+    "model": "packages.PackageSettings",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "currency_details": "",
+      "active_paytm": "N"
+    }
+  }
+]

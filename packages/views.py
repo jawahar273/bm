@@ -301,6 +301,9 @@ def PackageSettingsView(request):
 
 @api_view(['get'])
 def get_months(request, start, end=None):
+    '''
+    ... deperated :: in the favour of ItemList view..
+    '''
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
