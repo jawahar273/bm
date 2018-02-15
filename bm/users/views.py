@@ -15,6 +15,9 @@ from  allauth.account import views as allauth_views
 
 from .models import User
 
+def password_reset_done(request):
+    return render(request, 'account/password_reset_done.html')
+
 def display_home_page(request):
     '''
     An index function to show the home.

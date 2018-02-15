@@ -10,8 +10,10 @@ from rest_framework import routers
 # from allauth.account.views import confirm_email
 from allauth.account.views import confirm_email as allauthemailconfirmation
 
-from bm.users.views import (redirect_after_email_confirm, change_password,
-                            login_after_password_change, 
+from bm.users.views import (redirect_after_email_confirm,
+                            change_password,
+                            login_after_password_change,
+                            password_reset_done,
                             change_password_done, 
                             display_home_page)
 rest_router = routers.DefaultRouter()
@@ -25,9 +27,11 @@ if settings.DEBUG:
 
 
 api_url += [
-    url(r'^rest-auth/password/reset/confirm/', login_after_password_change,
+    # url(r'^rest-auth/password/reset/confirm/', login_after_password_change,
+    #    name='account_change_password'),
+    url(r'^rest-auth/password/reset/confirm/', password_reset_done,
        name='account_change_password'),
-   url(r'^package/', include('packages.urls', namespace='packages')),
+    url(r'^package/', include('packages.urls', namespace='packages')),
     url(r'^rest-auth/', include('rest_auth.urls')),
     # url(r'^rest-auth/registration/confirm-email/(?P<key>\w+)/$', allauthemailconfirmation, name='account_confirm_email'),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
