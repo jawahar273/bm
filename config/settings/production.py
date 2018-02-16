@@ -228,3 +228,7 @@ ADMIN_URL = env('DJANGO_ADMIN_URL')
 from .customize_production_settings import *
 
 CORS_ORIGIN_WHITELIST = ('https://jawahar273.github.io/bm-client')
+
+# must have protocol and end slash
+CLIENT_REDIRECT_DOMAIN = 'https://jawahar273.github.io/bm-client/'
+CLIENT_REDIRECT_URL = 'reset'

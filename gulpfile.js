@@ -72,6 +72,7 @@ gulp.task('imgCompression', function(){
     .pipe(gulp.dest(paths.images))
 });
 
+
 // Run django server
 gulp.task('runServer', function(cb) {
   var cmd = spawn('python', ['manage.py', 'runserver'], {stdio: 'inherit'});

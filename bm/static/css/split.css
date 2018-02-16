@@ -226,3 +226,7 @@ body.page-template-page-fullsingle-split {
     line-height: 14px; }
     .split-credit p a {
       color: #848d96; }
+
+.split-content-vertically-center, .split-lists, .split-credit {
+  margin-left: 2.5%;
+  margin-right: 2.5%; }

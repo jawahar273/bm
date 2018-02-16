@@ -15,7 +15,7 @@ from bm.users.views import (redirect_after_email_confirm,
                             login_after_password_change,
                             password_reset_done,
                             change_password_done, 
-                            display_home_page)
+                            display_home_page, redirect_password_rest_done)
 rest_router = routers.DefaultRouter()
 # rest_router.register('package/settings', UserProfileSettingsView, base_name='packages_profile_settings')
 
@@ -47,12 +47,10 @@ urlpatterns = [
     url(r'^api/', include(api_url)),
     url(r'verfied-success/$', redirect_after_email_confirm, name="verfied-success" ),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', 
-       TemplateView.as_view(template_name='account/password_rest_confirm_form.html'), name="password_reset_confirm" ),
+       redirect_password_rest_done, name="password_reset_confirm" ),
     url(r'^done', change_password_done, name='change_password_done'),
     url(r'^$', display_home_page,
            name='home',),
-    # url(r'^', include('django.contrib.auth.urls')),
-    # url(r'', )
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

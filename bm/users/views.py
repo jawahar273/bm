@@ -1,3 +1,4 @@
+import urllib.parse
 
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
@@ -5,7 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.conf import settings
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -15,8 +17,13 @@ from  allauth.account import views as allauth_views
 
 from .models import User
 
+
+def redirect_password_rest_done(request, uidb64, token):
+    return redirect(urllib.parse.urljoin(settings.CLIENT_REDIRECT_DOMAIN,  '%s/%s/%s'%(settings.CLIENT_REDIRECT_URL,uidb64,token) ))
+    
+
 def password_reset_done(request):
-    return render(request, 'account/password_reset_done.html')
+    return render(request, 'account/password_reset_from_key_done.html')
 
 def display_home_page(request):
     '''

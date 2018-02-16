@@ -122,3 +122,7 @@ SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
 
 # EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+
+# must have protocol and end slash
+CLIENT_REDIRECT_DOMAIN = 'http://localhost:4300/'
+CLIENT_REDIRECT_URL = 'reset'
