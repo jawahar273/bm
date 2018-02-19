@@ -1,12 +1,12 @@
 
-from django.db.models import Sum
+# from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from drf_writable_nested import WritableNestedModelSerializer
 
 from packages.models import ItemsList, Item, MonthBudgetAmount, PackageSettings
 
-from packages.serializers_childs.filter_nested_items import FilterNestedItems
+# from packages.serializers_childs.filter_nested_items import FilterNestedItems
 
 
 class MonthBudgetAmountSerializer(serializers.ModelSerializer):
@@ -14,15 +14,18 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
     class Meta:
         # list_serializer_class = FilterNestedItems
         model = MonthBudgetAmount
-        fields = ('budget_amount', 'month_year','user', )
+        fields = ('budget_amount', 'month_year', 'user', )
+
         def get_month(self, obj):
-            return 'user: {}-{}-{}'.format( obj.user,obj.month_year.year, obj.month_year.month)
+            return 'user: {}-{}-{}'.format(obj.user,
+                                           obj.month_year.year,
+                                           obj.month_year.month)
         validators = [
-          UniqueTogetherValidator(
-            queryset=MonthBudgetAmount.objects.all(),
-            fields=('user', 'month_year')
-          )
+          UniqueTogetherValidator(queryset=MonthBudgetAmount.objects.all(),
+                                  fields=('user', 'month_year')
+                                  )
         ]
+
 
 class ItemSerializer(serializers.ModelSerializer):
 
@@ -32,6 +35,7 @@ class ItemSerializer(serializers.ModelSerializer):
         # list_serializer_class = FilterNestedItems
         model = Item
         fields = ('amount', 'name')
+
 
 class ItemsListSerializer(WritableNestedModelSerializer):
 
@@ -43,7 +47,7 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         # if (object.items.total_amount == 0):
         # embed()
 
-        def flat(e): 
+        def flat(e):
             return (i[0] for i in e)
         amount = sum(flat(object.items.values_list('amount')))
         object.total_amount = amount
@@ -52,17 +56,21 @@ class ItemsListSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = ItemsList
-        fields = ('id', 'name', 'place', 'group', 'date', 'items', 'total_amount', 'user', )
+        fields = ('id', 'name', 'place', 'group',
+                  'date', 'items', 'total_amount', 'user', )
         # fields = ('__all__')
+
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret.pop('user')
         return ret
 
+
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
     class Meta:
         model = ItemsList
-        fields =  ('id', 'name', 'place', 'group', 'date', 'total_amount')
+        fields = ('id', 'name', 'place',
+                  'group', 'date', 'total_amount')
 
 
 class PackageSettingsSerializer(serializers.ModelSerializer):

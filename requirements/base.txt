@@ -60,4 +60,6 @@ django-cors-headers
 drf-writable-nested
 django-filter
 
+numpy==1.4.0
+pandas==0.22.0
 

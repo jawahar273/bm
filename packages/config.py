@@ -1,7 +1,8 @@
 # to class some setting for the package app
 
+
 class PaymentTypeNumber:
-    ''' 
+    '''
     +------------+-------------------+
     | Payment Type Name   |  Value   |
     +============+===================+
@@ -17,4 +18,4 @@ class PaymentTypeNumber:
 
     @staticmethod
     def paytm_type():
-       return PaymentTypeNumber.settings
+        return PaymentTypeNumber.settings

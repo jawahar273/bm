@@ -7,7 +7,6 @@ from django.views import defaults as default_views
 from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
-# from allauth.account.views import confirm_email
 from allauth.account.views import confirm_email as allauthemailconfirmation
 
 from bm.users.views import (redirect_after_email_confirm,
@@ -29,8 +28,8 @@ if settings.DEBUG:
 api_url += [
     # url(r'^rest-auth/password/reset/confirm/', login_after_password_change,
     #    name='account_change_password'),
-    url(r'^rest-auth/password/reset/confirm/', password_reset_done,
-       name='account_change_password'),
+    # url(r'^rest-auth/password/reset/confirm/', password_reset_done,
+    #    name='account_change_password'),
     url(r'^package/', include('packages.urls', namespace='packages')),
     url(r'^rest-auth/', include('rest_auth.urls')),
     # url(r'^rest-auth/registration/confirm-email/(?P<key>\w+)/$', allauthemailconfirmation, name='account_confirm_email'),
@@ -48,15 +47,17 @@ urlpatterns = [
     url(r'verfied-success/$', redirect_after_email_confirm, name="verfied-success" ),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', 
        redirect_password_rest_done, name="password_reset_confirm" ),
-    url(r'^done', change_password_done, name='change_password_done'),
+    # url(r'^done', change_password_done, name='change_password_done'),
     url(r'^$', display_home_page,
            name='home',),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
-    # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
+    '''
+    This allows the error pages to be debugged during development, just visit
+    these url in browser to see how these error pages look like.
+    '''
     urlpatterns += [
         url(r'^400/$', default_views.bad_request, kwargs={'exception': Exception('Bad Request!')}),
         url(r'^403/$', default_views.permission_denied, kwargs={'exception': Exception('Permission Denied')}),
