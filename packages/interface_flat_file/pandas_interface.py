@@ -77,21 +77,20 @@ class PandasExcelAPI(BaseExcelClass):
     def insert_db(self):
         # [self.pre_process_ItemList()]
         data = self.dataContent.to_dict('date')
-        # for inx in range(0, self.get_info()['row']):
-        #     inx = str(inx)
-        #     name = data['name'][inx]
-        #     group = data['group'][inx]
-        #     place = 'online'
-        #     amount = data['amount'][inx]
-        #     payment_type = self.payment_type
-        #     date = data['date'][inx]
-        #     items = ItemsList(name=name, group=group,
-        #             total_amount=amount, place=place,
-        #             entry_type=payment_type,
-        #             date=date,
-        #             user_id=1)
-        #     # print(items.total_amount, inx)
-        #     items.save()
+        for inx in range(0, self.get_info()['row']):
+            inx = str(inx)
+            name = data['name'][inx]
+            group = data['group'][inx]
+            place = 'online'
+            amount = data['amount'][inx]
+            payment_type = self.payment_type
+            date = data['date'][inx]
+            items = ItemsList(name=name, group=group,
+                    total_amount=amount, place=place,
+                    entry_type=payment_type,
+                    date=date)
+            # print(items.total_amount, inx)
+            items.save()
 
     def api_name(self):
         super().api_name()
