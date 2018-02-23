@@ -61,7 +61,7 @@ class PandasExcelAPI(BaseExcelClass):
         self.dataContent.drop(post_drop_fileds, axis=1, inplace=True)
         self.dataContent.rename(index=str, columns=fileds, inplace=True)
         paytm_date_fromat = (lambda x: datetime.datetime.strptime(
-            x, '%d/%m/%Y %H:%M:%S').strftime('%Y-%M-%d'))
+            x, '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d'))
         self.dataContent['date'] = self.dataContent.date.map(paytm_date_fromat)
 
     def get_info(self):
@@ -77,19 +77,21 @@ class PandasExcelAPI(BaseExcelClass):
     def insert_db(self):
         # [self.pre_process_ItemList()]
         data = self.dataContent.to_dict('date')
-        for inx in range(0, self.get_info()['row']):
-            inx = str(inx)
-            name = data['name'][inx]
-            group = data['group'][inx]
-            place = 'online'
-            amount = data['amount'][inx]
-            payment_type = self.payment_type
-            items = ItemsList(name=name, group=group,
-                    total_amount=amount, place=place,
-                    entry_type=payment_type,
-                    user_id=1)
-            # print(items.total_amount, inx)
-            items.save()
+        # for inx in range(0, self.get_info()['row']):
+        #     inx = str(inx)
+        #     name = data['name'][inx]
+        #     group = data['group'][inx]
+        #     place = 'online'
+        #     amount = data['amount'][inx]
+        #     payment_type = self.payment_type
+        #     date = data['date'][inx]
+        #     items = ItemsList(name=name, group=group,
+        #             total_amount=amount, place=place,
+        #             entry_type=payment_type,
+        #             date=date,
+        #             user_id=1)
+        #     # print(items.total_amount, inx)
+        #     items.save()
 
     def api_name(self):
         super().api_name()
