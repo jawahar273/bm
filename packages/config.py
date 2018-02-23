@@ -13,7 +13,8 @@ class PaymentTypeNumber:
     '''
     settings = {
       'default': {'id': 0},
-      'paytm': {'id': 1}
+      'paytm': {'id': 1},
+      'excel': {'id': 2},
     }
 
     @staticmethod

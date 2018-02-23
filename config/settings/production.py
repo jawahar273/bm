@@ -225,10 +225,10 @@ ADMIN_URL = env('DJANGO_ADMIN_URL')
 # Your production stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 
-from .customize_production_settings import *
+# from .customize_production_settings import *
 
-CORS_ORIGIN_WHITELIST = ('https://jawahar273.github.io/bm-client')
+CORS_ORIGIN_WHITELIST = (env('DJANGO_CLIENT_CROSS_DOMAIN_NAME'),)
+#('https://jawahar273.github.io/bm-client')
 
-# must have protocol and end slash
-CLIENT_REDIRECT_DOMAIN = 'https://jawahar273.github.io/bm-client/'
-CLIENT_REDIRECT_URL = 'reset'
+CLIENT_REDIRECT_DOMAIN = '{CORS_ORIGIN_WHITELIST}/'
+CLIENT_REDIRECT_URL = env('DJANGO_CLIENT_REDIRECT_URL', default='reset')

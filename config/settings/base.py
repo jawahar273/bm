@@ -309,7 +309,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'EXCEPTION_HANDLER': 'packages.serializers_childs.package_rest_exceptionHandling.custom_exception_handler',
+    'EXCEPTION_HANDLER': ('packages.serializers_childs.'
+                          'package_rest_exceptionHandling'
+                          '.custom_exception_handler'),
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -322,13 +324,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 SHOW_REQUEST_HEADERS = True
 
 # allauth setting keys
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_VERIFICATION ="optional"
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 # ACCOUNT_EMAIL_VERIFICATION ="mandatory"
 ACCOUNT_EMAIL_MAX_LENGTH = 40
 TEMPLATE_EXTENSION = 'html'
 CONFIRM_EMAIL_ON_GET = False
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "verfied-success"
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'verfied-success'
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
-

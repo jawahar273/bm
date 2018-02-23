@@ -1,10 +1,12 @@
-import urllib, hashlib
+# import urllib
+import hashlib
 
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
 
 User = get_user_model()
+
 
 class UserSerializer(UserDetailsSerializer):
     '''
@@ -23,7 +25,7 @@ class UserSerializer(UserDetailsSerializer):
 
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + ('profile_url', 'gender')
-        read_only_fields =UserDetailsSerializer.Meta.read_only_fields + ('username', 'pk', 'email')
+        read_only_fields = UserDetailsSerializer.Meta.read_only_fields + ('username', 'pk', 'email')
         # exclude = ('pk', )
 
     def get_profile_url(self, object):

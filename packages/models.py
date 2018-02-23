@@ -74,9 +74,9 @@ class ItemsList(models.Model):
     user = models.ForeignKey(USERMODEL, blank=True,
                              related_name='itemlist_USERMODEL',
                              on_delete=models.CASCADE)
-    name = models.CharField(max_length=20, unique=True, )
-    place = models.CharField(max_length=20)
-    group = models.CharField(max_length=10, blank=True)
+    name = models.CharField(max_length=50, unique=True, )
+    place = models.CharField(max_length=50)
+    group = models.CharField(max_length=30, blank=True)
     date = models.DateField(default=datetime.date.today)
     total_amount = models.DecimalField(max_digits=7,
                                        decimal_places=2, default=0)

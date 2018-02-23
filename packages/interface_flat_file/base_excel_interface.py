@@ -10,24 +10,44 @@ class BaseExcelClass(ABC):
         pass
 
     @abstractmethod
-    def convert_field_to_excel(self, options):
+    def read_csv(self, name):
+        pass
+
+    @abstractmethod
+    def data(self):
+        pass
+
+    @abstractmethod
+    def mapping_fields(self, options):
         '''
         Convert Field is a function that help mapping the
         field(columns of excel)
         with :model: `packages.ItemsList`.
+
+        @params options it is a dict() object
         '''
         pass
 
     @abstractmethod
-    def to_insert_db(self):
+    def paytm_process(self):
+        pass
+
+    @abstractmethod
+    def insert_db(self):
         '''
         Inserting the value of excel into db of :model: `packages.ItemsList`.
         '''
         pass
 
     @abstractmethod
+    def get_info(self):
+        pass
+
+    @abstractmethod
+    # @classmethod
     def api_name(self):
         pass
 
 
-
+class BaseExcelInterFaceException(Exception):
+    pass

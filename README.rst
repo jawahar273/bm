@@ -109,3 +109,7 @@ The system is setup with reasonable defaults, including 404 logging and integrat
 Seeds for DB
 ^^^^^^^^^^^^
 Need to use load data in `manager.py` as seed data.
+
+Cross Domain Name
+^^^^^^^^^^^^^^^^^^
+Must set `DJANGO_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client side. 
