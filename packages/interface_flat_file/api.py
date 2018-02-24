@@ -1,14 +1,13 @@
+from django.conf import settings
 
-from pandas_interface import PandasExcelAPI
+__APIClass = None
+if settings.FLAT_FILE_INTERFACE == 'pandas':
+    from pandas_interface import PandasExcelAPI
+    __APIClass = PandasExcelAPI
+# in plan for future alternative class.
 
-if __name__ == '__main__':
 
-    api = PandasExcelAPI()
-
-    api.read_csv('Paytm_Wallet_Txn_History_Csv_Feb2018_8973744171.csv')
-    # print(api.dataContent)
-    # print(api)
-    api.mapping_fields(324)
-    print(api.insert_db())
-    print(api.get_info())
-    print(api.api_name())
+class FlatFileInterFaceAPI(__APIClass):
+    """docstring for FlatFileInterFaceAPI"""
+    def __init__(self, user_id):
+        super(FlatFileInterFaceAPI, self).__init__(user_id)

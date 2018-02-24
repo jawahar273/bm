@@ -8,18 +8,21 @@ import pandas as pd
 # sys.path.append('..')
 from packages.models import ItemsList
 from packages.interface_flat_file.base_excel_interface import (BaseExcelClass,
-    BaseExcelInterFaceException)
+                                                    BaseExcelInterFaceException)
 
 
 class PandasExcelAPI(BaseExcelClass):
 
-    def __init__(self):
+    def __init__(self, user_id):
         '''
+        Using Pandas libery as working this Class is been
+        working on.
         '''
-        super(PandasExcelAPI, self).__init__()
+        super(PandasExcelAPI, self).__init__(user_id)
         self.read_flag = False  # to make read function called first
         self.dataContent = None
         self.payment_type = 2  # flag for excel type
+        self.user_id = user_id
 
     def read_excel(self, name, sheet_name=0, names=None):
         '''
@@ -88,7 +91,7 @@ class PandasExcelAPI(BaseExcelClass):
             items = ItemsList(name=name, group=group,
                     total_amount=amount, place=place,
                     entry_type=payment_type,
-                    date=date)
+                    date=date, user_id=self.user_id)
             # print(items.total_amount, inx)
             items.save()
 

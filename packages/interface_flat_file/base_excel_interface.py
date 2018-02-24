@@ -3,7 +3,18 @@ from abc import ABC, abstractmethod
 
 
 class BaseExcelClass(ABC):
-    '''docstring for BaseExcelClass'''
+    '''
+    Base excel class will be use as abstract class
+    for making interface between the excel and csv
+    file(flat file) to update into server data base
+    as django model. Accept file only are excel and
+    CSV along.
+    .. notes::
+       Try not use pandas function directly as possible
+    '''
+
+    def __init__(self, user_id):
+        pass
 
     @abstractmethod
     def read_excel(self, name, sheet_name=0, names=None):

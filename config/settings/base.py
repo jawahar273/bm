@@ -312,6 +312,8 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': ('packages.serializers_childs.'
                           'package_rest_exceptionHandling'
                           '.custom_exception_handler'),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -333,3 +335,5 @@ CONFIRM_EMAIL_ON_GET = False
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'verfied-success'
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
+
+FLAT_FILE_INTERFACE = 'pandas'
