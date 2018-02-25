@@ -8,7 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 import environ
-import os
+# import os
 
 ROOT_DIR = environ.Path(__file__) - 3  # (bm/config/settings/base.py - 3 = bm/)
 APPS_DIR = ROOT_DIR.path('bm')
@@ -304,7 +304,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser'
+        'rest_framework.parsers.FormParser',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -312,8 +312,9 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': ('packages.serializers_childs.'
                           'package_rest_exceptionHandling'
                           '.custom_exception_handler'),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
+    'DEFAULT_PAGINATION_CLASS': ('rest_framework.pagination.'
+                                 'LimitOffsetPagination'),
+    'PAGE_SIZE': 200,
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -336,4 +337,6 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'verfied-success'
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
 
+# Relative to flat file setting
 FLAT_FILE_INTERFACE = 'pandas'
+EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit 

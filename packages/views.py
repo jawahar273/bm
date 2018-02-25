@@ -7,10 +7,10 @@ from django.http import Http404
 from django.conf import settings
 
 from rest_framework.response import Response
-
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import FileUploadParser
+# from django_filters.rest_framework import DjangoFilterBackend
 
 from packages.models import (Item,
                              ItemsList,
@@ -22,7 +22,7 @@ from packages.serializers import (ItemSerializer,
                                   MonthBudgetAmountSerializer,
                                   PackageSettingsSerializer)
 # from packages.config import PaymentTypeNumber
-from packages.utlity import flatter_list
+from packages.utlity import flatter_list, to_hexdigit, to_hrs
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
@@ -207,10 +207,50 @@ class ItemsListCreateView(viewsets.ModelViewSet):
             to_detete = self.get_object()
             self.perform_destroy(to_detete)
 
-        except Http404 as e:
+        except Http404:
             Response({'detail': 'content not found'},
                      status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['get'])
+def upload_term_condition(request):
+    terms = [
+        'Default file will not saved',
+        'File will be saved based on your requirement',
+        ('Perment file are to removed '
+         'within the intervale of %d'
+         ' hrs' % (to_hrs(settings.EXPIRY_TIME_FLAT_FILT_IN_MINS))),
+        ('On reuploading try not to change the file'
+         ' name if is it perment file'),
+    ]
+    return Response({'detail': terms}, status=status.HTTP_200_OK)
+
+
+@api_view(['post'])
+@parser_classes((FileUploadParser,))
+def upload_flat_file(request, filename, format=None):
+    '''
+    Create a MyModel
+    ---
+    parameters:
+        - name: file
+          description: file
+          required: True
+          type: file
+    responseMessages:
+        - code: 201
+          message: Created
+    '''
+    def upload_file_handler(file_pointer, file_name):
+        file_name = to_hexdigit(file_name)
+        with open('%s'(file_name), 'wb') as file:
+            for chunk in file_pointer.chunk():
+                file.write(chunk)
+    import IPython
+    IPython.embed()
+    if len(request.FILES['file']) <= 0:
+        return Response({'details': 'uploading without file is not allowed'})
 
 
 @api_view(['get'])
@@ -220,7 +260,8 @@ def get_all_group_in_itemslist(request):
     '''
     status_code = status.HTTP_200_OK
     response = None
-    response = ItemsList.objects.filter(user=request.user.id).distinct().values_list('group')
+    response = ItemsList.objects.filter(
+        user=request.user.id).distinct().values_list('group')
     response = flatter_list(response)
     return Response(response, status=status_code)
 

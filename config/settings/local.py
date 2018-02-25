@@ -109,8 +109,8 @@ SWAGGER_SETTINGS = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-  '127.0.0.1',
-  'localhost:4300',
+    '127.0.0.1',
+    'localhost:4300',
 )
 
 # remove this one 
