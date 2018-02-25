@@ -243,14 +243,20 @@ def upload_flat_file(request, filename, format=None):
           message: Created
     '''
     def upload_file_handler(file_pointer, file_name):
-        file_name = to_hexdigit(file_name)
+        # file_name = to_hexdigit(file_name)
         with open('%s'(file_name), 'wb') as file:
             for chunk in file_pointer.chunk():
                 file.write(chunk)
     import IPython
     IPython.embed()
-    if len(request.FILES['file']) <= 0:
-        return Response({'details': 'uploading without file is not allowed'})
+    access_file = request.FILES['file']
+    if len(access_file) <= 0:
+        return Response({'details': 'Uploading without file is not allowed'})
+    # checking is file to big
+    if access_file.multiple_chunks():
+        msg = ('Uploaded file is too big'
+               ' (%.2f MB).' % (access_file.size / (1000 * 1000)))
+        return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['get'])

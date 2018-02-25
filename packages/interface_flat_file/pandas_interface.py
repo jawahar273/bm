@@ -75,12 +75,19 @@ class PandasExcelAPI(BaseExcelClass):
         }
         return details
 
+    def get_mem_info(self):
+        '''
+        Only for the this class
+        '''
+        return self.dataContent.info()
+
     # def pre_process_ItemList(self, data, inx):
 
     def insert_db(self):
         # [self.pre_process_ItemList()]
         data = self.dataContent.to_dict('date')
-        for inx in range(0, self.get_info()['row']):
+        row = self.get_info()['row']
+        for inx in range(0, row):
             inx = str(inx)
             name = data['name'][inx]
             group = data['group'][inx]
