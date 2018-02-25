@@ -22,6 +22,8 @@ from packages.serializers import (ItemSerializer,
                                   MonthBudgetAmountSerializer,
                                   PackageSettingsSerializer)
 # from packages.config import PaymentTypeNumber
+from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
+                                              FlatFileInterFaceException)
 from packages.utlity import flatter_list, to_hexdigit, to_hrs
 
 
@@ -215,21 +217,32 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
 @api_view(['get'])
 def upload_term_condition(request):
-    terms = [
-        'Default file will not saved',
-        'File will be saved based on your requirement',
-        ('Perment file are to removed '
-         'within the intervale of %d'
-         ' hrs' % (to_hrs(settings.EXPIRY_TIME_FLAT_FILT_IN_MINS))),
-        ('On reuploading try not to change the file'
-         ' name if is it perment file'),
-    ]
+    terms = {
+        'current': [
+            'Default file will not saved.',
+        ],
+        'planning': [
+            'File will be saved based on your requirement.',
+            'Perment file are to removed '  # cnt
+            'within the intervale of %d'  # cnt
+            ' hrs.' % (to_hrs(settings.EXPIRY_TIME_FLAT_FILT_IN_MINS)),  # end
+            # 'On reuploading try not to change the file'  # cnt
+            # ' name if is it perment file',  # end
+            # 'Cancling the upload',
+        ],
+        'beta': [
+        ],
+        'warning': [
+            'Please remeber once uploaded it is done.',
+            'Reuploading cause only error.'
+        ]
+    }
     return Response({'detail': terms}, status=status.HTTP_200_OK)
 
 
 @api_view(['post'])
 @parser_classes((FileUploadParser,))
-def upload_flat_file(request, filename, format=None):
+def upload_flat_file(request, file_name, file_format=None):
     '''
     Create a MyModel
     ---
@@ -242,21 +255,37 @@ def upload_flat_file(request, filename, format=None):
         - code: 201
           message: Created
     '''
-    def upload_file_handler(file_pointer, file_name):
+    def upload_file_handler(file_pointer, _file_name):
         # file_name = to_hexdigit(file_name)
-        with open('%s'(file_name), 'wb') as file:
-            for chunk in file_pointer.chunk():
+        with open('%s' % (_file_name), 'wb') as file:
+            for chunk in file_pointer.chunks():
                 file.write(chunk)
-    import IPython
-    IPython.embed()
+
     access_file = request.FILES['file']
     if len(access_file) <= 0:
         return Response({'details': 'Uploading without file is not allowed'})
+
     # checking is file to big
     if access_file.multiple_chunks():
-        msg = ('Uploaded file is too big'
-               ' (%.2f MB).' % (access_file.size / (1000 * 1000)))
+        msg = ('Uploaded file is too big'  # cnt
+               ' (%.2f MB).' % (access_file.size / (1000 * 1000)))  # end
+
         return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
+
+    file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
+                                 to_hexdigit(file_name))
+    import IPython
+    IPython.embed()
+    upload_file_handler(access_file, file_location)
+    try:
+        ffi_api = FlatFileInterFaceAPI(request.user.id)
+        ffi_api.read_file(file_format, name=file_location)
+        ffi_api.mapping_fields()
+        ffi_api.insert_db()
+
+        return Response({'details': 'success insert to database'})
+    except FlatFileInterFaceException:
+        return Response({'detail': 'error in processing file'})
 
 
 @api_view(['get'])

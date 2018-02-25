@@ -7,7 +7,7 @@ import pandas as pd
 
 # sys.path.append('..')
 from packages.models import ItemsList
-from packages.interface_flat_file.base_excel_interface import (BaseExcelClass,
+from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
                                                     BaseExcelInterFaceException)
 
 
