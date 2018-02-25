@@ -257,7 +257,7 @@ def upload_flat_file(request, file_name, file_format=None):
     '''
     def upload_file_handler(file_pointer, _file_name):
         # file_name = to_hexdigit(file_name)
-        with open('%s' % (_file_name), 'wb') as file:
+        with open('%s.%s' % (_file_name, file_format), 'wb') as file:
             for chunk in file_pointer.chunks():
                 file.write(chunk)
 
@@ -274,18 +274,27 @@ def upload_flat_file(request, file_name, file_format=None):
 
     file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
                                  to_hexdigit(file_name))
-    import IPython
-    IPython.embed()
     upload_file_handler(access_file, file_location)
+
     try:
         ffi_api = FlatFileInterFaceAPI(request.user.id)
         ffi_api.read_file(file_format, name=file_location)
         ffi_api.mapping_fields()
         ffi_api.insert_db()
-
+        ffi_api = None
         return Response({'details': 'success insert to database'})
+
     except FlatFileInterFaceException:
         return Response({'detail': 'error in processing file'})
+
+
+@api_view(['post'])
+def is_paytm_active(request, file_name, file_format=None):
+    setting = PackageSettings.objects.filter(user_id=request.user.id).first()
+    if setting.active_paytm == 'N':
+        return Response({'detail': 'paytm uploading is diabled'},
+                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    upload_flat_file(request, file_name, file_format=None)
 
 
 @api_view(['get'])

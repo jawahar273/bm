@@ -101,6 +101,7 @@ class PandasExcelAPI(BaseExcelClass):
                     date=date, user_id=self.user_id)
             # print(items.total_amount, inx)
             items.save()
+        self.dataContent = None
 
     def api_name(self):
         super().api_name()

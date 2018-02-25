@@ -321,3 +321,4 @@ customize_production_settings.py
 env*.sh
 fixtures/*-prod.json
 Paytm_Wallet_Txn_History_Csv_*.csv
+*.csv
