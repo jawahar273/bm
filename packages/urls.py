@@ -7,7 +7,7 @@ from packages.views import (ItemsListCreateView,  # ItemCreateView,
                             get_range_mba,
                             get_all_group_in_itemslist,
                             get_currency, upload_term_condition,
-                            upload_flat_file)
+                            is_paytm_active, upload_flat_file)
 
 router = routers.DefaultRouter()
 router.register('itemslist', ItemsListCreateView, base_name='itemslist')
@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^currency/$', get_currency, name='currency'),
     url(r'^upload-term-condition/$',
         upload_term_condition, name='upload_term_condition'),
+    url(r'^paytm-upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/',
+        is_paytm_active, name='upload_file'),
     url(r'^upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/',
         upload_flat_file, name='upload_file'),
     ]
