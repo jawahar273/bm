@@ -261,6 +261,10 @@ def upload_flat_file(request, file_name, file_format=None):
             for chunk in file_pointer.chunks():
                 file.write(chunk)
 
+    if file_format not in set(['csv', 'xslx']):
+        msg = 'the given file extenstion is not acceptable'
+        return Response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
     access_file = request.FILES['file']
     if len(access_file) <= 0:
         return Response({'details': 'Uploading without file is not allowed'})
@@ -270,7 +274,7 @@ def upload_flat_file(request, file_name, file_format=None):
         msg = ('Uploaded file is too big'  # cnt
                ' (%.2f MB).' % (access_file.size / (1000 * 1000)))  # end
 
-        return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
     file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
                                  to_hexdigit(file_name))
