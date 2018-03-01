@@ -27,12 +27,6 @@ def redirect_password_rest_done(request, uidb64, token):
                     )
 
 
-def password_reset_done(request):
-    # render(request, 'account/password_reset_from_key_done.html')
-    return Response({'password has been changes'},
-                    status=204)
-
-
 def display_home_page(request):
     '''
     An index function to show the home.
@@ -49,13 +43,6 @@ def redirect_after_email_confirm(request):
     return render(request, 'account/after_email_validation_confirm.html')
 
 
-def change_password(request, uidb64, token):
-    '''
-    After rest is confirm to a html.
-    '''
-    return render(request, 'account/password_rest_confirm_form.html')
-
-
 class LoginAfterPasswordChangeView(allauth_views.PasswordChangeView):
     template_name = 'account/password_rest_done.html'
 
@@ -65,13 +52,6 @@ class LoginAfterPasswordChangeView(allauth_views.PasswordChangeView):
 
 
 login_after_password_change = LoginAfterPasswordChangeView.as_view()
-
-
-def change_password_done(requests):
-    '''
-    Display nessary html after reset is done.
-    '''
-    return render(requests, 'account/password_rest_done.html')
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -124,3 +104,27 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+
+def password_reset_done(request):
+    '''
+    Display nessary html after reset is done.
+    .. deprecated::  0.1.0
+    '''
+    return Response({'password has been changes'},
+                    status=204)
+
+
+def change_password(request, uidb64, token):
+    '''
+    Display nessary html after reset is done.
+    .. deprecated:: 0.1.0
+    '''
+    return render(request, 'account/password_rest_confirm_form.html')
+
+
+def change_password_done(requests):
+    '''
+    Display nessary html after reset is done.
+    .. deprecated:: 0.1.0
+    '''
+    return render(requests, 'account/password_rest_done.html')

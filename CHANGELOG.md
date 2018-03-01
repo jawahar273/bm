@@ -4,6 +4,10 @@
 - allow xslx format (excel file).
 - uploading flat file with celery.
 
+## 0.1.1
+- Deprated unwanted function in view of user.
+- Deprated function will be removed on next version.
+
 ## 0.1.0
 - Uploading for csv file done.
 - Change in ther name for `interface_flat_file` into `flat_file_interface`.
