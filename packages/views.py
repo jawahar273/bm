@@ -43,8 +43,6 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
     '''
     lookup_field = 'month_year'
-    # queryset =  MonthBudgetAmount.objects.all()#.filter(month_year__month=today.month, month_year__year=today.year)
-    # today = datetime.date.today()
     serializer_class = MonthBudgetAmountSerializer
     filter_fields = ('budget_amount',)
     # filter_backends = (DjangoFilterBackend)
@@ -219,13 +217,14 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 def upload_term_condition(request):
     terms = {
         'current': [
-            'Default file will not saved.',
+            'Default file will saved with md5 has names.',
         ],
         'planning': [
             'File will be saved based on your requirement.',
             'Perment file are to removed '  # cnt
-            'within the intervale of %d'  # cnt
-            ' hrs.' % (to_hrs(settings.EXPIRY_TIME_FLAT_FILT_IN_MINS)),  # end
+            'within the intervale of %s'  # cnt
+            ' hrs.' % (to_hrs(mins=settings.EXPIRY_TIME_FLAT_FILT_IN_MINS
+                              )),  # end
             # 'On reuploading try not to change the file'  # cnt
             # ' name if is it perment file',  # end
             # 'Cancling the upload',
@@ -234,7 +233,7 @@ def upload_term_condition(request):
         ],
         'warning': [
             'Please remeber once uploaded it is done.',
-            'Reuploading cause only error.'
+            'Reuploading cause only unnessary errors.'
         ]
     }
     return Response({'detail': terms}, status=status.HTTP_200_OK)
@@ -298,7 +297,7 @@ def is_paytm_active(request, file_name, file_format=None):
     if setting.active_paytm == 'N':
         return Response({'detail': 'paytm uploading is diabled'},
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    upload_flat_file(request, file_name, file_format=None)
+    return upload_flat_file(request, file_name, file_format)
 
 
 @api_view(['get'])
@@ -423,10 +422,6 @@ def get_months(request, start, end=None):
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
 
-    # if len(start) == 7:
-    #     regex_date = r'(19|20)\d\d([-])(0[1-9]|1[012])'
-    #     checking_start = re.search(regex_date, start)
-    # else:
     regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)

@@ -31,9 +31,9 @@ urlpatterns = [
     url(r'^currency/$', get_currency, name='currency'),
     url(r'^upload-term-condition/$',
         upload_term_condition, name='upload_term_condition'),
-    url(r'^paytm-upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/',
+    url(r'^paytm-upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/$',
         is_paytm_active, name='upload_file'),
-    url(r'^upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/',
+    url(r'^upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/$',
         upload_flat_file, name='upload_file'),
     ]
 urlpatterns.extend(router.urls)

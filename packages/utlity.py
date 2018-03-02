@@ -26,7 +26,8 @@ def to_hrs(mins=0, secs=0, time_format=False) -> str:
     @params secs time in secs.
     @params time_format is to return the time format.
     '''
-    assert not mins > 0 and secs > 0, 'Both the mins and secs are not allowed'
+    assert not (mins > 0 and secs > 0), ('Both the mins and secs as arguments'
+                                         'are not allowed')
     if secs > 0:
         mins, secs = divmod(secs, 60)
     hrs, mins = divmod(mins, 60)
