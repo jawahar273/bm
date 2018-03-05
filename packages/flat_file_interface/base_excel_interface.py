@@ -17,7 +17,7 @@ class BaseExcelClass(ABC):
         pass
 
     @abstractmethod
-    def read_excel(self, name, sheet_name=0, names=None):
+    def read_excel(self, name, **kargs):
         pass
 
     @abstractmethod

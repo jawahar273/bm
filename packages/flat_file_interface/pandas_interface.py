@@ -8,7 +8,15 @@ import pandas as pd
 # sys.path.append('..')
 from packages.models import ItemsList
 from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
-                                                    BaseExcelInterFaceException)
+                                            BaseExcelInterFaceException)
+
+
+class PandaInterfaceException(BaseExcelInterFaceException):
+    pass
+
+
+class PandasInterfaceNotImplement(PandaInterfaceException):
+    pass
 
 
 class PandasExcelAPI(BaseExcelClass):
@@ -24,45 +32,65 @@ class PandasExcelAPI(BaseExcelClass):
         self.payment_type = 2  # flag for excel type
         self.user_id = user_id
 
-    def read_excel(self, name, sheet_name=0, names=None):
+    def read_excel(self, name, **kargs):
         '''
         '''
-        super().read_excel(name, sheet_name, names)
+        super().read_excel(name, kargs)
+        sheet_name = kargs.get('sheet_name', 0)
+        names = kargs.get('names', None)
         self.read_flag = True
         self.dataContent = pd.read_excel(name, sheet_name, names)
 
-    def read_csv(self, name):
+    def read_csv(self, name, **kargs):
         super().read_csv(name)
+        usecols = kargs.get('usercols', None)
+        #  usecols=None
         self.read_flag = True
-        self.dataContent = pd.read_csv(name)
+        self.dataContent = pd.read_csv(name, usecols=usecols)
 
     def data(self):
         return self.dataContent
 
-    def mapping_fields(self, options=None):
+    def mapping_fields(self, options=None, is_paytm=False):
         super().mapping_fields(options)
         assert self.read_flag, 'Please call read method first'
-        self.paytm_process()
+        if is_paytm:
+            self.paytm_process()
+        else:
+            raise PandasInterfaceNotImplement('other than paytm csv '
+                                              'function is not implemented')
         # self.dataContent.rename(options, inplace=True)
 
     def paytm_process(self):
         self.payment_type = 1
-        pre_drop_fileds = ['Wallet Txn ID', 'Comment', 'Transaction Breakup']
-        post_drop_fileds = ['Debit', 'Credit', 'Status']
+        # pre_drop_fileds =
+        post_drop_fileds = ['Credit', 'Status']
         fileds = {
             'Date': 'date',
             'Activity': 'group',
             'Source/Destination': 'name',
+            'Debit': 'amount'
         }
-        self.dataContent.drop(pre_drop_fileds, axis=1, inplace=True)
+        #  drop unwanted columns as preprocessing.
+        #  self.dataContent.drop(pre_drop_fileds, axis=1, inplace=True)
+        #  drop the if the status other than `SUCCESS`.
         self.dataContent.drop(
             self.dataContent[self.dataContent.Status != 'SUCCESS'].index,
             inplace=True)
-        self.dataContent['amount'] = pd.concat([
-            self.dataContent.Debit.dropna(),
-            self.dataContent.Credit.dropna()])
+
+        #  drop the row which has NaN in there cell of `Debit`.
+        self.dataContent.drop(self.dataContent[
+                              pd.isna(self.dataContent.Debit)].index,
+                              inplace=True)
+
+        #  droping the unwanted columns to reduce the columns after finishing
+        #  the nessary steps.
         self.dataContent.drop(post_drop_fileds, axis=1, inplace=True)
+
+        #  renaming the columns of the fileds.
         self.dataContent.rename(index=str, columns=fileds, inplace=True)
+
+        #  changing the date format.
         paytm_date_fromat = (lambda x: datetime.datetime.strptime(
             x, '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d'))
         self.dataContent['date'] = self.dataContent.date.map(paytm_date_fromat)
@@ -96,17 +124,13 @@ class PandasExcelAPI(BaseExcelClass):
             payment_type = self.payment_type
             date = data['date'][inx]
             items = ItemsList(name=name, group=group,
-                    total_amount=amount, place=place,
-                    entry_type=payment_type,
-                    date=date, user_id=self.user_id)
+                              total_amount=amount, place=place,
+                              entry_type=payment_type,
+                              date=date, user_id=self.user_id)
             # print(items.total_amount, inx)
             items.save()
         self.dataContent = None
 
     def api_name(self):
-        super().api_name()
-        return self.__class__
-
-
-class PandaExcelInterfaceException(BaseExcelInterFaceException):
-    pass
+        # super().api_name()
+        return 'Pandas Flat File Interface'
