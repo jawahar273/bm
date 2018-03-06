@@ -4,9 +4,11 @@ import datetime
 # import sys
 
 import pandas as pd
+import numpy as np
 
 # sys.path.append('..')
 from packages.models import ItemsList
+from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
                                             BaseExcelInterFaceException)
 
@@ -21,29 +23,28 @@ class PandasInterfaceNotImplement(PandaInterfaceException):
 
 class PandasExcelAPI(BaseExcelClass):
 
-    def __init__(self, user_id):
+    def __init__(self):
         '''
         Using Pandas libery as working this Class is been
         working on.
         '''
-        super(PandasExcelAPI, self).__init__(user_id)
+        super(PandasExcelAPI, self).__init__()
         self.read_flag = False  # to make read function called first
         self.dataContent = None
         self.payment_type = 2  # flag for excel type
-        self.user_id = user_id
 
     def read_excel(self, name, **kargs):
         '''
         '''
-        super().read_excel(name, kargs)
+        super().read_excel(name, **kargs)
         sheet_name = kargs.get('sheet_name', 0)
         names = kargs.get('names', None)
         self.read_flag = True
         self.dataContent = pd.read_excel(name, sheet_name, names)
 
     def read_csv(self, name, **kargs):
-        super().read_csv(name)
-        usecols = kargs.get('usercols', None)
+        super().read_csv(name, **kargs)
+        usecols = kargs.get('usecols', None)
         #  usecols=None
         self.read_flag = True
         self.dataContent = pd.read_csv(name, usecols=usecols)
@@ -51,20 +52,21 @@ class PandasExcelAPI(BaseExcelClass):
     def data(self):
         return self.dataContent
 
-    def mapping_fields(self, options=None, is_paytm=False):
+    def mapping_fields(self, entry_type, options=None):
         super().mapping_fields(options)
         assert self.read_flag, 'Please call read method first'
-        if is_paytm:
+        self.payment_type = entry_type
+        if entry_type == PaymentTypeNumber.paytm_type()['id']:
             self.paytm_process()
         else:
             raise PandasInterfaceNotImplement('other than paytm csv '
-                                              'function is not implemented')
+                                              'function is not been implemented')
         # self.dataContent.rename(options, inplace=True)
 
     def paytm_process(self):
         self.payment_type = 1
         # pre_drop_fileds =
-        post_drop_fileds = ['Credit', 'Status']
+        post_drop_fileds = ['Status']
         fileds = {
             'Date': 'date',
             'Activity': 'group',
@@ -89,6 +91,7 @@ class PandasExcelAPI(BaseExcelClass):
 
         #  renaming the columns of the fileds.
         self.dataContent.rename(index=str, columns=fileds, inplace=True)
+        self.dataContent.index = np.arange(0, len(self.dataContent))
 
         #  changing the date format.
         paytm_date_fromat = (lambda x: datetime.datetime.strptime(
@@ -111,12 +114,11 @@ class PandasExcelAPI(BaseExcelClass):
 
     # def pre_process_ItemList(self, data, inx):
 
-    def insert_db(self):
+    def insert_db(self, user_id):
         # [self.pre_process_ItemList()]
         data = self.dataContent.to_dict('date')
         row = self.get_info()['row']
         for inx in range(0, row):
-            inx = str(inx)
             name = data['name'][inx]
             group = data['group'][inx]
             place = 'online'
@@ -126,7 +128,7 @@ class PandasExcelAPI(BaseExcelClass):
             items = ItemsList(name=name, group=group,
                               total_amount=amount, place=place,
                               entry_type=payment_type,
-                              date=date, user_id=self.user_id)
+                              date=date, user_id=user_id)
             # print(items.total_amount, inx)
             items.save()
         self.dataContent = None

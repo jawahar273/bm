@@ -18,5 +18,13 @@ class PaymentTypeNumber:
     }
 
     @staticmethod
+    def default_type():
+        return PaymentTypeNumber.settings['default']
+
+    @staticmethod
     def paytm_type():
-        return PaymentTypeNumber.settings
+        return PaymentTypeNumber.settings['paytm']
+
+    @staticmethod
+    def excel_type():
+        return PaymentTypeNumber.settings['excel']

@@ -13,7 +13,7 @@ class BaseExcelClass(ABC):
        Try not use pandas function directly as possible
     '''
 
-    def __init__(self, user_id):
+    def __init__(self):
         pass
 
     @abstractmethod
@@ -21,7 +21,7 @@ class BaseExcelClass(ABC):
         pass
 
     @abstractmethod
-    def read_csv(self, name):
+    def read_csv(self, name, **kargs):
         pass
 
     @abstractmethod

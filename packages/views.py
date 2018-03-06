@@ -23,8 +23,10 @@ from packages.serializers import (ItemSerializer,
                                   PackageSettingsSerializer)
 # from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
-                                              FlatFileInterFaceException)
+                                              FlatFileInterFaceException,
+                                              FlatFileInterFaceNotImplemented)
 from packages.utlity import flatter_list, to_hexdigit, to_hrs
+from packages.config import PaymentTypeNumber
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
@@ -234,6 +236,10 @@ def upload_term_condition(request):
         'warning': [
             'Please remeber once uploaded it is done.',
             'Reuploading cause only unnessary errors.'
+        ],
+        'paytm': [
+            'Do not change column\' name of paytm, we will take care of the'
+            ' that one for you.',
         ]
     }
     return Response({'detail': terms}, status=status.HTTP_200_OK)
@@ -241,19 +247,14 @@ def upload_term_condition(request):
 
 @api_view(['post'])
 @parser_classes((FileUploadParser,))
-def upload_flat_file(request, file_name, file_format=None):
+def upload_flat_file(request, file_name, file_format=None,
+                     use_fields=None, entry_type=2):
     '''
-    Create a MyModel
-    ---
-    parameters:
-        - name: file
-          description: file
-          required: True
-          type: file
-    responseMessages:
-        - code: 201
-          message: Created
+    Upload the file and insert them on the database based
+    the flat file interface.
+    refer entry type in `packages.config`
     '''
+
     def upload_file_handler(file_pointer, _file_name):
         # file_name = to_hexdigit(file_name)
         with open('%s.%s' % (_file_name, file_format), 'wb') as file:
@@ -277,27 +278,40 @@ def upload_flat_file(request, file_name, file_format=None):
 
     file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
                                  to_hexdigit(file_name))
+
     upload_file_handler(access_file, file_location)
 
     try:
-        ffi_api = FlatFileInterFaceAPI(request.user.id)
-        ffi_api.read_file(file_format, name=file_location)
-        ffi_api.mapping_fields()
-        ffi_api.insert_db()
+        ffi_api = FlatFileInterFaceAPI()
+        ffi_api.read_file(file_format, file_location,
+                          usecols=use_fields)
+        try:
+            ffi_api.mapping_fields(entry_type)
+        except FlatFileInterFaceNotImplemented as e:
+            return Response({'detail': e},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        ffi_api.insert_db(request.user.id)
         ffi_api = None
-        return Response({'details': 'success insert to database'})
+        return Response({'details': 'success insert to database'},
+                        status=status.HTTP_200_OK)
 
     except FlatFileInterFaceException:
-        return Response({'detail': 'error in processing file'})
+        return Response({'detail': 'error in processing file'},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['post'])
 def is_paytm_active(request, file_name, file_format=None):
-    setting = PackageSettings.objects.filter(user_id=request.user.id).first()
-    if setting.active_paytm == 'N':
+    pack_setting = PackageSettings.objects.filter(user_id=request.user.id).first()
+    if pack_setting.active_paytm == 'N':
         return Response({'detail': 'paytm uploading is diabled'},
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    return upload_flat_file(request, file_name, file_format)
+    #  entry type == 1 is equal to paytm
+    return upload_flat_file(request, file_name,
+                            file_format,
+                            use_fields=settings.PAYTM_USE_FILEDS,
+                            entry_type=PaymentTypeNumber.paytm_type()['id'])
 
 
 @api_view(['get'])
@@ -310,6 +324,7 @@ def get_all_group_in_itemslist(request):
     response = ItemsList.objects.filter(
         user=request.user.id).distinct().values_list('group')
     response = flatter_list(response)
+
     return Response(response, status=status_code)
 
 

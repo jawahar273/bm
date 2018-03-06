@@ -61,8 +61,9 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     # custom users app
     'bm.users.apps.UsersConfig',
+    # 'bm.taskapp.celery.CeleryConfig',
     # Your stuff: custom apps go here
-    'packages'
+    'packages',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -350,4 +351,8 @@ LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
 FLAT_FILE_INTERFACE = 'pandas'
-EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit 
+EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
+
+PAYTM_USE_FILEDS = ['Date', 'Activity',
+                    'Source/Destination', 'Debit',
+                    'Status']

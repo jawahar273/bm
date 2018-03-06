@@ -18,19 +18,15 @@ if settings.FLAT_FILE_INTERFACE == 'pandas':
 class FlatFileInterFaceAPI(__APIClass):
     """docstring for FlatFileInterFaceAPI"""
 
-    def __init__(self, user_id):
-        super(FlatFileInterFaceAPI, self).__init__(user_id)
+    def __init__(self):
+        super(FlatFileInterFaceAPI, self).__init__()
 
-    def read_file(self, file_format, **kargs):
-        name = kargs.get('name')
+    def read_file(self, file_format, name, **kargs):
 
         if file_format == 'csv':
-            # usecols = kargs.get('usecols', None)
-            self.read_csv(name, kargs)
+            self.read_csv(name, **kargs)
         else:
-            # sheet_name = kargs.get('sheet_name', 0)
-            # names = kargs.get('names', None)
-            self.read_excel(name, kargs)
+            self.read_excel(name, **kargs)
 
 
 class FlatFileInterFaceException(__APIException):

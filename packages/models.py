@@ -80,7 +80,7 @@ class ItemsList(models.Model):
     date = models.DateField(default=datetime.date.today)
     total_amount = models.DecimalField(max_digits=7,
                                        decimal_places=2, default=0)
-    temp = PaymentTypeNumber.paytm_type()['default']['id']
+    temp = PaymentTypeNumber.default_type()['id']
     entry_type = models.PositiveSmallIntegerField(default=temp)
 
     class Meta:
@@ -88,7 +88,7 @@ class ItemsList(models.Model):
         get_latest_by = ['-date']
 
     def __str__(self):
-        return 'Group ID-{}: {}, {}'.format(self.id, self.name, self.date)
+        return 'Unique ID-{}: {}, {}'.format(self.id, self.name, self.date)
 
 
 class Item(models.Model):
@@ -116,10 +116,11 @@ class PackageSettings(models.Model):
                              related_name='package_settings',
                              on_delete=models.CASCADE)
     currency_details = models.TextField(max_length=100, default='', blank=True)
-    # force ask about monthly budget model in client.
+    #  force ask about monthly budget model in client.
     force_mba_update = models.CharField(default='Y', max_length=1)
-    temp = PaymentTypeNumber.paytm_type()
-    paytm_type = models.CharField(default=temp['default']['id'], max_length=2)
+    #  review need..
+    # temp = PaymentTypeNumber.default_type()
+    # paytm_type = models.CharField(default=temp['id'], max_length=2)
     active_paytm = models.CharField(default='N', max_length=1)
 
     def __str__(self):

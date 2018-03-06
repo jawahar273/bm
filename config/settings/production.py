@@ -130,16 +130,17 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # Uses Amazon RDS for database hosting, which doesn't follow the Heroku-style spec
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('RDS_DB_NAME'),
-        'USER': env('RDS_USERNAME'),
-        'PASSWORD': env('RDS_PASSWORD'),
-        'HOST': env('RDS_HOSTNAME'),
-        'PORT': env('RDS_PORT'),
-    }
-}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env('RDS_DB_NAME'),
+#         'USER': env('RDS_USERNAME'),
+#         'PASSWORD': env('RDS_PASSWORD'),
+#         'HOST': env('RDS_HOSTNAME'),
+#         'PORT': env('RDS_PORT'),
+#     }
+# }
 
 
 # CACHING
@@ -230,5 +231,6 @@ ADMIN_URL = env('DJANGO_ADMIN_URL')
 CORS_ORIGIN_WHITELIST = (env('DJANGO_CLIENT_CROSS_DOMAIN_NAME'),)
 #('https://jawahar273.github.io/bm-client')
 
+#  this redirection work with one domain only.
 CLIENT_REDIRECT_DOMAIN = '{CORS_ORIGIN_WHITELIST}/'
 CLIENT_REDIRECT_URL = env('DJANGO_CLIENT_REDIRECT_URL', default='reset')
