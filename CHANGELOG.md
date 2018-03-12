@@ -4,6 +4,10 @@
 - allow xslx format (excel file).
 - uploading flat file with celery.[next major version]
 
+## 0.2.0
+- JWT for auth
+- Distince in group on `ItemsList` model
+
 ## 0.1.3
 - Reprashing the sentence in uploading condtions.
 
