@@ -219,7 +219,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 def upload_term_condition(request):
     terms = {
         'current': [
-            'Default file will saved with md5 has names.',
+            'Default file will saved with md5 as its names.',
         ],
         'planning': [
             'File will be saved based on your requirement.',
@@ -322,7 +322,7 @@ def get_all_group_in_itemslist(request):
     status_code = status.HTTP_200_OK
     response = None
     response = ItemsList.objects.filter(
-        user=request.user.id).distinct().values_list('group')
+        user=request.user.id).values_list('group').order_by('group').distinct()
     response = flatter_list(response)
 
     return Response(response, status=status_code)

@@ -6,6 +6,9 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 # from django.contrib.auth import views as auth_views
 
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token
+from rest_framework_jwt.views import verify_jwt_token
 from rest_framework import routers
 # from allauth.account.views import confirm_email as allauthemailconfirmation
 
@@ -22,8 +25,18 @@ if settings.DEBUG:
 
 api_url += [
     url(r'^package/', include('packages.urls', namespace='packages')),
+
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+
+    #  url(r'^auth-jwt/', obtain_jwt_token),
+    #  by replacing the with `rest-auth/login/` to obtain jwt
+    #  token and making process painless.
+    url(r'^rest-auth/auth-jwt/', obtain_jwt_token),
+
+    url(r'^rest-auth/jwt-refresh/', refresh_jwt_token),
+    url(r'^rest-auth/jwt-verify/', verify_jwt_token),
+
 ]
 
 

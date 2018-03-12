@@ -62,3 +62,5 @@ drf-writable-nested
 
 # django-import-export==1.0.0
 pandas
+
+djangorestframework-jwt==1.11.0

@@ -4,6 +4,9 @@
 - allow xslx format (excel file).
 - uploading flat file with celery.[next major version]
 
+## 0.1.3
+- Reprashing the sentence in uploading condtions.
+
 ## 0.1.2
 - Changing the warning signs in term and condition in uploding of excel file REST.
 - Removing the concating of debit and creit columns as it cause wrong assert calculation.
