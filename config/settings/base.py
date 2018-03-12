@@ -7,8 +7,9 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
+import datetime
+
 import environ
-# import os
 
 ROOT_DIR = environ.Path(__file__) - 3  # (bm/config/settings/base.py - 3 = bm/)
 APPS_DIR = ROOT_DIR.path('bm')
@@ -325,6 +326,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=2),
     'JWT_AUTH_HEADER_PREFIX': 'Token',
 }
 
