@@ -32,10 +32,10 @@ api_url += [
     #  url(r'^auth-jwt/', obtain_jwt_token),
     #  by replacing the with `rest-auth/login/` to obtain jwt
     #  token and making process painless.
-    url(r'^rest-auth/auth-jwt/', obtain_jwt_token),
+    url(r'^rest-auth/login-auth/$', obtain_jwt_token),
 
-    url(r'^rest-auth/jwt-refresh/', refresh_jwt_token),
-    url(r'^rest-auth/jwt-verify/', verify_jwt_token),
+    url(r'^rest-auth/login-refresh/$', refresh_jwt_token),
+    url(r'^rest-auth/login-verify/$', verify_jwt_token),
 
 ]
 
