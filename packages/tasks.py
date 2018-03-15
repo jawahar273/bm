@@ -1,2 +1,72 @@
-from celery import shared_task
+import os
+
+from django.conf import settings
+
+from celery.utils.log import get_task_logger
+
+from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
+                                              FlatFileInterFaceException,
+                                              FlatFileInterFaceNotImplemented)
+from packages.utlity import to_hexdigit
+
+from bm.taskapp.celery import app
+
+logger = get_task_logger(__name__)
+
+
+@app.task(bind=True, track_started=True)
+def celery_upload_flat_file(self, response, status, request, file_name,
+                            file_format=None,
+                            use_fields=None, entry_type=2):
+
+    logger.info('Starting the upload file')
+
+    def upload_file_handler(file_pointer, _file_name):
+        logger.info('Writing %s to media folder' % (_file_name))
+        with open('%s.%s' % (_file_name, file_format), 'wb') as file:
+            for chunk in file_pointer.chunks():
+                file.write(chunk)
+
+    if file_format not in set(['csv', 'xslx']):
+        msg = 'the given file extenstion is not acceptable'
+        logger.info('File has is not acceptable')
+        return response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    access_file = request.FILES['file']
+    if len(access_file) <= 0:
+        logger.info('File is empty')
+        return response({'details': 'Uploading without file is not allowed'})
+
+    # checking is file to big
+    if access_file.multiple_chunks():
+        logger.info('File has reject due to big size'
+                    ' of (%.2f MB).' % (access_file.size / (1000 * 1000)))
+        msg = ('Uploaded file is too big'  # cnt
+               ' (%.2f MB).' % (access_file.size / (1000 * 1000)))  # end
+
+        return response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
+                                 to_hexdigit(file_name))
+
+    upload_file_handler(access_file, file_location)
+
+    try:
+        ffi_api = FlatFileInterFaceAPI()
+        ffi_api.read_file(file_format, file_location,
+                          usecols=use_fields)
+        try:
+            ffi_api.mapping_fields(entry_type)
+        except FlatFileInterFaceNotImplemented as e:
+            return response({'detail': e},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        ffi_api.insert_db(request.user.id)
+        ffi_api = None
+        return response({'details': 'success insert to database'},
+                        status=status.HTTP_200_OK)
+
+    except FlatFileInterFaceException:
+        return response({'detail': 'error in processing file'},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

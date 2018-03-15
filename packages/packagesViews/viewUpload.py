@@ -1,4 +1,3 @@
-import os
 
 from django.conf import settings
 
@@ -8,15 +7,16 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import FileUploadParser
 
-from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
-                                              FlatFileInterFaceException,
-                                              FlatFileInterFaceNotImplemented)
-from packages.utlity import to_hexdigit, to_hrs
+from packages.models import PackageSettings
+
+from packages.utlity import to_hrs
 from packages.config import PaymentTypeNumber
+from packages.tasks import celery_upload_flat_file
 
 
 @api_view(['get'])
 def upload_term_condition(request):
+
     terms = {
         'current': [
             'Default file will saved with md5 as its names.',
@@ -42,6 +42,7 @@ def upload_term_condition(request):
             ' that one for you.',
         ]
     }
+
     return Response({'detail': terms}, status=status.HTTP_200_OK)
 
 
@@ -55,56 +56,22 @@ def upload_flat_file(request, file_name, file_format=None,
     refer entry type in `packages.config`
     '''
 
-    def upload_file_handler(file_pointer, _file_name):
-        # file_name = to_hexdigit(file_name)
-        with open('%s.%s' % (_file_name, file_format), 'wb') as file:
-            for chunk in file_pointer.chunks():
-                file.write(chunk)
+    output = celery_upload_flat_file.delay(Response, status,
+                                           request,
+                                           file_name, file_format,
+                                           use_fields, entry_type)
 
-    if file_format not in set(['csv', 'xslx']):
-        msg = 'the given file extenstion is not acceptable'
-        return Response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
-
-    access_file = request.FILES['file']
-    if len(access_file) <= 0:
-        return Response({'details': 'Uploading without file is not allowed'})
-
-    # checking is file to big
-    if access_file.multiple_chunks():
-        msg = ('Uploaded file is too big'  # cnt
-               ' (%.2f MB).' % (access_file.size / (1000 * 1000)))  # end
-
-        return Response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
-
-    file_location = os.path.join('%s' % (settings.MEDIA_ROOT),
-                                 to_hexdigit(file_name))
-
-    upload_file_handler(access_file, file_location)
-
-    try:
-        ffi_api = FlatFileInterFaceAPI()
-        ffi_api.read_file(file_format, file_location,
-                          usecols=use_fields)
-        try:
-            ffi_api.mapping_fields(entry_type)
-        except FlatFileInterFaceNotImplemented as e:
-            return Response({'detail': e},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-        ffi_api.insert_db(request.user.id)
-        ffi_api = None
-        return Response({'details': 'success insert to database'},
-                        status=status.HTTP_200_OK)
-
-    except FlatFileInterFaceException:
-        return Response({'detail': 'error in processing file'},
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return output.ready().get(timeout=4)
 
 
 @api_view(['post'])
 def is_paytm_active(request, file_name, file_format=None):
-    pack_setting = PackageSettings.objects.filter(user_id=request.user.id).first()
+
+    pack_setting = PackageSettings.objects.filter(user_id=request.user.id)
+    pack_setting = pack_setting.first()
+
     if pack_setting.active_paytm == 'N':
+
         return Response({'detail': 'paytm uploading is diabled'},
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
     #  entry type == 1 is equal to paytm
@@ -112,5 +79,4 @@ def is_paytm_active(request, file_name, file_format=None):
                             file_format,
                             use_fields=settings.PAYTM_USE_FILEDS,
                             entry_type=PaymentTypeNumber.paytm_type()['id'])
-
 

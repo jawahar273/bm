@@ -47,19 +47,22 @@ pytz
 
 celery==3.1.25
 
-
 # Your custom requirements go here
 
 mysqlclient==1.3.12
 
-
-djangorestframework==3.7.3
 django-rest-auth==0.9.2 # intergate with rest framework and allauth package
-django-cors-headers
 drf-writable-nested
 # django-filter
 
 # django-import-export==1.0.0
 pandas
 
+# djangorestframework
+djangorestframework==3.7.3
+django-cors-headers
 djangorestframework-jwt==1.11.0
+
+# for celery
+django-celery-results==1.0.1
+flower==0.9.2

@@ -55,7 +55,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',  # for django-rest-auth
     'rest_auth',  # for django-rest-auth
     'rest_auth.registration',  # for django-rest-auth
-    'corsheaders',
+    'corsheaders',  # as CORS handler for djagno rest framework
 ]
 
 # Apps specific for this project go here.
@@ -280,11 +280,14 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 ########## CELERY
 INSTALLED_APPS += ['bm.taskapp.celery.CeleryConfig']
-CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='django://')
-if CELERY_BROKER_URL == 'django://':
-    CELERY_RESULT_BACKEND = 'redis://'
-else:
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://')
+# db+postgres://jawahar:jon2speed@localhost/bm
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='redis://')
+
+# if CELERY_BROKER_URL == 'django://':
+#     CELERY_RESULT_BACKEND = 'redis://'
+# else:
+#     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 ########## END CELERY
 
 

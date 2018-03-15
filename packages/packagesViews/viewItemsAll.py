@@ -15,13 +15,20 @@ from packages.utlity import flatter_list
 
 
 class ItemsListCreateView(viewsets.ModelViewSet):
+    '''Get the ItemsListModel value.
+    .. Notes::
+        overriding of `list` is handle in get_serializer_class.
 
-    # queryset = ItemsList.objects.all()
+    '''
+
     def get_queryset(self):
+
         return ItemsList.objects.filter(user=self.request.user.id)
 
     def get_serializer_class(self, *args, **kwargs):
+
         serializer_class = None
+
         if self.action == 'list':
             serializer_class = ItemsListSerializerOnlyForListFun
         else:
@@ -29,6 +36,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         return serializer_class
 
     def save_or_error_response(self, save_object):
+
         if not save_object.is_valid():
             return Response({'detail': 'wrong data given'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -39,7 +47,9 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         return Response(save_object.data)
 
     def create_or_update_entry(self, custom_request_data, update=None):
+
         serializers = None
+
         if update:
             serializers = ItemsListSerializer(update,
                                               data=custom_request_data)
@@ -49,22 +59,24 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         return self.save_or_error_response(serializers)
 
     def create(self, request):
-        # self.get_valid_date_or_error_response(month_year)
+
         request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def update(self, request, pk=None):
+
         request.data.update({'user': request.user.id})
         return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, pk=None):
+
         request.data.update({'user': request.user.id})
 
         return self.create_or_update_entry(request.data, self.get_object())
 
     def destroy(self, request, pk=None):
-        # request.data.update({'user': request.user.id})
+
         try:
             to_detete = self.get_object()
             self.perform_destroy(to_detete)
@@ -72,10 +84,12 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         except Http404:
             Response({'detail': 'content not found'},
                      status=status.HTTP_404_NOT_FOUND)
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ItemCreateView(viewsets.ModelViewSet):
+
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
 
@@ -85,6 +99,7 @@ def get_months(request, start, end=None):
     '''
     ... deperated :: in the favour of ItemList view..
     '''
+
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
@@ -92,6 +107,7 @@ def get_months(request, start, end=None):
     regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
+
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
         response = ItemsList.objects.filter(date__range=(start, end),
@@ -99,7 +115,9 @@ def get_months(request, start, end=None):
         serializers = ItemsListSerializerOnlyForListFun(data=response,
                                                         many=True)
         serializers.is_valid()
+
         return Response(serializers.data, status=status_code)
+
     elif start and not end:
         _date = start.rsplit('-', 1)[0]
         _date = datetime.datetime.strptime(_date, '%Y-%m').date()
@@ -109,10 +127,13 @@ def get_months(request, start, end=None):
         serializers = ItemsListSerializerOnlyForListFun(data=response,
                                                         many=True)
         serializers.is_valid()
+
         return Response(serializers.data, status=status_code)
+
     else:
         response = {'detail': 'Wrong date formate please check it again'}
         status_code = status.HTTP_400_BAD_REQUEST
+
         return Response(response, status=status_code)
 
 
@@ -124,6 +145,7 @@ def itemlist_get_by_months(request, start, end):
      ItemsList object.
      old-method-name: get_months
     '''
+
     response = []
     # %Y-%m-%d formate checking.
 
@@ -140,14 +162,19 @@ def itemlist_get_by_months(request, start, end):
                                                         many=True)
         serializers.is_valid()
         status_code = status.HTTP_200_OK
+
         return Response(serializers.data, status=status_code)
+
     elif checking_start and not end:
         response = {'detail': 'Need both date ranges'}
         status_code = status.HTTP_400_BAD_REQUEST
+
         return Response(response, status=status_code)
+
     else:
         response = {'detail': 'Wrong date formate please check it again'}
         status_code = status.HTTP_400_BAD_REQUEST
+
         return Response(response, status=status_code)
 
 
@@ -156,6 +183,7 @@ def get_all_group_in_itemslist(request):
     '''
      get the list of group/catagories items from itemsList object
     '''
+
     status_code = status.HTTP_200_OK
     response = None
     response = ItemsList.objects.filter(

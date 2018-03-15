@@ -12,6 +12,7 @@ from packages.serializers import PackageSettingsSerializer
 def PackageSettingsView(request):
 
     def save_or_error_response(save_object):
+
         if not save_object.is_valid():
             return Response({'detail': 'not a valid settings'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -22,12 +23,14 @@ def PackageSettingsView(request):
         return Response(save_object.data)
 
     def create_or_update_entry(custom_request_data, update=None):
+
         serializers = PackageSettingsSerializer(update,
                                                 data=custom_request_data)
         return save_or_error_response(serializers)
 
     if request.method == 'GET':
-        queryset = PackageSettings.objects.filter(user__id=request.user.id).values()[0]
+        queryset = PackageSettings.objects.filter(user__id=request.user.id)
+        queryset = queryset.values()[0]
         queryset['user'] = queryset.pop('user_id')
         serializers = PackageSettingsSerializer(data=queryset)
         if not serializers.is_valid():
@@ -37,12 +40,13 @@ def PackageSettingsView(request):
 
     if request.method == 'PUT':
         request.data.update({'user': request.user.id})
-        queryset = PackageSettings.objects.filter(user__id=request.user.id).first()#.values()[0]
+        queryset = PackageSettings.objects.filter(user__id=request.user.id)
+        queryset = queryset.first()
 
         return create_or_update_entry(request.data, queryset)
 
     if request.method == 'DELETE':
-        # request.data.update({'user': request.user.id})
+
         return Response({'detail': 'method is not allowed'},
                         status=status.HTTP_403_FORBIDDEN)
 
