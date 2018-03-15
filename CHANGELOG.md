@@ -4,6 +4,9 @@
 - allow xslx format (excel file).
 - uploading flat file with celery.[next major version]
 
+## 0.2.1
+- Changing the `packages.view` into readable sub folders.
+
 ## 0.2.0
 - JWT for auth
 - Distince in group on `ItemsList` model
