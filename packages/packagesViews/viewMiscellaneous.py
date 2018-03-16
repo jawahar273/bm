@@ -17,4 +17,5 @@ def get_currency(request):
     file_location = os.path.join(settings.STATIC_ROOT, 'js', '')
 
     with open(file_location + 'commmon-currency.json') as file:
+
         return Response(json.loads(file.read()), status=status.HTTP_200_OK)
