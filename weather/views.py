@@ -17,16 +17,11 @@ class AirPollutionView(viewsets.ReadOnlyModelViewSet):
     queryset = AirPollution.objects.all()
     serializer_class = AirPollutionSerializer
 
-    def retrieve(self, request, date=None):
-        '''
-        :param: request
-        :param str date: get the value from db based on date.
-
-        '''
+    def retrieve(self, request, weather_date=None):
 
         regex_date = settings.REGEX_DATE_FORMAT
 
-        if not re.search(regex_date, date):
+        if not re.search(regex_date, weather_date):
             return Response({'detail': 'wrong date format given'},
                             status=status.HTTP_400_BAD_REQUEST)
         response = []
@@ -35,7 +30,7 @@ class AirPollutionView(viewsets.ReadOnlyModelViewSet):
 
             gtype_code = gtype[0].lower()
             _queryset = AirPollutionData.objects.filter(data_base__gas_type=gtype_code,
-                                                        weather_date=date)
+                                                        weather_date=weather_date)
 
             _serializer = AirPollutionDataSerializer(data=_queryset)
             _serializer.is_valid()

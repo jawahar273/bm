@@ -39,6 +39,12 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return MonthBudgetAmount.objects.filter(user=self.request.user.id)
 
     def get_valid_date_or_error_response(self, month_year=None):
+        '''Chech the date is a valid based on the application's
+        standards.
+
+        :param str month_year: the date from the user.
+        :rtype: JSON
+        '''
 
         regex_date = settings.REGEX_DATE_FORMAT
 
@@ -58,7 +64,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
             return Response({'detail': 'unable to save the request data'},
                             status=status.HTTP_400_BAD_REQUEST)
-        return Response(save_object.data)
+        return Response(save_object.data, status=status.HTTP_200_OK)
 
     def return_only_monthYear(self, month_year=None):
 
@@ -89,7 +95,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
 
-        return Response(serializers.data)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
     def create(self, request):
 
