@@ -1,9 +1,13 @@
 import re
 import datetime
 
+
+from django.conf import settings
+
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
+
 
 from packages.models import MonthBudgetAmount
 from packages.serializers import MonthBudgetAmountSerializer
@@ -36,7 +40,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
     def get_valid_date_or_error_response(self, month_year=None):
 
-        regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+        regex_date = settings.REGEX_DATE_FORMAT
 
         if not re.search(regex_date, month_year):
 
@@ -127,7 +131,8 @@ def get_range_mba(request, start, end=None):
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking.
-    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    regex_date = settings.REGEX_DATE_FORMAT
+    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 

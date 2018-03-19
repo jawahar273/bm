@@ -1,10 +1,14 @@
 import datetime
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 #from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
+
 
 from packages.config import PaymentTypeNumber
 
@@ -50,7 +54,11 @@ class MonthBudgetAmount(models.Model):
 
     budget_amount = models.DecimalField(max_digits=10,
                                         decimal_places=2, default=0)
-    month_year = models.DateField(default=start_date)
+    month_year = models.DateField(default=start_date,
+                                  validators=[
+                                     RegexValidator(settings.BM_STANDARD_DATEFORMAT)
+                                    ]
+                                 )
     user = models.ForeignKey(USERMODEL, blank=True,
                              related_name='mba_USERMODEL',
                              on_delete=models.CASCADE)
@@ -77,9 +85,14 @@ class ItemsList(models.Model):
     name = models.CharField(max_length=50, unique=True, )
     place = models.CharField(max_length=50)
     group = models.CharField(max_length=30, blank=True)
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateField(default=datetime.date.today,
+                            validators=[
+                                RegexValidator(settings.BM_STANDARD_DATEFORMAT)
+                                ]
+                            )
     total_amount = models.DecimalField(max_digits=7,
-                                       decimal_places=2, default=0)
+                                       decimal_places=2,
+                                       default=0)
     temp = PaymentTypeNumber.default_type()['id']
     entry_type = models.PositiveSmallIntegerField(default=temp)
 

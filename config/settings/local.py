@@ -76,11 +76,6 @@ if DEBUG:
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
 
-# REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] =  (
-#         'rest_framework.authentication.BasicAuthentication',
-#         # permission related issue 
-#         'rest_framework.authentication.TokenAuthentication',
-#     )
 # permission related issue 
 # from django.conf import settings
 SWAGGER_SETTINGS = {
@@ -91,12 +86,10 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization'
         }
     },
-    # 'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),
-    # 'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),
     'DOC_EXPANSION': None,
     'APIS_SORTER': None,
     'OPERATIONS_SORTER': None,
-    'JSON_EDITOR': False,
+    'JSON_EDITOR': True,
     'SHOW_REQUEST_HEADERS': False,
     'SUPPORTED_SUBMIT_METHODS': [
         'get',
@@ -105,7 +98,7 @@ SWAGGER_SETTINGS = {
         'delete',
         'patch'
     ],
-'VALIDATOR_URL': '',
+    'VALIDATOR_URL': 'https://online.swagger.io/validator',
 }
 
 CORS_ORIGIN_WHITELIST = (

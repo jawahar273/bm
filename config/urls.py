@@ -24,7 +24,6 @@ if settings.DEBUG:
 
 
 api_url += [
-    url(r'^package/', include('packages.urls', namespace='packages')),
 
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
@@ -37,6 +36,8 @@ api_url += [
     url(r'^rest-auth/login-refresh/$', refresh_jwt_token),
     url(r'^rest-auth/login-verify/$', verify_jwt_token),
 
+    url(r'^package/', include('packages.urls', namespace='packages')),
+    url(r'^weather/', include('weather.urls', namespace='weather')),
 ]
 
 

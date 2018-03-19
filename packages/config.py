@@ -1,6 +1,4 @@
 # to class some setting for the package app
-
-
 class PaymentTypeNumber:
     '''
     +------------+-------------------+

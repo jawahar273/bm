@@ -1,5 +1,3 @@
-
-
 def flatter_list(items):
     '''
      fastest way to flatten list of elements
