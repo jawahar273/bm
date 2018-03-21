@@ -1,11 +1,13 @@
 import re
 import datetime
 
+from django.conf import settings
 from django.http import Http404
 
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
+
 
 from packages.models import Item, ItemsList
 from packages.serializers import (ItemSerializer,
@@ -103,16 +105,16 @@ def get_months(request, start, end=None):
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking. 
-
-    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    regex_date = settings.REGEX_DATE_FORMAT
+    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
-        response = ItemsList.objects.filter(date__range=(start, end),
-                                            user_id=request.user.id)
-        serializers = ItemsListSerializerOnlyForListFun(data=response,
+        _queryset = ItemsList.objects.filter(date__range=(start, end),
+                                             user_id=request.user.id)
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
                                                         many=True)
         serializers.is_valid()
 
@@ -121,10 +123,10 @@ def get_months(request, start, end=None):
     elif start and not end:
         _date = start.rsplit('-', 1)[0]
         _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        response = ItemsList.objects.filter(date__month=_date.month,
-                                            date__year=_date.year,
-                                            user_id=request.user.id)
-        serializers = ItemsListSerializerOnlyForListFun(data=response,
+        _queryset = ItemsList.objects.filter(date__month=_date.month,
+                                             date__year=_date.year,
+                                             user_id=request.user.id)
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
                                                         many=True)
         serializers.is_valid()
 
@@ -148,17 +150,17 @@ def itemlist_get_by_months(request, start, end):
 
     response = []
     # %Y-%m-%d formate checking.
-
-    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    regex_date = settings.REGEX_DATE_FORMAT
+    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
-        response = ItemsList.objects.filter(date__range=(start, end),
-                                            user=request.user.id)
+        _queryset = ItemsList.objects.filter(date__range=(start, end),
+                                             user=request.user.id)
 
-        serializers = ItemsListSerializerOnlyForListFun(data=response,
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
                                                         many=True)
         serializers.is_valid()
         status_code = status.HTTP_200_OK
@@ -185,9 +187,8 @@ def get_all_group_in_itemslist(request):
     '''
 
     status_code = status.HTTP_200_OK
-    response = None
-    response = ItemsList.objects.filter(
-        user=request.user.id).values_list('group').order_by('group').distinct()
-    response = flatter_list(response)
+    _queryset = ItemsList.objects.filter(
+         user=request.user.id).values_list('group').order_by('group').distinct()
+    _queryset = flatter_list(_queryset)
 
-    return Response(response, status=status_code)
+    return Response(_queryset, status=status_code)

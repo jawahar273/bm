@@ -4,15 +4,13 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from drf_writable_nested import WritableNestedModelSerializer
 
-from packages.models import ItemsList, Item, MonthBudgetAmount, PackageSettings
 
-# from packages.serializers_childs.filter_nested_items import FilterNestedItems
+from packages.models import ItemsList, Item, MonthBudgetAmount, PackageSettings
 
 
 class MonthBudgetAmountSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # list_serializer_class = FilterNestedItems
         model = MonthBudgetAmount
         fields = ('budget_amount', 'month_year', 'user', )
 
@@ -20,11 +18,9 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
             return 'user: {}-{}-{}'.format(obj.user,
                                            obj.month_year.year,
                                            obj.month_year.month)
-        validators = [
-          UniqueTogetherValidator(queryset=MonthBudgetAmount.objects.all(),
-                                  fields=('user', 'month_year')
-                                  )
-        ]
+        temp = MonthBudgetAmount.objects.all()
+        validators = [UniqueTogetherValidator(queryset=temp,
+                                              fields=('user', 'month_year'))]
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -32,7 +28,6 @@ class ItemSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(max_digits=6, decimal_places=2)
 
     class Meta:
-        # list_serializer_class = FilterNestedItems
         model = Item
         fields = ('amount', 'name')
 
@@ -58,7 +53,6 @@ class ItemsListSerializer(WritableNestedModelSerializer):
         model = ItemsList
         fields = ('id', 'name', 'place', 'group',
                   'date', 'items', 'total_amount', 'user', )
-        # fields = ('__all__')
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -81,9 +75,3 @@ class PackageSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PackageSettings
         fields = '__all__'
-
-    # def to_representation(self, instance):
-    #     # to avoid the extra encoding in the string(return)..
-    #     ret = super(PackageSettingsSerializer, self).to_representation(instance)
-    #     ret['new_settings'] = json.loads(ret['new_settings'])
-    #     return ret

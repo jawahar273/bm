@@ -65,6 +65,7 @@ LOCAL_APPS = [
     # 'bm.taskapp.celery.CeleryConfig',
     # Your stuff: custom apps go here
     'packages',
+    'weather'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -297,6 +298,11 @@ ADMIN_URL = r'^admin/'
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 
+#  Date and time format
+BM_REGEX_DATE_FORMAT = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+BM_ISO_8601_TIMESTAMP = '%Y-%m-%dT%H:%M:%Sz'
+BM_STANDARD_DATEFORMAT = '%Y-%m-%d'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -367,3 +373,11 @@ EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
 PAYTM_USE_FILEDS = ['Date', 'Activity',
                     'Source/Destination', 'Debit',
                     'Status']
+
+# open weather api key
+OPEN_WEATHER_MAP = env('OPEN_WEATHER_MAP', default='')
+
+#  https://openweathermap.org/api/pollution/o3
+#  Title under <h2>Location format</h2>
+BM_MAX_DISTANCE_ACCURACY = 78
+# (aprx) Digits beyond decimal point to search radius

@@ -1,6 +1,5 @@
-
-
 from rest_framework import serializers
+
 
 class FilterNestedItems(serializers.ListSerializer):
 

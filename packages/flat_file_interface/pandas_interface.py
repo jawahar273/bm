@@ -60,7 +60,8 @@ class PandasExcelAPI(BaseExcelClass):
             self.paytm_process()
         else:
             raise PandasInterfaceNotImplement('other than paytm csv '
-                                              'function is not been implemented')
+                                              'function is not been'
+                                              ' implemented')
         # self.dataContent.rename(options, inplace=True)
 
     def paytm_process(self):

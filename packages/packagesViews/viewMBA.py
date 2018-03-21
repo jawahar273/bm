@@ -1,9 +1,13 @@
 import re
 import datetime
 
+
+from django.conf import settings
+
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
+
 
 from packages.models import MonthBudgetAmount
 from packages.serializers import MonthBudgetAmountSerializer
@@ -35,8 +39,14 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return MonthBudgetAmount.objects.filter(user=self.request.user.id)
 
     def get_valid_date_or_error_response(self, month_year=None):
+        '''Chech the date is a valid based on the application's
+        standards.
 
-        regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+        :param str month_year: the date from the user.
+        :rtype: JSON
+        '''
+
+        regex_date = settings.REGEX_DATE_FORMAT
 
         if not re.search(regex_date, month_year):
 
@@ -54,7 +64,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
             return Response({'detail': 'unable to save the request data'},
                             status=status.HTTP_400_BAD_REQUEST)
-        return Response(save_object.data)
+        return Response(save_object.data, status=status.HTTP_200_OK)
 
     def return_only_monthYear(self, month_year=None):
 
@@ -85,7 +95,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
 
-        return Response(serializers.data)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
     def create(self, request):
 
@@ -127,7 +137,8 @@ def get_range_mba(request, start, end=None):
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking.
-    regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+    regex_date = settings.REGEX_DATE_FORMAT
+    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 

@@ -2,7 +2,16 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
+
 from .models import User
+
+'''Admin module is use for web admin to make interface with the modules.
+
+.. notes::
+    In development mode on login(making remeber me also) makes swagger to
+    automatically login default its self.
+'''
 
 
 class MyUserChangeForm(UserChangeForm):

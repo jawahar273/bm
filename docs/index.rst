@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to bm's documentation!
-====================================================================
+==============================
 
 Contents:
 
@@ -14,9 +14,9 @@ Contents:
    readme
    install
    packages/index
+   weathers/index
    deploy
    docker_ec2
-   tests
 
 
 Indices and tables

@@ -1,6 +1,5 @@
 MonthBudgetAmount
 ==================
-jflkaddfjladf
 
-.. automodule:: packages.models
+.. automodule::bm.packages.models
    :members:
