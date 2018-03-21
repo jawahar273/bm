@@ -1,6 +1,9 @@
 
-Welcome to Packages
-====================
+Packages
+========
+
+Package is storage place for the spending amount and its after maths process.
+
 
 Contents:
 
