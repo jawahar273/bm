@@ -9,7 +9,8 @@ class AirPollutionDataSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = AirPollutionData
-        fields = '__all__'
+        fields = ('data_base', 'precision',
+                  'pressure', 'value', 'weather_date')
 
 
 class AirPollutionSerializer(serializers.ModelSerializer):

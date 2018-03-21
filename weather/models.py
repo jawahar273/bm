@@ -23,7 +23,7 @@ class AirPollution(models.Model):
     #  get the last time update of its content.
     last_update = models.DateTimeField()
     #  get the last timestramp update in db
-    last_db_update = models.DateTimeField(timezone.now())
+    last_db_update = models.DateTimeField(default=timezone.now, blank=True)
     #  get the center station's location.
     location_lat = models.DecimalField(max_digits=14, decimal_places=4,
                                        default=0)
@@ -44,8 +44,10 @@ class AirPollutionData(models.Model):
     precision = models.FloatField()
     pressure = models.FloatField()
     value = models.FloatField()
-    weather_date = models.DateField(null=True, unique=True)
+    weather_date = models.DateField(null=True)
 
     def __str__(self):
-        return 'Base id-{:d}, Pressure-{:.2f} '.format(self.data_base.id,
-                                                       self.pressure)
+        return ('Base id-{:d}, Pressure-{:.2f}'
+                ' Gas Type -{}'.format(self.data_base.id,
+                                       self.pressure,
+                                       self.data_base.gas_type.upper()))

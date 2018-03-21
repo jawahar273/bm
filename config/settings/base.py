@@ -299,8 +299,8 @@ ADMIN_URL = r'^admin/'
 # ------------------------------------------------------------------------------
 
 #  Date and time format
-REGEX_DATE_FORMAT = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
-ISO_8601_TIMESTAMP = '%Y-%m-%dT%H:%M:%Sz'
+BM_REGEX_DATE_FORMAT = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
+BM_ISO_8601_TIMESTAMP = '%Y-%m-%dT%H:%M:%Sz'
 BM_STANDARD_DATEFORMAT = '%Y-%m-%d'
 
 REST_FRAMEWORK = {
