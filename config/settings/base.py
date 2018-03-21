@@ -379,5 +379,5 @@ OPEN_WEATHER_MAP = env('OPEN_WEATHER_MAP', default='')
 
 #  https://openweathermap.org/api/pollution/o3
 #  Title under <h2>Location format</h2>
-MAX_DISTANCE_ACCURACY = 78
+BM_MAX_DISTANCE_ACCURACY = 78
 # (aprx) Digits beyond decimal point to search radius

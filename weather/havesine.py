@@ -9,6 +9,9 @@ class Haversine:
     output distance available in kilometers, meters, miles, and feet.
     example usage: Haversine([lon1,lat1],[lon2,lat2]).feet
 
+    Distance of the user's location and weather's stations is calucated to
+    call the `weather api` get the weather details.
+
     please ref this
     `link <https://nathanrooy.github.io/posts/2016-09-07/haversine-with-python/>`_
     to know more of its formula by its author Nathan A. Rooy.
