@@ -2,9 +2,7 @@ import datetime
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-#from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
