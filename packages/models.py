@@ -30,16 +30,6 @@ def after_user_signed_up(sender, request, user, **kwargs):
 USERMODEL = get_user_model()
 
 
-def onlyFiveRangeValidator(val):
-    '''
-    .. deprecated::
-       The functioncality of this function has been removed.
-    '''
-
-    if(val % 1 == 0 or val % 1 == 0.5):
-        ValidationError('given value "{}" is not multiple of 5'.format(val))
-
-
 class MonthBudgetAmount(models.Model):
     '''
     The budget amount of the  months with unique key constrain with
