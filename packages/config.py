@@ -26,3 +26,10 @@ class PaymentTypeNumber:
     @staticmethod
     def excel_type():
         return PaymentTypeNumber.settings['excel']
+
+
+class PackageSettingsGeoloc:
+
+    @staticmethod
+    def interval_time():
+        return 60 #  equal to mins.

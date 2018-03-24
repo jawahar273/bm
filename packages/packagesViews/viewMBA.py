@@ -46,7 +46,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         :rtype: JSON
         '''
 
-        regex_date = settings.REGEX_DATE_FORMAT
+        regex_date = settings.BM_REGEX_DATE_FORMAT
 
         if not re.search(regex_date, month_year):
 
@@ -137,7 +137,7 @@ def get_range_mba(request, start, end=None):
     response = []
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking.
-    regex_date = settings.REGEX_DATE_FORMAT
+    regex_date = settings.BM_REGEX_DATE_FORMAT
     # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)

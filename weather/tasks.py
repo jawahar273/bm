@@ -52,5 +52,4 @@ def celery_update_air_pollution_db(self, lat, lon):
 
         get_task_logger('Insert into the database successfully.')
 
-        return True
 

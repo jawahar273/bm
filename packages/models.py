@@ -10,7 +10,8 @@ from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
 
 
-from packages.config import PaymentTypeNumber
+from packages.config import (PaymentTypeNumber,
+                             PackageSettingsGeoloc as Geoloc)
 
 
 # https://www.cloudamqp.com/plans.html
@@ -131,10 +132,12 @@ class PackageSettings(models.Model):
     currency_details = models.TextField(max_length=100, default='', blank=True)
     #  force ask about monthly budget model in client.
     force_mba_update = models.CharField(default='Y', max_length=1)
-    #  review need..
-    # temp = PaymentTypeNumber.default_type()
-    # paytm_type = models.CharField(default=temp['id'], max_length=2)
+
     active_paytm = models.CharField(default='N', max_length=1)
+
+    #  get/set the interval to get the geolocation from the user.
+    temp_geoloc = Geoloc.interval_time()
+    geoloc_interval = models.PositiveSmallIntegerField(default=temp_geoloc)
 
     def __str__(self):
         return '{}`s package setting'.format(self.user.username)

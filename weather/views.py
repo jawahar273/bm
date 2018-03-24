@@ -9,13 +9,12 @@ from rest_framework.response import Response
 
 
 from weather.models import GAS_TYPE_CHOICES, AirPollution, AirPollutionData
-from weather.serializers import (AirPollutionSerializer,
-                                 AirPollutionDataSerializer)
+from weather.serializers import AirPollutionDataSerializer
 
 
 class AirPollutionView(viewsets.ReadOnlyModelViewSet):
 
-    queryset = AirPollutionData.objects.all()
+    queryset = AirPollution.objects.all()
     serializer_class = AirPollutionDataSerializer
     lookup_field = 'weather_date'
 
