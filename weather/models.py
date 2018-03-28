@@ -23,7 +23,7 @@ class AirPollution(models.Model):
     #  get the last time update of its content.
     last_update = models.DateTimeField()
     #  get the last timestramp update in db
-    last_db_update = models.DateTimeField(default=timezone.now, blank=True)
+    last_db_update_date = models.DateTimeField(default=timezone.now, blank=True)
     #  get the center station's location.
     location_lat = models.DecimalField(max_digits=14, decimal_places=4,
                                        default=0)

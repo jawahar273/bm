@@ -1,10 +1,14 @@
-from rest_framework import routers
+from django.conf import settings
+from django.conf.urls import url
 
 
-from weather.views import AirPollutionView
+from weather.views import get_air_pollution
 
 
-router = routers.DefaultRouter()
-router.register('air-pollution', AirPollutionView, base_name='air-pollution')
-
-urlpatterns = router.urls
+urlpatterns = [
+    url('air-pollution/(?P<weather_date>{})'
+        '/(?P<lat>{})/(?P<lon>{})'.format(settings.BM_REGEX_DATE_FORMAT,
+                                          '[0-9]{0,3}',
+                                          '[0-9]{0,3}'),
+        get_air_pollution)
+]

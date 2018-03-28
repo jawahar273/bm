@@ -29,12 +29,15 @@ def celery_update_air_pollution_db(self, lat, lon):
                                        lon=lon,
                                        appid=settings.OPEN_WEATHER_MAP,
                                        gas_type=gtype_code))
+
         content = weather_get(url).json()
+
         base = AirPollution(gas_type=gtype_code,
                             last_update=content['time'],
                             location_lat=content['location'],
                             location_lon=content['longitude'])
         base.save()
+
         base_date = datetime.datetime.strptime(content['time'],
                                                settings.ISO_8601_TIMESTAMP)
 

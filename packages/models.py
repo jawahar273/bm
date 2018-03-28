@@ -1,10 +1,12 @@
 import datetime
 
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
 from django.db import models
 from django.dispatch import receiver
+
 from allauth.account.signals import user_signed_up
 
 
@@ -43,19 +45,23 @@ class MonthBudgetAmount(models.Model):
 
     budget_amount = models.DecimalField(max_digits=10,
                                         decimal_places=2, default=0)
+
     month_year = models.DateField(default=start_date,
                                   validators=[
                                      RegexValidator(settings.BM_STANDARD_DATEFORMAT)
                                     ]
                                  )
+
     user = models.ForeignKey(USERMODEL, blank=True,
                              related_name='mba_USERMODEL',
                              on_delete=models.CASCADE)
 
     class Meta:
+
         unique_together = ('month_year', 'user')
 
     def __str__(self):
+
         return '{}`s Time line: {}'.format(self.user, self.month_year)
 
 
@@ -71,25 +77,33 @@ class ItemsList(models.Model):
     user = models.ForeignKey(USERMODEL, blank=True,
                              related_name='itemlist_USERMODEL',
                              on_delete=models.CASCADE)
+
     name = models.CharField(max_length=50, unique=True, )
+
     place = models.CharField(max_length=50)
+
     group = models.CharField(max_length=30, blank=True)
+
     date = models.DateField(default=datetime.date.today,
                             validators=[
                                 RegexValidator(settings.BM_STANDARD_DATEFORMAT)
                                 ]
                             )
+
     total_amount = models.DecimalField(max_digits=7,
                                        decimal_places=2,
                                        default=0)
+
     temp = PaymentTypeNumber.default_type()['id']
     entry_type = models.PositiveSmallIntegerField(default=temp)
 
     class Meta:
+
         ordering = ['-id']
         get_latest_by = ['-date']
 
     def __str__(self):
+
         return 'Unique ID-{}: {}, {}'.format(self.id, self.name, self.date)
 
 
@@ -102,7 +116,9 @@ class Item(models.Model):
     items_list = models.ForeignKey(ItemsList,
                                    related_name='items',
                                    on_delete=models.CASCADE)
+
     name = models.CharField(max_length=10, default='')
+
     amount = models.DecimalField(max_digits=6, decimal_places=2, default=1)
 
     def __str__(self):
@@ -117,7 +133,9 @@ class PackageSettings(models.Model):
     user = models.ForeignKey(USERMODEL, blank=True,
                              related_name='package_settings',
                              on_delete=models.CASCADE)
+
     currency_details = models.TextField(max_length=100, default='', blank=True)
+
     #  force ask about monthly budget model in client.
     force_mba_update = models.CharField(default='Y', max_length=1)
 
@@ -128,4 +146,5 @@ class PackageSettings(models.Model):
     geoloc_interval = models.PositiveSmallIntegerField(default=temp_geoloc)
 
     def __str__(self):
+
         return '{}`s package setting'.format(self.user.username)

@@ -18,6 +18,7 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
             return 'user: {}-{}-{}'.format(obj.user,
                                            obj.month_year.year,
                                            obj.month_year.month)
+
         temp = MonthBudgetAmount.objects.all()
         validators = [UniqueTogetherValidator(queryset=temp,
                                               fields=('user', 'month_year'))]

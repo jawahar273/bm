@@ -20,22 +20,32 @@ router.register('mba', MonthBudgetAmountView, base_name='mba')
 regex_date_valid = r'[0-9\-]{10}'
 
 urlpatterns = [
+
     url(r'^settings/',
         PackageSettingsView, name='package_settings'),
+
     url(r'^itemslist/(?P<start>{})/(?P<end>{})/$'.format(regex_date_valid,
                                                          regex_date_valid),
         itemlist_get_by_months, name="itemslist_get_by_month"),
+
     url(r'^get_group_items/$',
         get_all_group_in_itemslist, name="get_group_list"),
+
     url(r'^mba/(?P<start>{})/(?P<end>{})/$'.format(regex_date_valid,
                                                    regex_date_valid),
         get_range_mba, name="range_mba"),
+
     url(r'^currency/$', get_currency, name='currency'),
+
     url(r'^upload-term-condition/$',
         upload_term_condition, name='upload_term_condition'),
+
     url(r'^paytm-upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/$',
         is_paytm_active, name='patym_upload_file'),
+
     url(r'^upload/(?P<file_name>[^/]+).(?P<file_format>csv|xslx)/$',
         upload_flat_file, name='upload_file'),
+
     ]
+
 urlpatterns.extend(router.urls)
