@@ -14,8 +14,6 @@ from packages.config import (PaymentTypeNumber,
                              PackageSettingsGeoloc as Geoloc)
 
 
-# https://www.cloudamqp.com/plans.html
-
 @receiver(user_signed_up)
 def after_user_signed_up(sender, request, user, **kwargs):
     '''

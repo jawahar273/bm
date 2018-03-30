@@ -11,29 +11,34 @@ depones on open weather's api.
 
 GAS_TYPE_CHOICES = (
     ('CO', 'Carbon Monoxide Data'),
-    ('O3', 'Ozone Data'),
     ('SO2', 'Sulfur Dioxide Data'),
-    ('NO2', 'Nitrogen Dioxide Data')
+    # ('O3', 'Ozone Data'),
+    # ('NO2', 'Nitrogen Dioxide Data')
 )
 
 
 class AirPollution(models.Model):
 
     gas_type = models.CharField(max_length=3, choices=GAS_TYPE_CHOICES)
+
     #  get the last time update of its content.
     last_update = models.DateTimeField()
     #  get the last timestramp update in db
-    last_db_update_date = models.DateTimeField(default=timezone.now, blank=True)
+    last_db_update_date = models.DateTimeField(default=timezone.now,
+                                               blank=True)
     #  get the center station's location.
     location_lat = models.DecimalField(max_digits=14, decimal_places=4,
                                        default=0)
     location_lon = models.DecimalField(max_digits=15, decimal_places=4,
                                        default=0)
 
+    class Meta:
+        unique_together = (('gas_type', 'last_update'))
+
     def __str__(self):
-        return ('Gas Type-{},'
-                ' Last Update-{:%Y-%m-%d %H:%M}'.format(self.gas_type.upper(),
-                                                        self.last_update))
+        return ('Last Update-{:%Y-%m-%d %H:%M}'
+                ' GasType-{}'.format(self.last_update,
+                                     self.gas_type.upper()))
 
 
 class AirPollutionData(models.Model):
@@ -47,7 +52,8 @@ class AirPollutionData(models.Model):
     weather_date = models.DateField(null=True)
 
     def __str__(self):
-        return ('Base id-{:d}, Pressure-{:.2f}'
-                ' Gas Type -{}'.format(self.data_base.id,
+        return ('Date-{} Base id-{:d}, Pressure-{:.2f}'
+                ' Gas Type -{}'.format(self.weather_date,
+                                       self.data_base.id,
                                        self.pressure,
                                        self.data_base.gas_type.upper()))

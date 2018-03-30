@@ -75,6 +75,7 @@ def is_paytm_active(request, file_name, file_format=None):
 
         return Response({'detail': 'paytm uploading is diabled'},
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     #  entry type == 1 is equal to paytm
     return upload_flat_file(request, file_name,
                             file_format,
