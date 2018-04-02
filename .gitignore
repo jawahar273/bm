@@ -319,6 +319,7 @@ testProd/
 testPro/
 customize_*_settings.py
 env*.sh
+.env.*
 fixtures/*-prod.json
 Paytm_Wallet_Txn_History_Csv_*.csv
 *.csv
