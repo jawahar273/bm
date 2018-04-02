@@ -1,3 +1,3 @@
 
 web: gunicorn config.wsgi --log-file -
-worker: celery -A bm.taskapp worker -S django -l info
+worker: python manage.py celery worker --loglevel=info
