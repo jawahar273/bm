@@ -145,7 +145,8 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 
 # CACHING
 # ------------------------------------------------------------------------------
-REDIS_LOCATION = 'redis://{}:{}/0'.format(
+REDIS_LOCATION = 'rediss://:{}@{}:{}/0'.format(
+    env('REDIS_PASSWORD')
     env('REDIS_ENDPOINT_ADDRESS'),
     env('REDIS_PORT')
 )
@@ -157,7 +158,7 @@ CACHES = {
         'LOCATION': REDIS_LOCATION,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'IGNORE_EXCEPTIONS': True,  # mimics memcache behavior.
+            'IGNORE_EXCEPTIONS': False,  # mimics memcache behavior.
                                         # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
         }
     }
