@@ -145,8 +145,7 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 
 # CACHING
 # ------------------------------------------------------------------------------
-REDIS_LOCATION = 'rediss://:{}@{}:{}/0'.format(
-    env('REDIS_PASSWORD'),
+REDIS_LOCATION = 'rediss://{}:{}/0'.format(
     env('REDIS_ENDPOINT_ADDRESS'),
     env('REDIS_PORT')
 )
@@ -237,3 +236,6 @@ CLIENT_REDIRECT_DOMAIN = '{CORS_ORIGIN_WHITELIST}/'
 CLIENT_REDIRECT_URL = env('BM_CLIENT_REDIRECT_URL', default='reset')
 
 CELERY_RESULT_BACKEND = REDIS_LOCATION
+CELERY_ALWAYS_EAGER = False
+CELERY_ACKS_LATE = True
+
