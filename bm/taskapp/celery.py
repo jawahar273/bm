@@ -36,6 +36,8 @@ class CeleryConfig(AppConfig):
             raven_register_logger_signal(raven_client)
             raven_register_signal(raven_client)
 
+        debug_task.delay()
+
 
 
 
