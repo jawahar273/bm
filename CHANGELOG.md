@@ -3,6 +3,7 @@
 ## [Planning]
 - allow xslx format (excel file).
 - uploading flat file with celery.[next major version]
+- deploy heroku automaticaly by `heroku button`.
 
 ## 0.2.1
 - Changing the `packages.view` into readable sub folders.

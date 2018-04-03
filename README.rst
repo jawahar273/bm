@@ -70,7 +70,8 @@ To run a celery worker:
 .. code-block:: bash
 
     cd bm
-    celery -A bm.taskapp worker -l info
+    celery -A bm.taskapp worker -l info # may cause heroku(worker) crash.
+    celery -A b.taskapp worker --loglevel=info
 
 Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
 
@@ -102,11 +103,11 @@ Sentry
 ^^^^^^
 
 Sentry is an error logging aggregator service. You can sign up for a free account at  https://sentry.io/signup/?code=cookiecutter  or download and host it yourself.
-The system is setup with reasonable defaults, including 404 logging and integration with the WSGI applic
+The system is setup with reasonable defaults, including 404 logging and integration with the WSGI.
 
 .. note::
 
-   Important part for working
+   Important part for working in production.
 
 Seeds for DB
 ^^^^^^^^^^^^
@@ -114,4 +115,12 @@ Need to use load data in `manager.py` as seed data.
 
 Cross Domain Name
 ^^^^^^^^^^^^^^^^^^
-Must set `DJANGO_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client side. 
+Must set `BM_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client side. 
+
+Client Side Redirection
+^^^^^^^^^^^^^^^^^^^^^^^
+
+`BM_CLIENT_REDIRECT_URL` set the url which help in `restting` password.
+
+.. note::
+   Default redirection url is `reset`.
