@@ -13,6 +13,7 @@ from weather.models import (GAS_TYPE_CHOICES,
                             AirPollutionData)
 from weather.serializers import AirPollutionDataSerializer
 from weather.tasks import celery_update_air_pollution_db
+from weather.exceptions import LatLonDoesNotExit, DateDoesNotExit
 
 
 def air_pollution(weather_date=None, lat=None, lon=None):
@@ -33,12 +34,21 @@ def air_pollution(weather_date=None, lat=None, lon=None):
     for gtype in GAS_TYPE_CHOICES:
 
         gtype_code = gtype[0]
+        queryset = AirPollutionData.objects.filter(location_lat=lat,
+                                                   location_lon=lon)
 
-        _queryset = AirPollutionData.objects.filter(data_base__gas_type=gtype_code,
-                                                    weather_date=weather_date)
+        if not queryset:
 
+            raise LatLonDoesNotExit
 
-        serializer = AirPollutionDataSerializer(data=_queryset.values()[0])
+        queryset = queryset.filter(weather_date=weather_date)
+
+        if not queryset:
+
+            raise DateDoesNotExit
+
+        queryset = queryset.filter(data_base__gas_type=gtype_code)
+        serializer = AirPollutionDataSerializer(data=queryset.values()[0])
         serializer.is_valid()
         response.update({gtype_code: serializer.data})
 
@@ -48,14 +58,23 @@ def air_pollution(weather_date=None, lat=None, lon=None):
 @api_view(['get'])
 def get_air_pollution(request, weather_date=None, lat=None, lon=None):
 
+    delete_all = False
+
     try:
 
         return air_pollution(weather_date, lat, lon)
 
-    except IndexError:
+    except LatLonDoesNotExit:
 
-        output = celery_update_air_pollution_db.delay(lat, lon)
-        output.ready()
+        delete_all = False
 
-        return Response([], status=status.HTTP_200_OK)
+    except DateDoesNotExit:
 
+        delete_all = True
+
+    output = celery_update_air_pollution_db.delay(lat,
+                                                  lon,
+                                                  delete_all)
+    output.ready()
+
+    return Response([], status=status.HTTP_200_OK)

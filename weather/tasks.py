@@ -13,36 +13,36 @@ from weather.models import GAS_TYPE_CHOICES, AirPollution, AirPollutionData
 
 from bm.taskapp.celery import app
 
-# from celery.contrib import rdb
 
-
-def delete_all_airpollution():
+def delete_all_airpollution(lat, lon):
     '''Delete all the previous data in the database
-    under Airpollution model
+    under AirPollution model
 
     '''
-    AirPollution.object.all().delete()
+
+    AirPollution.object.filter(location_lat=lat,
+                               location_lon=lon).delete()
 
 
 @app.task(bind=True)
-def celery_update_air_pollution_db(self, lat, lon):
+def celery_update_air_pollution_db(self, lat, lon, delete_all):
 
     get_task_logger('Initializing the air pollution update task.')
 
-    delete_all_airpollution()
+    if delete_all:
+
+        delete_all_airpollution()
 
     for gtype in GAS_TYPE_CHOICES:
 
         gtype_code = gtype[0].lower()
-
         get_task_logger('Getting the gast type of {}'.format(gtype_code))
-
         url = ('https://api.openweathermap.org/pollution'
                '/v1/{gas_type}/{lat},{lon}'
                '/current.json'
                '?appid={appid}'.format(lat=lat,
                                        lon=lon,
-                                       appid=settings.OPEN_WEATHER_MAP,
+                                       appid=settings.BM_OPEN_WEATHER_MAP,
                                        gas_type=gtype_code))
 
         try:
@@ -52,12 +52,13 @@ def celery_update_air_pollution_db(self, lat, lon):
                                   timeout=(connect_timeout,
                                            read_timeout)).json()
         except RequestException as e:
+
             get_task_logger('Error in the'
                             ' request connection %S', str(e))
+
             return
 
         location = content['location']
-
         base = AirPollution(gas_type=gtype_code,
                             last_update=content['time'],
                             location_lat=location['latitude'],
@@ -71,11 +72,8 @@ def celery_update_air_pollution_db(self, lat, lon):
         for sub_content in content['data']:
 
             update_date = temp_date + timedelta(days=1)
-
             temp_date = update_date
-
             update_date = update_date.strftime(settings.BM_STANDARD_DATEFORMAT)
-
             sub_base = AirPollutionData(precision=sub_content['precision'],
                                         pressure=sub_content['pressure'],
                                         value=sub_content['value'],

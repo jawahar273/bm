@@ -33,7 +33,10 @@ class AirPollution(models.Model):
                                        default=0)
 
     class Meta:
-        unique_together = (('gas_type', 'last_update'))
+        unique_together = (('gas_type',
+                            'last_update',
+                            'location_lat',
+                            'location_lon'))
 
     def __str__(self):
         return ('Last Update-{:%Y-%m-%d %H:%M}'

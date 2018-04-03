@@ -375,7 +375,7 @@ PAYTM_USE_FILEDS = ['Date', 'Activity',
                     'Status']
 
 # open weather api key
-OPEN_WEATHER_MAP = env('OPEN_WEATHER_MAP', default='')
+BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP', default='')
 
 #  https://openweathermap.org/api/pollution/o3
 #  Title under <h2>Location format</h2>
