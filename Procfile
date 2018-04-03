@@ -1,3 +1,3 @@
 
 web: gunicorn config.wsgi --log-file -
-worker: celery -A bm.taskapp worker  -l info
+worker: celery -A taskapp worker  -l info
