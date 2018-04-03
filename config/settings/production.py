@@ -145,7 +145,8 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 
 # CACHING
 # ------------------------------------------------------------------------------
-REDIS_LOCATION = 'redis://{}:{}/0'.format(
+REDIS_LOCATION = 'redis://:{}@{}:{}/0'.format(
+    env('REDIS_PASSWORD'),
     env('REDIS_ENDPOINT_ADDRESS'),
     env('REDIS_PORT')
 )
