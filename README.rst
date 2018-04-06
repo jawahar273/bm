@@ -113,9 +113,9 @@ Seeds for DB
 ^^^^^^^^^^^^
 Need to use load data in `manager.py` as seed data.
 
-Cross Domain Name
+Cross Domain Name/Client Side Domain Name
 ^^^^^^^^^^^^^^^^^^
-Must set `BM_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client side. 
+Must set `BM_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client and server side communication. 
 
 Client Side Redirection
 ^^^^^^^^^^^^^^^^^^^^^^^
