@@ -34,8 +34,8 @@ def air_pollution(weather_date=None, lat=None, lon=None):
     for gtype in GAS_TYPE_CHOICES:
 
         gtype_code = gtype[0]
-        queryset = AirPollutionData.objects.filter(location_lat=lat,
-                                                   location_lon=lon)
+        queryset = AirPollutionData.objects.filter(data_base__location_lat=lat,
+                                                   data_base__location_lon=lon)
 
         if not queryset:
 
@@ -52,17 +52,21 @@ def air_pollution(weather_date=None, lat=None, lon=None):
         serializer.is_valid()
         response.update({gtype_code: serializer.data})
 
-    return Response({'detail': response}, status=status.HTTP_200_OK)
+    return {'result': response}
 
 
 @api_view(['get'])
 def get_air_pollution(request, weather_date=None, lat=None, lon=None):
 
     delete_all = False
+    result = None
+    status_code = 0
 
     try:
 
-        return air_pollution(weather_date, lat, lon)
+        temp = air_pollution(weather_date, lat, lon)
+        result = temp['result']
+        status_code = status.status.HTTP_200_OK
 
     except LatLonDoesNotExit:
 
@@ -75,6 +79,11 @@ def get_air_pollution(request, weather_date=None, lat=None, lon=None):
     output = celery_update_air_pollution_db.delay(lat,
                                                   lon,
                                                   delete_all)
-    output.ready()
+    if isinstance(output.result, dict):
+        result = output.result['msg']
+        status_code = output.result['code']
 
-    return Response([], status=status.HTTP_200_OK)
+        if status_code == status.HTTP_200_OK:
+            get_air_pollution(request, weather_date, lat, lon)
+
+    return Response(result, status=status_code)

@@ -20,7 +20,7 @@ from .models import User
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(['GET'])
 def redirect_password_rest_done(request, uidb64, token):
     return redirect(urllib.parse.urljoin(settings.CLIENT_REDIRECT_DOMAIN,
                     '%s/%s/%s' % (settings.CLIENT_REDIRECT_URL, uidb64, token))

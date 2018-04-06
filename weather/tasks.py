@@ -3,6 +3,8 @@ from datetime import timedelta, datetime
 
 from django.conf import settings
 
+from rest_framework import status
+
 from requests import get as weather_get
 from requests.exceptions import RequestException
 
@@ -12,6 +14,8 @@ from celery.utils.log import get_task_logger
 from weather.models import GAS_TYPE_CHOICES, AirPollution, AirPollutionData
 
 from bm.taskapp.celery import app
+
+logger = get_task_logger(__name__)
 
 
 def delete_all_airpollution(lat, lon):
@@ -27,7 +31,7 @@ def delete_all_airpollution(lat, lon):
 @app.task(bind=True)
 def celery_update_air_pollution_db(self, lat, lon, delete_all):
 
-    get_task_logger('Initializing the air pollution update task.')
+    logger.info('Initializing the air pollution update task.')
 
     if delete_all:
 
@@ -36,7 +40,8 @@ def celery_update_air_pollution_db(self, lat, lon, delete_all):
     for gtype in GAS_TYPE_CHOICES:
 
         gtype_code = gtype[0].lower()
-        get_task_logger('Getting the gast type of {}'.format(gtype_code))
+        logger.info('Getting the gast type of {}'.format(gtype_code))
+        'https://api.openweathermap.org/pollution/v1/{gas_type}/{lat},{lon}/current.json?appid={appid}'
         url = ('https://api.openweathermap.org/pollution'
                '/v1/{gas_type}/{lat},{lon}'
                '/current.json'
@@ -51,12 +56,26 @@ def celery_update_air_pollution_db(self, lat, lon, delete_all):
             content = weather_get(url,
                                   timeout=(connect_timeout,
                                            read_timeout)).json()
+            success_code = 200
+            status_code = content.get('cod', success_code)
+
+            if status_code != success_code:
+                logger.fatal('something went wrong in the'
+                             ' request %d and the message:'
+                             ' %s ' % (status_code, content.get('message')))
+                import IPython
+                IPython.embed()
+
+                return {'msg': 'something went wrong.',
+                        'code': status.HTTP_500_INTERNAL_SERVER_ERROR}
+
         except RequestException as e:
 
-            get_task_logger('Error in the'
-                            ' request connection %S', str(e))
+            logger.error('Error in the'
+                         ' request connection %S', str(e))
 
-            return
+            return {'msg': 'something went wrong.',
+                    'code': status.HTTP_500_INTERNAL_SERVER_ERROR}
 
         location = content['location']
         base = AirPollution(gas_type=gtype_code,
@@ -81,6 +100,7 @@ def celery_update_air_pollution_db(self, lat, lon, delete_all):
                                         data_base=base)
             sub_base.save()
 
-        get_task_logger('Insert into the database successfully.')
+        return {'msg': 'everything went as planned.',
+                'code': status.HTTP_200_OK}
 
-
+        logger.info('Insert into the database successfully.')

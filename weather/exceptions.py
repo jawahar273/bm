@@ -1,9 +1,9 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import EmptyResultSet as DoesNotExit
 
 
-class LatLonDoesNotExit(ObjectDoesNotExist):
+class LatLonDoesNotExit(DoesNotExit):
     '''This class is child class of
-    :class: `core.exceptions.ObjectDoesNotExist`
+    :class: `core.exceptions.EmptyResultSet`
     set to raise if latitute and lontitute not found
     in database.
     '''
@@ -13,10 +13,11 @@ class LatLonDoesNotExit(ObjectDoesNotExist):
                ' is not present in the database'
 
 
-class DateDoesNotExit(ObjectDoesNotExist):
+class DateDoesNotExit(DoesNotExit):
     '''This class is child class of
-    :class: `core.exceptions.ObjectDoesNotExist`
+    :class: `core.exceptions.EmptyResultSet`
     set to raise if date of specific locaiont(geo points).
     '''
+
     def __str__(self):
         return 'date of the given location is not present'
