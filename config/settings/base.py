@@ -65,7 +65,8 @@ LOCAL_APPS = [
     # 'bm.taskapp.celery.CeleryConfig',
     # Your stuff: custom apps go here
     'packages',
-    'weather'
+    # 'weather',
+    'weather2',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -377,7 +378,18 @@ PAYTM_USE_FILEDS = ['Date', 'Activity',
 # open weather api key
 BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP', default='')
 
+#  type of cache timeout
+#  date
+#  day
+# optional
+BM_WEATHER_DATA_CACHE_TIMEOUT = env('BM_WEATHER_DATA_CACHE_TIMEOUT', default='date')
+
 #  https://openweathermap.org/api/pollution/o3
 #  Title under <h2>Location format</h2>
-BM_MAX_DISTANCE_ACCURACY = 78
+BM_MAX_DISTANCE_ACCURACY = 78 #  depercated
 # (aprx) Digits beyond decimal point to search radius
+
+#  Celery network request timeout
+BM_CONNECTION_TIMEOUT = env.float('BM_CONNECTION_TIMEOUT', default=5.0)
+
+BM_READ_TIMEOUT = env.float('BM_READ_TIMEOUT', default=30.0)

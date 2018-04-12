@@ -41,7 +41,8 @@ api_url += [
     url(r'^rest-auth/login-verify/$', verify_jwt_token),
 
     url(r'^package/', include('packages.urls', namespace='packages')),
-    url(r'^weather/', include('weather.urls', namespace='weather')),
+    # url(r'^weather/', include('weather.urls', namespace='weather')),
+    url(r'^weather/v2/', include('weather2.urls', namespace='weather')),
 
 ]
 

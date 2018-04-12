@@ -46,7 +46,7 @@ class MonthBudgetAmount(models.Model):
 
     month_year = models.DateField(default=start_date,
                                   validators=[
-                                     RegexValidator(settings.BM_STANDARD_DATEFORMAT)
+                                     RegexValidator(settings.BM_REGEX_DATE_FORMAT)
                                     ]
                                  )
 
@@ -132,7 +132,8 @@ class PackageSettings(models.Model):
                              related_name='package_settings',
                              on_delete=models.CASCADE)
 
-    currency_details = models.TextField(max_length=100, default='', blank=True)
+    currency_details = models.CharField(max_length=5,
+                                        default='USD', blank=True)
 
     #  force ask about monthly budget model in client.
     force_mba_update = models.CharField(default='Y', max_length=1)

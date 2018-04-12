@@ -3,3 +3,4 @@ include = bm/*
 omit = *migrations*, *tests*
 plugins =
     django_coverage_plugin
+django_coverage_plugin

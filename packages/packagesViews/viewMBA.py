@@ -56,6 +56,8 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
     def save_or_error_response(self, save_object):
 
         if not save_object.is_valid():
+            import IPython
+            IPython.embed()
 
             return Response({'detail': 'wrong data given'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -80,6 +82,8 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
                                                       data=custom_request_data)
         else:
             serializers = MonthBudgetAmountSerializer(data=custom_request_data)
+            import IPython
+            IPython.embed()
         return self.save_or_error_response(serializers)
 
     def retrieve(self, request, month_year=None):

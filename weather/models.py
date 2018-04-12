@@ -1,7 +1,7 @@
 
 from django.utils import timezone
 from django.db import models
-
+# from django.contrib.gis.db import models
 '''The weather models stores the information about the weather of
 specificy area which given by the users. The api developed based on
 Open weather map's `air pollution<http://openweathermap.org/api/pollution/co>`_
