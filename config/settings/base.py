@@ -368,9 +368,14 @@ OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
+
+# @must review key
 FLAT_FILE_INTERFACE = 'pandas'
+
+# @must review key
 EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
 
+# @must review key
 PAYTM_USE_FILEDS = ['Date', 'Activity',
                     'Source/Destination', 'Debit',
                     'Status']
@@ -381,8 +386,8 @@ BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP', default='')
 #  type of cache timeout
 #  date
 #  day
-# optional
-BM_WEATHER_DATA_CACHE_TIMEOUT = env('BM_WEATHER_DATA_CACHE_TIMEOUT', default='date')
+# @optional key
+BM_WEATHER_DATA_CACHE_TYPE = env('BM_WEATHER_DATA_CACHE_TYPE', default='day')
 
 #  https://openweathermap.org/api/pollution/o3
 #  Title under <h2>Location format</h2>

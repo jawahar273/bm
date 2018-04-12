@@ -1,6 +1,6 @@
-# from django.shortcuts import render
+import datetime
 
-# Create your views here.
+from django.conf import settings
 from django.core.cache import caches
 from rest_framework import status
 
@@ -21,6 +21,10 @@ def get_air_pollution(request, weather_date, lat, lon):
         -- Thursday 12 April 2018 09:11:49 AM IST
             @jawahar273 [Version 0.1]
             -1- Init code
+        -- Thursday 12 April 2018 11:18:11 PM IST
+            @jawahar273 [Version 0.2]
+            -1- Adding the timeout for new caches.
+            -2- Date timeout has been done
 
     '''
     result = {}
@@ -29,17 +33,27 @@ def get_air_pollution(request, weather_date, lat, lon):
     caches_content = caches.get(CO_CACHES_NAME, None)
 
     if not caches_content:
-        content_data = celery_get_co_data.delay(lat, lon).get(timeout=20)
+        data = celery_get_co_data.delay(lat, lon).get(timeout=20)
 
-        if content_data['code'] == status.HTTP_200_OK:
+        if data['code'] == status.HTTP_200_OK:
 
-            #   To use open weather api more offen the
-            #   expire time is set to midnight of th client
-            #   location.
+            #  If the day type is selected keep that it use the
+            #  UTC for time zone.
+            #  To make optimal use of
+            #  the openweather api(air pollution[beta api]) set the cache type
+            #  as date.
+            confi_cache_timeout_type = settings.BM_WEATHER_DATA_CACHE_TYPE
+            set_timeout = None
 
-            #   set time for now
-            confi_cache_timeout
-            caches.set(CO_CACHES_NAME, content_data, )
+            if confi_cache_timeout_type == 'date':
+                temp_date = datetime.datetime.strptime(data['time'],
+                            settings.BM_ISO_8601_TIMESTAMP)
+
+                set_timeout = datetime.datetime.now() - temp_date
+                set_timeout = set_timeout.total_seconds()
+
+            #  days timeout code here
+            caches.set(CO_CACHES_NAME, data, set_timeout)
     else:
 
         result['co'] = caches_content['data']
