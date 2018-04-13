@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 
 from django.conf import settings
-from django.core.cache import caches
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -58,13 +58,12 @@ def set_caches(lat, lon, gcode_name, caches_name):
             set_timeout = (24 - datetime.now().hour) * 3600
 
         #  days timeout code here
-        caches.set(caches_name, data['content_data'], set_timeout)
+        cache.set(caches_name, data['content_data'], set_timeout)
 
     elif data['code'] == status.HTTP_500_INTERNAL_SERVER_ERROR:
 
         logger.error('Error in the celery data, No storing'
                      ' of the data in caches system')
-
 
 
 def get_caches(caches_content, gcode_name):
@@ -125,15 +124,15 @@ def get_air_pollution(request, weather_date, lat, lon):
             -2- Restrucuted the code to follow DRY rule as possible.
 
     '''
-    result = {}
     CO_code_name = 'co'
     SO2_code_name = 'so2'
+    result = {}
 
-    CO_CACHES_NAME = 'airPollution_CO_%d_%d' % (lat, lon)
-    SO2_CACHES_NAME = 'airPollution_SO2_%d_%d' % (lat, lon)
+    CO_CACHES_NAME = 'airPollution_CO_%s_%s' % (lat, lon)
+    SO2_CACHES_NAME = 'airPollution_SO2_%s_%s' % (lat, lon)
 
-    CO_caches_content = caches.get(CO_CACHES_NAME, None)
-    SO2_caches_content = caches.get(SO2_CACHES_NAME, None)
+    CO_caches_content = cache.get(CO_CACHES_NAME, None)
+    SO2_caches_content = cache.get(SO2_CACHES_NAME, None)
 
     status_code = status.HTTP_200_OK
 
@@ -142,30 +141,33 @@ def get_air_pollution(request, weather_date, lat, lon):
 
         # setting the caches
         set_caches(lat, lon, CO_code_name, CO_CACHES_NAME)
-        result[CO_code_name] = get_caches(CO_caches_content,
-                                          CO_code_name)
 
     else:
 
         result[CO_code_name] = get_caches(CO_caches_content,
                                           CO_code_name)
+        logger.debug('setting the co result')
 
     #  checking the caches is present or not
     if not SO2_caches_content:
 
         set_caches(lat, lon, SO2_code_name, SO2_CACHES_NAME)
-        result[SO2_code_name] = get_caches(SO2_caches_content,
-                                           SO2_code_name)
 
     else:
 
         result[SO2_code_name] = get_caches(SO2_caches_content,
                                            SO2_code_name)
+        logger.debug('setting the so2 result')
 
     #  Checking the content is present on both.
-    if not result[CO_code_name] and not result[SO2_code_name]:
+    if not result.get(CO_code_name) and not result.get(SO2_code_name):
 
-        status_code = status.HTTP_204_NO_CONTENT
-
+        #  this is used, that celery is async task
+        #  which they may or may not return data suddenly,
+        #  so we are computing after little time out.
+        result[CO_code_name] = get_caches(CO_caches_content,
+                                          CO_code_name)
+        result[SO2_code_name] = get_caches(SO2_caches_content,
+                                           SO2_code_name)
     return Response({'detail': result},
                     status=status_code)
