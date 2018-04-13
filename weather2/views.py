@@ -124,6 +124,7 @@ def get_air_pollution(request, weather_date, lat, lon):
             -2- Restrucuted the code to follow DRY rule as possible.
 
     '''
+    # XXXXXX check the date formate XXXXXX
     CO_code_name = 'co'
     SO2_code_name = 'so2'
     result = {}
@@ -165,8 +166,13 @@ def get_air_pollution(request, weather_date, lat, lon):
         #  this is used, that celery is async task
         #  which they may or may not return data suddenly,
         #  so we are computing after little time out.
+
+        CO_caches_content = cache.get(CO_CACHES_NAME)
+        SO2_caches_content = cache.get(SO2_CACHES_NAME)
+
         result[CO_code_name] = get_caches(CO_caches_content,
                                           CO_code_name)
+
         result[SO2_code_name] = get_caches(SO2_caches_content,
                                            SO2_code_name)
     return Response({'detail': result},
