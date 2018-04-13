@@ -17,7 +17,8 @@ GAS_TYPE_CHOICES = (
 
 
 def get_air_pollution_data(lat, lon, gtype_code):
-    '''Using the function the weather data can be fetched
+    '''Using(which is general form) the function
+    the weather data can be fetched
     from the openweather api(air-pollution [under beta]).
 
     :param lat: latitute of the user's.
@@ -28,13 +29,18 @@ def get_air_pollution_data(lat, lon, gtype_code):
     ChangeLog:
     -- Wednesday 11 April 2018 10:45:58 PM IST
         @jawahar273 [Version 0.1]
-        -1- init struture of the code.
+        -1- Init struture of the code.
+    -- Friday 13 April 2018 11:41:36 PM IST
+        @jawahar273[Version 0.2]
+        -1- Update in docstring.
 
     '''
+
     logger.info('#[utils weather]Initializing the air pollution update task.')
 
     gtype_code = gtype_code.lower()
-    logger.info('#[utils weather] Getting the gast type of {}'.format(gtype_code))
+    logger.info('#[utils weather] Getting the'
+                ' gast type of {}'.format(gtype_code))
     url = ('https://api.openweathermap.org/pollution'
            '/v1/{gas_type}/{lat},{lon}'
            '/current.json'
