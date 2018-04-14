@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import re
 
 from django.conf import settings
 from django.core.cache import cache
@@ -74,11 +75,16 @@ def get_caches(caches_content, gcode_name):
     :param caches_content: the cache data(which is the dict of
         open weather (air pollution [beta api])).
     :param gcode_name: gas type as code name.
+    :return: the cache object in python navtive form.
+    :rtype: dict/list
 
     ChangeLog:
         -- Friday 13 April 2018 11:33:08 PM IST
             @jawahar273 [Version 0.1]
             -1- Init code
+        -- Saturday 14 April 2018 11:56:05 AM IST
+            @jawahar273 [Version 0.2]
+            -1- update return value of this function.
     '''
 
     # get the time last update and todays date use that
@@ -94,9 +100,9 @@ def get_caches(caches_content, gcode_name):
         logger.error('Computated days should not exceed'
                      'the max_days count')
 
-        return {gcode_name: []}
+        return []
 
-    return {gcode_name: caches_content['data'][num_days]}
+    return caches_content['data'][num_days]
 
 
 @api_view(['get'])
@@ -109,6 +115,7 @@ def get_air_pollution(request, weather_date, lat, lon):
         with the 31 days from the last update from the services.
     :param lat: latitute of the user's.
     :param lon:  lontitute of the user's.
+    :rtype: Response
 
     ChangeLog:
         -- Thursday 12 April 2018 09:11:49 AM IST
@@ -122,9 +129,16 @@ def get_air_pollution(request, weather_date, lat, lon):
             @jawahar273 [Version 0.3]
             -1- Setting the cache for day.
             -2- Restrucuted the code to follow DRY rule as possible.
-
+        -- Saturday 14 April 2018 12:39:05 PM IST
+            @jawahar273 [Version 0.4]
+            -1- Adding validation for date format.
     '''
-    # XXXXXX check the date formate XXXXXX
+
+    if not re.search(settings.BM_REGEX_DATE_FORMAT, weather_date):
+
+        return Response({'detail': 'wrong date formate.'
+                         ' Please Check date fromate'},
+                        status=status.HTTP_400_BAD_REQUEST)
     CO_code_name = 'co'
     SO2_code_name = 'so2'
     result = {}

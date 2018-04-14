@@ -56,12 +56,27 @@ def get_air_pollution_data(lat, lon, gtype_code):
 
         content_data = weather_get(url,
                                    timeout=(connect_timeout,
-                                            read_timeout)).json()
+                                            read_timeout))
 
         success_code = status.HTTP_200_OK
-        status_code = content_data.get('cod', success_code)
+        status_code = content_data.status_code
 
         if status_code != success_code:
+            logger.fatal('#[utils weather]Error from openweathermap:'
+                         'status code %d and the '
+                         'message %s ' % (status_code, content_data.reason))
+
+            return {
+                   'msg': 'something went wrong openweathermap.',
+                   'code': status.HTTP_500_INTERNAL_SERVER_ERROR,
+            }
+
+        content_data = content_data.json()
+
+        status_code = content_data.get('cod', None)
+
+        if status_code != success_code:
+
             logger.fatal('#[utils weather]something went wrong in the'
                          ' request %d and the message:'
                          ' %s ' % (status_code, content_data.get('message')))
