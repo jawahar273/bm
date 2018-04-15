@@ -13,6 +13,7 @@ Contents:
    
    readme
    install
+   remember_point
    packages/index
    weathers/index
    deploy

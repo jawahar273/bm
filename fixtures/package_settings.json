@@ -5,7 +5,8 @@
     "fields": {
       "user": 1,
       "currency_details": "",
-      "active_paytm": "N"
+      "active_paytm": "N",
+      "geoloc_interval": 60
     }
   }
 ]

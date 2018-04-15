@@ -10,4 +10,5 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   MonthBudgetAmount
+   month_budget_amount
+   package_setting

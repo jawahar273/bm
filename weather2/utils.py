@@ -73,18 +73,18 @@ def get_air_pollution_data(lat, lon, gtype_code):
 
         content_data = content_data.json()
 
-        status_code = content_data.get('cod', None)
+        # status_code = content_data.get('cod', None)
 
-        if status_code != success_code:
+        # if status_code != success_code:
 
-            logger.fatal('#[utils weather]something went wrong in the'
-                         ' request %d and the message:'
-                         ' %s ' % (status_code, content_data.get('message')))
+        #     logger.fatal('#[utils weather]something went wrong in the'
+        #                  ' request %d and the message:'
+        #                  ' %s ' % (status_code, content_data.get('message')))
 
-            return {
-                   'msg': 'something went wrong.',
-                   'code': status.HTTP_500_INTERNAL_SERVER_ERROR,
-            }
+        #     return {
+        #            'msg': 'something went wrong.',
+        #            'code': status.HTTP_500_INTERNAL_SERVER_ERROR,
+        #     }
         # ----- code for the today's date value.
         return {
                'content_data': content_data,
