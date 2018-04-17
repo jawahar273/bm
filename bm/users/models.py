@@ -12,7 +12,7 @@ class User(AbstractUser):
     # around the globe.
 
     name = models.CharField(_('Name of User'), blank=True, max_length=100)
-    gender = models.CharField(_('Gender'), max_length=1, default='M')
+    gender = models.CharField(_('Gender'), max_length=1, default='M', blank=True)
     profile_url = models.URLField(blank=True)
 
     def __str__(self):
