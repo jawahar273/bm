@@ -14,12 +14,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='user',
-            name='gender',
-            field=models.CharField(default='M', max_length=1, verbose_name='Gender'),
+            name='name',
+            field=models.CharField(blank=True, max_length=100, verbose_name='Name of User'),
         ),
         migrations.AlterField(
             model_name='user',
-            name='name',
-            field=models.CharField(blank=True, max_length=100, verbose_name='Name of User'),
+            name='gender',
+            field=models.CharField(default='M', max_length=1, verbose_name='Gender'),
         ),
     ]
