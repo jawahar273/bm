@@ -22,7 +22,7 @@ Remeber the intercommunication between client and server must be in secure conne
 |                          | https://userName.github. |
 |                          | com. [1]_                |
 +--------------------------+--------------------------+
-|     Open Weather Map     |                          |
+|     Open Weather Map                                |
 +--------------------------+--------------------------+
 | BM_OPEN_WEATHER_MAP_API  | Get api key for the      |
 |                          | openweather website by   |
@@ -38,13 +38,13 @@ headpain.
 +--------------------------+--------------------------+
 | Name                     | Detail desciption        |
 +==========================+==========================+
-|     Forgotten Password   |                          |
+|     Forgotten Password                              |
 +--------------------------+--------------------------+
 | BM_CLIENT_PASSWORD_RESET | Set url of               |
 | _URL(reset)              | redirection in password  |
 |                          | changing.                |
 +--------------------------+--------------------------+
-|     Open Weather Map     |                          |
+|     Open Weather Map                                |
 +--------------------------+--------------------------+
 | BM_WEATHER_DATA_CACHE_TY | Set these values(day,    |
 | PE                       | date) which help in      |
@@ -52,7 +52,7 @@ headpain.
 |                          | openweather api key      |
 |                          | `Rate Limit`_. [2]_      |
 +--------------------------+--------------------------+
-|        celery            |                          |
+|        Celery                                       |
 +--------------------------+--------------------------+
 | BM_CONNECTION_TIMEOUT    | When working with celery |
 | (5.0)                    | timeout must be set for  |
@@ -62,9 +62,9 @@ headpain.
 |                          | read timeout must be set |
 |                          | for `requests`_ packages |
 +--------------------------+--------------------------+
-| Rename Possible          |                          |
+| Rename Possible                                     |
 +--------------------------+--------------------------+
-| Uploading                |                          |
+| Uploading                                           |
 +--------------------------+--------------------------+
 | FLAT_FILE_INTERFACE      | (planned name: [3]_ )    |
 | (pandas)                 | Set the                  |
