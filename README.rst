@@ -120,7 +120,7 @@ Must set `BM_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client and ser
 Client Side Redirection
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-`BM_CLIENT_REDIRECT_URL` set the url which help in `restting` password.
+`BM_CLIENT_PASSWORD_RESET_URL` set the url which help in `restting` password.
 
 .. note::
    Default redirection url is `reset`.
