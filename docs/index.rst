@@ -13,7 +13,7 @@ Contents:
    
    readme
    install
-   remember_point
+   global_env
    packages/index
    weathers/index
    deploy
