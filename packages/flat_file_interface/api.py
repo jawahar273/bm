@@ -4,9 +4,10 @@ __APIClass = None
 __APIException = None
 __APIExceptionNotImplemented = None
 
+# rework based on importlib
 if settings.FLAT_FILE_INTERFACE == 'pandas':
     from packages.flat_file_interface.pandas_interface import (PandasExcelAPI,
-                                                               PandaInterfaceException,
+                                                               PandasInterfaceException,
                                                                PandasInterfaceNotImplement)
 
     __APIClass = PandasExcelAPI

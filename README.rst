@@ -109,18 +109,18 @@ The system is setup with reasonable defaults, including 404 logging and integrat
 
    Important part for working in production.
 
-Seeds for DB
-^^^^^^^^^^^^
-Need to use load data in `manager.py` as seed data.
+.. Seeds for DB
+.. ^^^^^^^^^^^^
+.. Need to use load data with `manager.py` as seed data.
 
 Cross Domain Name/Client Side Domain Name
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Must set `BM_CLIENT_CROSS_DOMAIN_NAME` for active cross domain in client and server side communication. 
 
 Client Side Redirection
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-`BM_CLIENT_REDIRECT_URL` set the url which help in `restting` password.
+`BM_CLIENT_PASSWORD_RESET_URL` set the url which help in `restting` password.
 
 .. note::
    Default redirection url is `reset`.

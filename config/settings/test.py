@@ -59,3 +59,6 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
         'django.template.loaders.app_directories.Loader',
     ], ],
 ]
+
+
+INSTALLED_APPS += env.list('BM_OPTIONAL_TEST_APPS', default=[])

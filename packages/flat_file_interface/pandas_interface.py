@@ -13,11 +13,11 @@ from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
                                             BaseExcelInterFaceException)
 
 
-class PandaInterfaceException(BaseExcelInterFaceException):
+class PandasInterfaceException(BaseExcelInterFaceException):
     pass
 
 
-class PandasInterfaceNotImplement(PandaInterfaceException):
+class PandasInterfaceNotImplement(PandasInterfaceException):
     pass
 
 
