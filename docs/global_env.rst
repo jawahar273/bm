@@ -62,20 +62,19 @@ headpain.
 |                          | read timeout must be set |
 |                          | for `requests`_ packages |
 +--------------------------+--------------------------+
-| Rename Possible                                     |
-+--------------------------+--------------------------+
 | Uploading                                           |
 +--------------------------+--------------------------+
-| FLAT_FILE_INTERFACE      | (planned name: [3]_ )    |
+| BM_FLAT_FILE_            |                          |
+| INTERFACE_CLASS          | (planned name: [3]_ )    |
 | (pandas)                 | Set the                  |
 |                          | name of the class to     |
 |                          | process the upload       |
 |                          | files. [4]_              |
 +--------------------------+--------------------------+
-| EXPIRY_TIME_FLAT_FILT_IN | may depreated            |
+| EXPIRY_TIME_FLAT_FILT_IN | depreated                |
 | _MINS                    |                          |
 +--------------------------+--------------------------+
-| PAYTM_USE_FILEDS         | list of field which      |
+| BM_PAYTM_USE_FILEDS      | list of field which      |
 |                          | will be used in          |
 |                          | process the flat file    |
 |                          | (only paytm).            |
