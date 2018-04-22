@@ -371,7 +371,7 @@ LOGOUT_ON_PASSWORD_CHANGE = True
 # Relative to flat file setting
 
 # @must review key
-FLAT_FILE_INTERFACE = 'pandas'
+BM_FLAT_FILE_INTERFACE = 'pandas'
 
 # @must review key
 EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
@@ -380,6 +380,12 @@ EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
 PAYTM_USE_FILEDS = ['Date', 'Activity',
                     'Source/Destination', 'Debit',
                     'Status']
+BM_PAYTM_USE_FILEDS = {
+    'Date': 'date',
+    'Activity': 'group',
+    'Source/Destination': 'name',
+    'Debit': 'amount'
+}
 
 # open weather api key
 BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP_API', default='')

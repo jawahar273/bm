@@ -1,8 +1,6 @@
 import os
 
-
 from django.conf import settings
-
 from celery.utils.log import get_task_logger
 
 
@@ -10,7 +8,6 @@ from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
                                               FlatFileInterFaceException,
                                               FlatFileInterFaceNotImplemented)
 from packages.utlity import to_hexdigit
-
 from bm.taskapp.celery import app
 
 logger = get_task_logger(__name__)
@@ -75,9 +72,9 @@ def celery_upload_flat_file(self, response, status, request, file_name,
         except FlatFileInterFaceNotImplemented as e:
 
             logger.error('Flat File feed to Database error'
-                         ' (selected unwanted options) %s' % e)
+                         ' (selected maybe unwanted options) %s' % e)
 
-            return response({'detail': e},
+            return response({'detail': 'Method not allowed'},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
         ffi_api.insert_db(request.user.id)

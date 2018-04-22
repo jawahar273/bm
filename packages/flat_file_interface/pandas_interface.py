@@ -2,6 +2,7 @@ import datetime
 
 # import os
 # import sys
+from django.conf import settings
 
 import pandas as pd
 import numpy as np
@@ -68,12 +69,7 @@ class PandasExcelAPI(BaseExcelClass):
         self.payment_type = 1
         # pre_drop_fileds =
         post_drop_fileds = ['Status']
-        fileds = {
-            'Date': 'date',
-            'Activity': 'group',
-            'Source/Destination': 'name',
-            'Debit': 'amount'
-        }
+        fileds = settings.BM_PAYTM_USE_FILEDS
         #  drop unwanted columns as preprocessing.
         #  self.dataContent.drop(pre_drop_fileds, axis=1, inplace=True)
         #  drop the if the status other than `SUCCESS`.
