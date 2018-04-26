@@ -13,5 +13,6 @@ class TestAirPollution(TestCase):
         todays_date = datetime.datetime.strftime(datetime.datetime.now(),
                                                  settings.BM_STANDARD_DATEFORMAT)
 
-        response = self.get(get_air_pollution(todays_date, 13, 80))
-        self.assertIsInstance(response, dict)
+        response = self.get('http://localhost:8000/api/weather/air-pollution/%s/13/80/' % todays_date)
+        self.assertEqual(response['status_code'], 200)
+        # self.assertIsInstance(response, dict)
