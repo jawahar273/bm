@@ -47,6 +47,7 @@ DJANGO_APPS = [
     'django.contrib.admin',
 ]
 THIRD_PARTY_APPS = [
+    'channels',
     'crispy_forms',  # Form layouts
     'allauth',  # registration
     'allauth.account',  # registration
@@ -400,3 +401,10 @@ BM_WEATHER_DATA_CACHE_TYPE = env('BM_WEATHER_DATA_CACHE_TYPE', default='day')
 BM_CONNECTION_TIMEOUT = env.float('BM_CONNECTION_TIMEOUT', default=5.0)
 
 BM_READ_TIMEOUT = env.float('BM_READ_TIMEOUT', default=30.0)
+
+#  Django Channel config
+ASGI_APPLICATION = 'bm.routing.application'
+
+ROOT_URLCONF = 'config.urls'
+
+WSGI_APPLICATION = 'config.wsgi.application'

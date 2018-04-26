@@ -44,7 +44,6 @@ CACHES = {
 # ------------------------------------------------------------------------------
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
 INSTALLED_APPS += ['debug_toolbar', 'rest_framework_swagger']
-INSTALLED_APPS += env.list('BM_OPTIONAL_LOCAL_APPS', default=[])
 
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', '0.0.0.0' ]
 
@@ -57,7 +56,8 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # django-extensions
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ['django_extensions', ]
+INSTALLED_APPS += ['django_extensions']
+INSTALLED_APPS += env.list('BM_OPTIONAL_LOCAL_APPS', default=[])
 
 # TESTING
 # ------------------------------------------------------------------------------
@@ -124,3 +124,15 @@ CLIENT_REDIRECT_URL = 'reset'
 
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 CELERY_ALWAYS_EAGER = True
+
+#  Django Channel config local
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        # "ROUTING": "packages.routing.packages_ws_urlpatterns"
+    },
+}
+

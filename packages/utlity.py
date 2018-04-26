@@ -32,3 +32,7 @@ def to_hrs(mins=0, secs=0, time_format=False) -> str:
     if time_format:
         return '%d:%02d:%02d' % (hrs, mins, secs)
     return '%d' % (hrs)
+
+def to_percentage(current_value, total_value):
+
+    return int((current_value / total_value) * 100)

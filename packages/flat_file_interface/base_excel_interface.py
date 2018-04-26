@@ -13,7 +13,7 @@ class BaseExcelClass(ABC):
        Try not use pandas function directly as possible
     '''
 
-    def __init__(self):
+    def __init__(self, user_id):
         pass
 
     @abstractmethod

@@ -62,7 +62,7 @@ def celery_upload_flat_file(self, response, status, request, file_name,
     try:
 
         logger.info('Starting the feed file data to Database')
-        ffi_api = FlatFileInterFaceAPI()
+        ffi_api = FlatFileInterFaceAPI(request.user.id)
         ffi_api.read_file(file_format, file_location,
                           usecols=use_fields)
         try:
@@ -77,7 +77,7 @@ def celery_upload_flat_file(self, response, status, request, file_name,
             return response({'detail': 'Method not allowed'},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-        ffi_api.insert_db(request.user.id)
+        ffi_api.insert_db()
         ffi_api = None
         logger.error('Flat File feed to Database success')
 
