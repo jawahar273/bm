@@ -15,18 +15,20 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
     async def connect(self, *args, **kwars):
 
-        self.channel_name = 'bm'
-        await self.accept()
-        print(self.channel_name)
-        # sync_to_async(cache.set)()
-        # await sync_to_async(cache.set)()
+        # setting the channel name
+        # remeber don't set channel name in __init__
+        self.channel_name = 'bm.notification.channel'
+        self.user = self.scope["user"]
+        import IPython
+        IPython.embed()
+        if self.user.is_anonymous:
+            await self.close()
 
+        await self.accept()
 
     async def receive(self, text_data=None):
-
-        # await self.send(text_data=text_data)
-        # print(text_data, get_user(self.scope))
-        print('receive: ', self.channel_name)
+        # print('receive: ', self.channel_name)
+        pass
 
     async def disconnect(self, close_code):
         pass
