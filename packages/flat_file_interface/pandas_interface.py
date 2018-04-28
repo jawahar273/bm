@@ -140,14 +140,13 @@ class PandasExcelAPI(BaseExcelClass):
 
         self.dataContent = None
 
-
-
     def api_name(self):
         # super().api_name()
         return 'Pandas Flat File Interface'
 
     def as_msg_client(current_value, total_value):
-        async_to_sync(CHANNEL_LAYER.send)('', {
+        channel_name = 'bm.notification.channel'
+        async_to_sync(CHANNEL_LAYER.send)(channel_name, {
             'type': 'upload.status',
             'satus': to_percentage(inx, row)
         })

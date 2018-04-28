@@ -1,3 +1,9 @@
+import re
+import datetime
+
+from django.conf import settings
+
+
 def flatter_list(items):
     '''
      fastest way to flatten list of elements
@@ -33,6 +39,32 @@ def to_hrs(mins=0, secs=0, time_format=False) -> str:
         return '%d:%02d:%02d' % (hrs, mins, secs)
     return '%d' % (hrs)
 
+
 def to_percentage(current_value, total_value):
 
     return int((current_value / total_value) * 100)
+
+
+def validate_bm_standard_date_format(value):
+    '''This function which help in
+    validate the given date with BM standard date.
+
+    :params value (str): date in string
+    :return: where is given format is valide or not
+    :rtype: bool
+    '''
+
+    regex_date = settings.BM_REGEX_DATE_FORMAT
+    return re.search(regex_date, value)
+
+
+def validate_less_than_today(value):
+    '''This function which help in validate
+    the given date less than today.
+    '''
+
+    if not validate_bm_standard_date_format(value):
+        return False
+
+    today = datetime.date.today()
+

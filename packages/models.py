@@ -1,14 +1,15 @@
 import datetime
-
+import os
+import json
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 
 from allauth.account.signals import user_signed_up
-
 
 from packages.config import (PaymentTypeNumber,
                              PackageSettingsGeoloc as Geoloc)
@@ -123,6 +124,30 @@ class Item(models.Model):
         return '{}, {}'.format(self.name, self.amount)
 
 
+def validate_country_code_(value):
+    file_location = os.path.join(settings.STATIC_ROOT, 'js', '')
+    file_location += settings.BM_CURRENCY_DETAIL_JSON_FILE
+
+    with open(file_location) as file:
+        content = file.read()
+        content = json.dumps(content)
+        if not content.get(value):
+            temp = ('Contry code is not a valid one. Please'
+                    ' choose a valid contry code')
+            return ValidationError(temp)
+
+
+def validate_max_time_interval(value):
+    '''This method is used as validator
+    to check range of times.
+    '''
+    if value < Geoloc.min_interval_time and value > Geoloc.max_interval_time:
+        return ValidationError('Can not Exceed the max or'
+                               'min of interval of 10 mins 8 hours'
+                               'repecatively' % (Geoloc.max_interval_time,
+                                                 Geoloc.min_interval_time))
+
+
 class PackageSettings(models.Model):
     '''
     This setting field may not stable until their is fixed ones.
@@ -132,7 +157,7 @@ class PackageSettings(models.Model):
                              related_name='package_settings',
                              on_delete=models.CASCADE)
 
-    currency_details = models.CharField(max_length=5,
+    currency_details = models.CharField(max_length=3,
                                         default='USD', blank=True)
 
     #  force ask about monthly budget model in client.
@@ -141,8 +166,13 @@ class PackageSettings(models.Model):
     active_paytm = models.CharField(default='N', max_length=1)
 
     #  get/set the interval to get the geolocation from the user.
+    #  getting the config.
     temp_geoloc = Geoloc.interval_time()
-    geoloc_interval = models.PositiveSmallIntegerField(default=temp_geoloc)
+    #  Value must be stored as minutes.
+    geoloc_interval = models.PositiveSmallIntegerField(default=temp_geoloc,
+                                                       validators=[
+                                                        validate_max_time_interval
+                                                       ])
 
     def __str__(self):
 

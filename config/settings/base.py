@@ -371,7 +371,6 @@ LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
 
-# @must review key
 BM_FLAT_FILE_INTERFACE = 'pandas'
 
 # @must review key
@@ -394,7 +393,7 @@ BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP_API', default='')
 #  type of cache timeout
 #  date
 #  day
-# @optional key
+# @optional keys
 BM_WEATHER_DATA_CACHE_TYPE = env('BM_WEATHER_DATA_CACHE_TYPE', default='day')
 
 #  Celery network request timeout
@@ -408,3 +407,5 @@ ASGI_APPLICATION = 'bm.routing.application'
 ROOT_URLCONF = 'config.urls'
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+BM_CURRENCY_DETAIL_JSON_FILE = 'commmon-currency.json'

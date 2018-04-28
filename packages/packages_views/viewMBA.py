@@ -8,9 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 
-
 from packages.models import MonthBudgetAmount
 from packages.serializers import MonthBudgetAmountSerializer
+from packages.utlity import validate_bm_standard_date_format
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
@@ -142,7 +142,6 @@ def get_range_mba(request, start, end=None):
     status_code = status.HTTP_200_OK
     # %Y-%m-%d formate checking.
     regex_date = settings.BM_REGEX_DATE_FORMAT
-    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 
@@ -150,6 +149,7 @@ def get_range_mba(request, start, end=None):
         # check based on regex expression
         response = MonthBudgetAmount.objects.filter(date__range=(start, end),
                                                     user=request.user.id)
+
         serializers = MonthBudgetAmountSerializer(data=response, many=True)
         serializers.is_valid()
 
