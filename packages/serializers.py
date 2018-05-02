@@ -1,5 +1,7 @@
 
 # from django.db.models import Sum
+from django.conf import settings
+
 from rest_framework import serializers
 from drf_writable_nested import WritableNestedModelSerializer
 
@@ -18,7 +20,6 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
                                            obj.month_year.year,
                                            obj.month_year.month)
 
-        # temp = MonthBudgetAmount.objects.all()
 
 class ItemSerializer(serializers.ModelSerializer):
 
@@ -32,33 +33,39 @@ class ItemSerializer(serializers.ModelSerializer):
 class ItemsListSerializer(WritableNestedModelSerializer):
 
     items = ItemSerializer(many=True, required=False)
+    date = serializers.DateField(format=settings.BM_STANDARD_DATEFORMAT)
     total_amount = serializers.SerializerMethodField()
 
     def get_total_amount(self, object):
 
-        # if (object.items.total_amount == 0):
-        # embed()
-
         def flat(e):
+
             return (i[0] for i in e)
+
         amount = sum(flat(object.items.values_list('amount')))
         object.total_amount = amount
         object.save()
+
         return amount
 
     class Meta:
+
         model = ItemsList
         fields = ('id', 'name', 'place', 'group',
                   'date', 'items', 'total_amount', 'user', )
 
     def to_representation(self, instance):
+
         ret = super().to_representation(instance)
         ret.pop('user')
+
         return ret
 
 
 class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
+
     class Meta:
+
         model = ItemsList
         fields = ('id', 'name', 'place',
                   'group', 'date', 'total_amount')
@@ -70,5 +77,6 @@ class PackageSettingsSerializer(serializers.ModelSerializer):
     '''
 
     class Meta:
+
         model = PackageSettings
         fields = '__all__'

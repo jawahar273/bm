@@ -32,20 +32,32 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         serializer_class = None
 
         if self.action == 'list':
+
             serializer_class = ItemsListSerializerOnlyForListFun
+
         else:
+
             serializer_class = ItemsListSerializer
+
         return serializer_class
 
     def save_or_error_response(self, save_object):
 
         if not save_object.is_valid():
-            return Response({'detail': 'wrong data given'},
+
+            error_msg = ''
+            content_key = list(save_object.errors.keys())[0]
+            error_msg = save_object.errors[content_key]
+            error_msg += ' Check \'%s\'  field' % (content_key.title())
+
+            return Response({'detail': error_msg},
                             status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
+
             return Response({'detail': 'unable to save the request data'},
                             status=status.HTTP_400_BAD_REQUEST)
+
         return Response(save_object.data)
 
     def create_or_update_entry(self, custom_request_data, update=None):
@@ -53,9 +65,11 @@ class ItemsListCreateView(viewsets.ModelViewSet):
         serializers = None
 
         if update:
+
             serializers = ItemsListSerializer(update,
                                               data=custom_request_data)
         else:
+
             serializers = ItemsListSerializer(data=custom_request_data)
 
         return self.save_or_error_response(serializers)
@@ -69,6 +83,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     def update(self, request, pk=None):
 
         request.data.update({'user': request.user.id})
+
         return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, pk=None):
@@ -80,10 +95,12 @@ class ItemsListCreateView(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
 
         try:
+
             to_detete = self.get_object()
             self.perform_destroy(to_detete)
 
         except Http404:
+
             Response({'detail': 'content not found'},
                      status=status.HTTP_404_NOT_FOUND)
 

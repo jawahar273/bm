@@ -1,4 +1,4 @@
-
+import asyncio
 from django.core.cache import cache
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -15,12 +15,21 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         # remeber don't set channel name in __init__
         self.channel_name = 'bm.notification.channel'
         self.user = self.scope["user"]
+        user_status = self.is_anonymous(self.user)
+        # print('user permission', user_status == True)
 
-        if self.user.is_anonymous:
+        if user_status:
+
+            await self.accept()
+            await asyncio.sleep(1)
             await self.send('Unauthenticated user. Connection closing')
             await self.close()
 
-        await self.accept()
+        else:
+            await self.accept()
+
+    async def is_anonymous(self, value):
+        return value.is_anonymous
 
     async def receive(self, text_data=None):
         pass

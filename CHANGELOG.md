@@ -1,9 +1,14 @@
 # CHANGELOG
 
 ## [Planning]
-- allow xslx format (excel file).
-- uploading flat file with celery.[next major version]
-- deploy heroku automaticaly by `heroku button`.
+- allow xslx format (excel file).[next version]
+- deploy heroku automaticaly by `heroku button`.[patch]
+- dynamic channing flat file class in settings[patch]
+
+## 0.3.0
+- uploading flat file with celery(paytm only).
+- Update code proper message in new entry.
+- Adding package.serializers.ItemsListSerializer default to date fields manully.
 
 ## 0.2.1
 - Changing the `packages.view` into readable sub folders.
