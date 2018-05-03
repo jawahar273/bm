@@ -99,7 +99,9 @@ The below environment adds the given django 3rd party or local apps(which is con
 |    BM_OPTIONAL_PRODUCTION_APPS| Add the given apps to      |
 |                               | production                 |
 +-------------------------------+----------------------------+
-
+|    BM_CURRENT_USER_UPLOAD     | This is used to set cache  |
+|    _CACHE_TIMEOUT(default 90) | time out(in seconds)       |
++-------------------------------+----------------------------+
 
 .. [1] For now, only one domain is allowed to set.
 .. [2] In case many user it would be wise to set `date`. That cache expires based on the calucate date.

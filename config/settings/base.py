@@ -411,3 +411,5 @@ WSGI_APPLICATION = 'config.wsgi.application'
 BM_CURRENCY_DETAIL_JSON_FILE = 'commmon-currency.json'
 
 BM_CURRENT_USER_UPLOAD = 'current_upload_keys'
+# SECS
+BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT = env.int('BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT', default=90)
