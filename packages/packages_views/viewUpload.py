@@ -54,20 +54,35 @@ def upload_flat_file(request, file_name, file_format=None,
     '''
     Upload the file and insert them on the database based
     the flat file interface.
+
     refer entry type in `packages.config`
+    :param request: [Request object form view djagno]
+    :type request: [request]
+    :param file_name: [name of the file in uploading]
+    :type file_name: [str]
+    :param file_format: [flat file extention]
+    :type file_format: [str]
+    :param use_fields: [This is useful for find which columns are allowed]
+    :type use_fields: [list]
+    :param entry_type: [Mark to find upload type like (patym, user's etc)]
+    :type entry_type: [int]
+
+    :return: output of the result form celery
     '''
 
-    output = celery_upload_flat_file.delay(Response, status,
-                                           request,
+    output = celery_upload_flat_file.delay(request,
                                            file_name, file_format,
-                                           use_fields, entry_type)
+                                           entry_type)
 
     return output.ready().get(timeout=4)
 
 
 @api_view(['post'])
 def is_paytm_active(request, file_name, file_format=None):
-
+    '''This function is kind of inhertices of the
+    :py:func:upload_flat_file (refer parameters)
+    which is useful for specific file uploading that is Paytm
+    '''
     pack_setting = PackageSettings.objects.filter(user_id=request.user.id)
     pack_setting = pack_setting.first()
 
