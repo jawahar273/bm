@@ -177,3 +177,10 @@ class PackageSettings(models.Model):
     def __str__(self):
 
         return '{}`s package setting'.format(self.user.username)
+
+
+class UploadCount(models.Model):
+
+    def __str__(self):
+        return '{}'.format(self.id)
+

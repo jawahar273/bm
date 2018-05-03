@@ -67,4 +67,15 @@ def validate_less_than_today(value):
         return False
 
     today = datetime.date.today()
+    # need implement
 
+
+def to_query_string_dict(value):
+
+    content = {}
+
+    for inx in value:
+
+        content[inx[0]] = inx[1]
+
+    return content

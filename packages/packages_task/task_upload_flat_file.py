@@ -3,19 +3,22 @@ import os
 from django.conf import settings
 from celery.utils.log import get_task_logger
 
+from django.core.cache import cache
 
 from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
                                               FlatFileInterFaceException,
                                               FlatFileInterFaceNotImplemented)
 from packages.utlity import to_hexdigit
+from packages.models import UploadCount
+
 from bm.taskapp.celery import app
 
 logger = get_task_logger(__name__)
 
 
 @app.task(bind=True, track_started=True)
-def celery_upload_flat_file(self, response, status, request, file_name,
-                            file_format,
+def celery_upload_flat_file(self, response, status,
+                            request, file_name, file_format,
                             use_fields, entry_type):
 
     logger.info('Starting the upload file')
@@ -71,7 +74,7 @@ def celery_upload_flat_file(self, response, status, request, file_name,
 
         except FlatFileInterFaceNotImplemented as e:
 
-            logger.error('Flat File feed to Database error'
+            logger.error('Database error (Flat File feed)-'
                          ' (selected maybe unwanted options) %s' % e)
 
             return response({'detail': 'Method not allowed'},
@@ -79,8 +82,9 @@ def celery_upload_flat_file(self, response, status, request, file_name,
 
         ffi_api.insert_db()
         ffi_api = None
-        logger.error('Flat File feed to Database success')
+        logger.info('Flat File feed to Database success')
 
+        # UploadCount.objects.cre
         return response({'details': 'success insert to database'},
                         status=status.HTTP_200_OK)
 

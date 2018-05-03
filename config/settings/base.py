@@ -409,3 +409,5 @@ ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
 
 BM_CURRENCY_DETAIL_JSON_FILE = 'commmon-currency.json'
+
+BM_CURRENT_USER_UPLOAD = 'current_upload_keys'
