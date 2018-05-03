@@ -3,7 +3,6 @@ import os
 from django.conf import settings
 from celery.utils.log import get_task_logger
 
-from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -11,7 +10,6 @@ from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
                                               FlatFileInterFaceException,
                                               FlatFileInterFaceNotImplemented)
 from packages.utlity import to_hexdigit
-from packages.models import UploadCount
 
 from bm.taskapp.celery import app
 
@@ -39,6 +37,14 @@ def celery_upload_flat_file(self,
     logger.info('Starting the upload file')
 
     def upload_file_handler(file_pointer, _file_name):
+        '''These file are upload and written to the server.
+        
+        [description]
+        :param file_pointer: [python native file pointer]
+        :type file_pointer: [object]
+        :param _file_name: [file name of the upload folder]
+        :type _file_name: [string]
+        '''
         logger.info('Writing %s to media folder' % (_file_name))
 
         with open('%s.%s' % (_file_name, file_format), 'wb') as file:
@@ -47,6 +53,7 @@ def celery_upload_flat_file(self,
 
                 file.write(chunk)
 
+    # checking the file extention
     if file_format not in set(['csv', 'xslx']):
 
         msg = 'the given file extenstion is not acceptable'
@@ -56,6 +63,7 @@ def celery_upload_flat_file(self,
 
     access_file = request.FILES['file']
 
+    # checking the file is empty or not
     if len(access_file) <= 0:
 
         logger.info('File is empty')

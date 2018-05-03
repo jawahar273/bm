@@ -104,6 +104,6 @@ The below environment adds the given django 3rd party or local apps(which is con
 +-------------------------------+----------------------------+
 
 .. [1] For now, only one domain is allowed to set.
-.. [2] In case many user it would be wise to set `date`. That cache expires based on the calucate date.
+.. [2] In case many user it would be wise to set `date`. That is cache expires should be based on calucate date.
 .. [3] `BM_FLAT_FILE_INTERFACE_CLASS`
 .. [4] All the class's name(title case) under `xXx_interface.py` must start with the prefix of the file's name as `xXx` and that value must be given as the value for the `FLAT_FILE_INTERFACE`.

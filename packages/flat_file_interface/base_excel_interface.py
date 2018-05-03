@@ -1,6 +1,9 @@
 
 from abc import ABC, abstractmethod
 
+from django.conf import settings
+from django.core.cache import cache
+
 
 class BaseExcelClass(ABC):
     '''
@@ -44,11 +47,19 @@ class BaseExcelClass(ABC):
         pass
 
     @abstractmethod
-    def insert_db(self):
+    def insert_db(self, user_id):
         '''
         Inserting the value of excel into db of :model: `packages.ItemsList`.
         '''
-        pass
+
+        if settings.DEBUG:
+
+            print('testing abstrac method')
+
+        if cache.get(settings.BM_CURRENT_USER_UPLOAD_NAME + user_id):
+            cache.set(settings.BM_CURRENT_USER_UPLOAD_NAME + user_id,
+                      user_id,
+                      settings.BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT)
 
     @abstractmethod
     def get_info(self):
