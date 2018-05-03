@@ -1,9 +1,12 @@
 import asyncio
+
 from django.core.cache import cache
-from rest_framework_jwt.serializers  import VerifyJSONWebTokenSerializer
+
+from rest_framework_jwt.serializers import VerifyJSONWebTokenSerializer
+from rest_framework.exceptions import ValidationError
+
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
-
 from channels.auth import get_user
 
 from packages.utlity import to_query_string_dict
@@ -12,17 +15,21 @@ from packages.utlity import to_query_string_dict
 class BMNotifcationConsumer(AsyncWebsocketConsumer):
     groups = ["broadcast"]
 
+    def __init__(self, *args, **kwars):
+
+        self.JWTtoken = None
+
     async def connect(self, *args, **kwars):
 
         # setting the channel name
         # remeber don't set channel name in __init__
         self.channel_name = 'bm.notification.channel'
-        # self.user = self.scope["user"]
-        # user_status = self.is_anonymous(self.user)
-        print(to_query_string_dict(self.scope['query_string']))
-        # print('user permission', user_status == True)
+        query_string = to_query_string_dict(self.scope['query_string'])
+        self.JWTtoken = query_string['token']
 
-        if user_status:
+        user_status = self.valitication_jwt(self.JWTtoken)
+
+        if not user_status['status']:
 
             await self.accept()
             await asyncio.sleep(1)
@@ -37,8 +44,25 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
         return value.is_anonymous
 
-    def valitication_jwt(self):
-        VerifyJSONWebTokenSerializer.validate({'token': 34})
+    def valitication_jwt(self, value):
+        try:
+
+            result = VerifyJSONWebTokenSerializer.validate({'token': value})
+
+            return {
+
+                'status': True,
+                'user': result['user']
+
+            }
+
+        except ValidationError:
+
+            return {
+
+                'status': False
+
+            }
 
     async def receive(self, text_data=None):
 
