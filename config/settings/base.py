@@ -282,7 +282,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'account_logout'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
-########## CELERY
+# ######### CELERY
 INSTALLED_APPS += ['bm.taskapp.celery.CeleryConfig']
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://')
 # db+postgres://jawahar:jon2speed@localhost/bm
@@ -292,7 +292,7 @@ CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='redis://')
 #     CELERY_RESULT_BACKEND = 'redis://'
 # else:
 #     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-########## END CELERY
+# ######### END CELERY
 
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
@@ -300,6 +300,11 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+#  Django Channel config
+ASGI_APPLICATION = 'bm.routing.application'
+ROOT_URLCONF = 'config.urls'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 #  Date and time format
 BM_REGEX_DATE_FORMAT = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
@@ -370,7 +375,6 @@ OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
-
 BM_FLAT_FILE_INTERFACE = 'pandas'
 
 # @must review key
@@ -395,26 +399,20 @@ BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP_API', default='')
 #  day
 # @optional keys
 BM_WEATHER_DATA_CACHE_TYPE = env('BM_WEATHER_DATA_CACHE_TYPE', default='day')
+BM_WEATHER_DATA_NEED_CACHE = env.bool('BM_WEATHER_DATA_NEED_CACHE',
+                                      default=True)
 
 #  Celery network request timeout
 BM_CONNECTION_TIMEOUT = env.float('BM_CONNECTION_TIMEOUT', default=5.0)
 
 BM_READ_TIMEOUT = env.float('BM_READ_TIMEOUT', default=30.0)
 
-#  Django Channel config
-ASGI_APPLICATION = 'bm.routing.application'
-
-ROOT_URLCONF = 'config.urls'
-
-WSGI_APPLICATION = 'config.wsgi.application'
-
+# Currency system
 BM_CURRENCY_DETAIL_JSON_FILE = 'commmon-currency.json'
 
+# flat file related
 BM_CURRENT_USER_UPLOAD_NAME = env('BM_CURRENT_USER_UPLOAD_NAME',
                                   default='current-upload-user:')
-# SECS
+# #SECS
 BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT = env.int(('BM_CURRENT_USER_UPLOAD_CACHE'
                                                 '_TIMEOUT'), default=90)
-
-BM_WEATHER_DATA_NEED_CACHE = env.bool('BM_WEATHER_DATA_NEED_CACHE',
-                                      default=True)
