@@ -149,5 +149,5 @@ class PandasExcelAPI(BaseExcelClass):
         channel_name = 'bm.notification.channel'
         async_to_sync(CHANNEL_LAYER.send)(channel_name, {
             'type': 'upload.status',
-            'satus': to_percentage(inx, row)
+            'satus': to_percentage(current_value, total_value)
         })

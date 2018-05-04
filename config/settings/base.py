@@ -416,3 +416,5 @@ BM_CURRENT_USER_UPLOAD_NAME = env('BM_CURRENT_USER_UPLOAD_NAME',
 BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT = env.int(('BM_CURRENT_USER_UPLOAD_CACHE'
                                                 '_TIMEOUT'), default=90)
 
+BM_WEATHER_DATA_NEED_CACHE = env.bool('BM_WEATHER_DATA_NEED_CACHE',
+                                      default=True)

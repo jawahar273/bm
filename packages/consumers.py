@@ -13,13 +13,19 @@ from packages.utlity import to_query_string_dict
 
 
 class BMNotifcationConsumer(AsyncWebsocketConsumer):
+    '''Bm Notification is a async web socket class
+    which is used to send the notificaion to client app.
+    
+    :param groups: [name of the group]
+    :type groups: list
+    '''
     groups = ["broadcast"]
 
     def __init__(self, *args, **kwars):
 
         self.JWTtoken = None
 
-    async def connect(self, *args, **kwars):
+    async def connect(self):
 
         # setting the channel name
         # remeber don't set channel name in __init__
@@ -33,16 +39,13 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
             await self.accept()
             await asyncio.sleep(1)
-            await self.send('Unauthenticated user. Connection closing')
+            await self.send('Unauthenticated user. '
+                            'Connection closing')
             await self.close()
 
         else:
 
             await self.accept()
-
-    async def is_anonymous(self, value):
-
-        return value.is_anonymous
 
     def valitication_jwt(self, value):
         try:
