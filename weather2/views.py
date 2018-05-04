@@ -185,13 +185,14 @@ def get_air_pollution(request, weather_date, lat, lon):
     result = {}
     status_code = status.HTTP_200_OK
 
-    # if the hosting teams no need for cache
-    # function in the 
+    # if the hosting teams has no need for cache
+    # function, then they can simple turn this
+    # as `False`.
     if not settings.BM_WEATHER_DATA_NEED_CACHE:
 
         CO_data = get_openweather_data(lat, lon, CO_code_name)
         SO2_data = get_openweather_data(lat, lon, SO2_code_name)
-        
+
         CO_num_days = get_count_days(CO_data['time'])
         SO2_num_days = get_count_days(SO2_data['time'])
 
