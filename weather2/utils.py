@@ -101,3 +101,10 @@ def get_air_pollution_data(lat, lon, gtype_code):
                'code': status.HTTP_500_INTERNAL_SERVER_ERROR
         }
 
+
+def empty_gas_type():
+        return {
+                "precision": 0,
+                "pressure": 0,
+                "value": 0
+        }

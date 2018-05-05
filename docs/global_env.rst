@@ -52,8 +52,8 @@ headpain.
 |                          | openweather api key      |
 |                          | `Rate Limit`_. [2]_      |
 +--------------------------+--------------------------+
-| BM_WEATHER_DATA_NEED     | Need the cache system    |
-| _CACHE (True)            | for the saving the       |
+| BM_AIRPOLLUTION_DATA_    | Need the cache system    |
+| NEED_CACHE (True)        | for the saving the       |
 |                          | air pollution data [5]_. |
 +--------------------------+--------------------------+
 |        Celery                                       |

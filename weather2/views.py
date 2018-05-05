@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from weather2 import tasks as bm_celery
+from weather2.utils import empty_gas_type
 
 logger = logging.getLogger(__name__)
 
@@ -133,12 +134,15 @@ def get_caches_redis(caches_content, gcode_name):
 
     num_days = get_count_days(caches_content['time'])
 
-    if num_days > len(caches_content['data']):  # max_days count
+    if num_days >= len(caches_content['data']):  # max_days count
 
-        logger.error('Computated days should not exceed'
-                     'the max_days count')
+            logger.error('Computated days should not exceed'
+                         ' the max_days count. Last update date'
+                         ' {}, Gas Type: {}'
+                         ' '.format(caches_content['time'],
+                                    gcode_name))
+        return empty_gas_type()
 
-        return []
 
     return caches_content['data'][num_days]
 
@@ -173,6 +177,9 @@ def get_air_pollution(request, weather_date, lat, lon):
         -- Friday 04 May 2018 08:57:27 PM IST
             @jawahar273 [Version 1.0]
             -1- Update code with cache and non cache system.
+        -- Saturday 05 May 2018 04:27:04 PM IST
+            @jawahar273 [Version 1.1]
+            -1- fixing the bug.[cnt]
     '''
 
     if not re.search(settings.BM_REGEX_DATE_FORMAT, weather_date):
@@ -188,7 +195,7 @@ def get_air_pollution(request, weather_date, lat, lon):
     # if the hosting teams has no need for cache
     # function, then they can simple turn this
     # as `False`.
-    if not settings.BM_WEATHER_DATA_NEED_CACHE:
+    if not settings.BM_AIRPOLLUTION_DATA_NEED_CACHE:
 
         CO_data = get_openweather_data(lat, lon, CO_code_name)
         SO2_data = get_openweather_data(lat, lon, SO2_code_name)
@@ -196,7 +203,36 @@ def get_air_pollution(request, weather_date, lat, lon):
         CO_num_days = get_count_days(CO_data['time'])
         SO2_num_days = get_count_days(SO2_data['time'])
 
-        result[CO_code_name] = CO_data[CO_num_days]
+        if CO_num_days >= len(caches_content['data']):
+
+            logger.error('Computated days should not exceed'
+                         ' the max_days count. Last update date'
+                         ' {}, Gas Type: {}'
+                         ' '.format(caches_content['time'],
+                                    CO_code_name))
+
+            CO_data =  empty_gas_type()
+
+        else:
+
+            CO_data = CO_data[CO_num_days]
+
+        if SO2_num_days >= len(caches_content['data']):
+
+
+            logger.error('Computated days should not exceed'
+                         ' the max_days count. Last update date'
+                         ' {}, Gas Type: {}'
+                         ' '.format(caches_content['time'],
+                                    SO2_code_name))
+
+            SO2_data =  empty_gas_type()
+
+        else:
+
+            SO2_data = SO2_data[SO2_num_days]
+
+        result[CO_code_name] = CO_data
         result[SO2_code_name] = SO2_data[SO2_num_days]
 
         return Response({'detail': result},
@@ -213,24 +249,26 @@ def get_air_pollution(request, weather_date, lat, lon):
     if not CO_caches_content:
 
         # setting the caches
+        logger.debug('setting cache for CO gas')   
         set_caches_redis(lat, lon, CO_code_name, CO_CACHES_NAME)
 
     else:
 
         result[CO_code_name] = get_caches_redis(CO_caches_content,
                                                 CO_code_name)
-        logger.debug('setting the co result')
+        logger.debug('setting the CO result')
 
     #  checking the caches is present or not
     if not SO2_caches_content:
 
+        logger.debug('setting cache for SO2 gas')   
         set_caches_redis(lat, lon, SO2_code_name, SO2_CACHES_NAME)
 
     else:
 
         result[SO2_code_name] = get_caches_redis(SO2_caches_content,
                                                  SO2_code_name)
-        logger.debug('setting the so2 result')
+        logger.debug('setting the SO2 result')
 
     #  Checking the content is present on both.
     if not result.get(CO_code_name) and not result.get(SO2_code_name):
