@@ -13,6 +13,7 @@
 - Update code proper message in new entry.
 - Adding package.serializers.ItemsListSerializer default to date fields manully.
 - Optional cache system in air pollution system.
+- Change file name `utlitys.py` to `utils.py` packages.
 
 ## 0.2.1
 - Changing the `packages.view` into readable sub folders.
