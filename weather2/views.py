@@ -136,13 +136,13 @@ def get_caches_redis(caches_content, gcode_name):
 
     if num_days >= len(caches_content['data']):  # max_days count
 
-            logger.error('Computated days should not exceed'
-                         ' the max_days count. Last update date'
-                         ' {}, Gas Type: {}'
-                         ' '.format(caches_content['time'],
-                                    gcode_name))
-        return empty_gas_type()
+        logger.error('Computated days should not exceed'
+                     ' the max_days count. Last update date'
+                     ' {}, Gas Type: {}'
+                     ' '.format(caches_content['time'],
+                                gcode_name))
 
+        return empty_gas_type()
 
     return caches_content['data'][num_days]
 
@@ -179,7 +179,8 @@ def get_air_pollution(request, weather_date, lat, lon):
             -1- Update code with cache and non cache system.
         -- Saturday 05 May 2018 04:27:04 PM IST
             @jawahar273 [Version 1.1]
-            -1- fixing the bug.[cnt]
+            -1- fixing the bug.(syntax error)
+
     '''
 
     if not re.search(settings.BM_REGEX_DATE_FORMAT, weather_date):

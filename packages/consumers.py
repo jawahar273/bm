@@ -21,18 +21,15 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
     '''
     groups = ["broadcast"]
 
-    def __init__(self, *args, **kwars):
-
-        self.JWTtoken = None
-
     async def connect(self):
 
         # setting the channel name
-        # remeber don't set channel name in __init__
+        # remeber, don't set channel name in __init__
+
         self.channel_name = 'bm.notification.channel'
+
         query_string = to_query_string_dict(self.scope['query_string'])
         self.JWTtoken = query_string['token']
-
         user_status = self.valitication_jwt(self.JWTtoken)
 
         if not user_status['status']:

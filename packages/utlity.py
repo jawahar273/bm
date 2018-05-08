@@ -73,9 +73,9 @@ def validate_less_than_today(value):
 def to_query_string_dict(value):
 
     content = {}
-
+    value = value.split(',')
     for inx in value:
-
+        inx = inx.split('=')
         content[inx[0]] = inx[1]
 
     return content
