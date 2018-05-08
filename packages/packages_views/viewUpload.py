@@ -10,7 +10,7 @@ from rest_framework.parsers import FileUploadParser
 
 from packages.models import PackageSettings
 
-from packages.utlity import to_hrs
+from packages.utlitys import to_hrs
 from packages.config import PaymentTypeNumber
 from packages.tasks import celery_upload_flat_file
 
