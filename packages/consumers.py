@@ -9,7 +9,7 @@ from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.auth import get_user
 
-from packages.utlitys import to_query_string_dict
+from packages.utils import to_query_string_dict
 
 
 class BMNotifcationConsumer(AsyncWebsocketConsumer):

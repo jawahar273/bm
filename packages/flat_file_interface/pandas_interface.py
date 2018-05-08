@@ -15,7 +15,7 @@ from packages.models import ItemsList
 from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
                                             BaseExcelInterFaceException)
-from packages.utlitys import to_percentage
+from packages.utils import to_percentage
 
 CHANNEL_LAYER = get_channel_layer()
 

@@ -10,7 +10,7 @@ from rest_framework.parsers import FileUploadParser
 
 from packages.models import PackageSettings
 
-from packages.utlitys import to_hrs
+from packages.utils import to_hrs
 from packages.config import PaymentTypeNumber
 from packages.tasks import celery_upload_flat_file
 
@@ -39,7 +39,7 @@ def upload_term_condition(request):
             'Reuploading cause only unnessary errors.'
         ],
         'paytm': [
-            'Do not change column\' name of paytm, we will take care of the'
+            'Do not change column\'s name of paytm, we will take care of the'
             ' that one for you.',
         ]
     }

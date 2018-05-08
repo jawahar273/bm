@@ -9,7 +9,7 @@ from rest_framework import status
 from packages.flat_file_interface.api import (FlatFileInterFaceAPI,
                                               FlatFileInterFaceException,
                                               FlatFileInterFaceNotImplemented)
-from packages.utlitys import to_hexdigit
+from packages.utils import to_hexdigit
 
 from bm.taskapp.celery import app
 

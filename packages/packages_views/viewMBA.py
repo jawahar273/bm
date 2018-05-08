@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 
 from packages.models import MonthBudgetAmount
 from packages.serializers import MonthBudgetAmountSerializer
-from packages.utlitys import validate_bm_standard_date_format
+from packages.utils import validate_bm_standard_date_format
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):

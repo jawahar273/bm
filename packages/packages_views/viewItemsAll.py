@@ -13,7 +13,7 @@ from packages.models import Item, ItemsList
 from packages.serializers import (ItemSerializer,
                                   ItemsListSerializer,
                                   ItemsListSerializerOnlyForListFun)
-from packages.utlitys import flatter_list
+from packages.utils import flatter_list
 
 
 class ItemsListCreateView(viewsets.ModelViewSet):
