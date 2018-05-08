@@ -73,6 +73,7 @@ def validate_less_than_today(value):
 def to_query_string_dict(value):
 
     content = {}
+    value = value.decode("utf-8")
     value = value.split(',')
     for inx in value:
         inx = inx.split('=')

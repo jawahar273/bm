@@ -27,7 +27,6 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         # remeber, don't set channel name in __init__
 
         self.channel_name = 'bm.notification.channel'
-
         query_string = to_query_string_dict(self.scope['query_string'])
         self.JWTtoken = query_string['token']
         user_status = self.valitication_jwt(self.JWTtoken)
@@ -47,7 +46,7 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
     def valitication_jwt(self, value):
         try:
 
-            result = VerifyJSONWebTokenSerializer.validate({'token': value})
+            result = VerifyJSONWebTokenSerializer().validate({'token': value})
 
             return {
 
