@@ -75,7 +75,6 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
     async def upload_status(self, event):
 
         status = event['status']
-        print('status=>', status)
 
         await self.send(text_data=status)
 
