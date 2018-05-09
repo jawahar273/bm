@@ -1,9 +1,19 @@
 # CHANGELOG
 
 ## [Planning]
-- allow xslx format (excel file).
-- uploading flat file with celery.[next major version]
-- deploy heroku automaticaly by `heroku button`.
+- allow xslx format (excel file).[miner version]
+- deploy heroku automaticaly by `heroku button`.[patch]
+- dynamic setting flat file class in settings[patch]
+- change the cache timeing based on Geo-Location[patch]
+<!-- If about current planning all done then it next major version
+ -->
+ 
+## 0.3.0
+- uploading flat file with celery(paytm only).
+- Update code proper message in new entry.
+- Adding package.serializers.ItemsListSerializer default to date fields manully.
+- Optional cache system in air pollution system.
+- Change file name `utlitys.py` to `utils.py` packages.
 
 ## 0.2.1
 - Changing the `packages.view` into readable sub folders.

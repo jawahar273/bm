@@ -244,3 +244,12 @@ CELERY_RESULT_BACKEND = REDIS_LOCATION
 CELERY_ALWAYS_EAGER = False
 CELERY_ACKS_LATE = True
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_LOCATION],
+        },
+    },
+}

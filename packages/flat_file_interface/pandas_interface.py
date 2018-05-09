@@ -5,14 +5,19 @@ import datetime
 from django.conf import settings
 
 import pandas as pd
-import numpy as np
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+# import numpy as np
 
 # sys.path.append('..')
 from packages.models import ItemsList
 from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (BaseExcelClass,
                                             BaseExcelInterFaceException)
+from packages.utils import to_percentage
 
+CHANNEL_LAYER = get_channel_layer()
 
 class PandasInterfaceException(BaseExcelInterFaceException):
     pass
@@ -24,15 +29,16 @@ class PandasInterfaceNotImplement(PandasInterfaceException):
 
 class PandasExcelAPI(BaseExcelClass):
 
-    def __init__(self):
+    def __init__(self, user_id):
         '''
         Using Pandas libery as working this Class is been
         working on.
         '''
-        super(PandasExcelAPI, self).__init__()
+        super(PandasExcelAPI, self).__init__(user_id)
         self.read_flag = False  # to make read function called first
         self.dataContent = None
         self.payment_type = 2  # flag for excel type
+        self.user_id = user_id
 
     def read_excel(self, name, **kargs):
         '''
@@ -111,10 +117,13 @@ class PandasExcelAPI(BaseExcelClass):
 
     # def pre_process_ItemList(self, data, inx):
 
-    def insert_db(self, user_id):
+    def insert_db(self):
         # [self.pre_process_ItemList()]
+        super(PandasExcelAPI, self).insert_db(user_id)
+        user_id = self.user_id
         data = self.dataContent.to_dict('date')
         row = self.get_info()['row']
+
         for inx in range(0, row):
             name = data['name'][inx]
             group = data['group'][inx]
@@ -128,8 +137,18 @@ class PandasExcelAPI(BaseExcelClass):
                               date=date, user_id=user_id)
             # print(items.total_amount, inx)
             items.save()
+            self.as_msg_client(inx, row)
+
         self.dataContent = None
 
     def api_name(self):
         # super().api_name()
         return 'Pandas Flat File Interface'
+
+    def as_msg_client(current_value, total_value):
+        channel_name = 'bm.notification.channel'
+        value = to_percentage(current_value, total_value)
+        async_to_sync(CHANNEL_LAYER.send)(channel_name, {
+            'type': 'upload.status',
+            'satus': str(value)
+        })
