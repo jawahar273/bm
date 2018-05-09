@@ -79,8 +79,7 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
 
     # get the weather data from the openweather.
     data = get_openweather_data(lat, lon, gcode_name)
-    import IPython
-    IPython.embed()
+
     if data['code'] == status.HTTP_200_OK:
 
         #  If the day type is selected keep that it use the

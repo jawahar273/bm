@@ -57,6 +57,10 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         else:
 
             await self.accept()
+            # await self.upload_status({'status': '45'})
+            # await self.upload_status({'status': '125'})
+            # await self.upload_status({'status': '434'})
+
 
     def validation_jwt(self, value):
         '''This method validate the given token
