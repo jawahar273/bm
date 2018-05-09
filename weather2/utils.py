@@ -106,5 +106,6 @@ def empty_gas_type():
         return {
                 "precision": 0,
                 "pressure": 0,
-                "value": 0
+                "value": 0,
+                "is_empty": True
         }

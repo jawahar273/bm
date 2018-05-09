@@ -18,18 +18,33 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
     
     :param groups: [name of the group]
     :type groups: list
+
+    ChangeLog:
+        -- Wednesday 09 May 2018 08:44:15 AM IST
+        @jawahar273 [Version 0.3]
+        -1- Removing the __init__ of the class.
     '''
     groups = ["broadcast"]
 
     async def connect(self):
+        '''This method is called on init connection
+        between the client and server.
+        
+        .. notes:
+            Channel name not be set in `__init__`. If you know
+            what are you doing.
 
-        # setting the channel name
-        # remeber, don't set channel name in __init__
+        ChangeLog:
+            -- Wednesday 09 May 2018 08:50:05 AM IST
+            @jawahar273 [Version 0.3]
+            -1- Updating docset.
+
+        '''
 
         self.channel_name = 'bm.notification.channel'
         query_string = to_query_string_dict(self.scope['query_string'])
         self.JWTtoken = query_string['token']
-        user_status = self.valitication_jwt(self.JWTtoken)
+        user_status = self.validation_jwt(self.JWTtoken)
 
         if not user_status['status']:
 
@@ -43,7 +58,18 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
             await self.accept()
 
-    def valitication_jwt(self, value):
+    def validation_jwt(self, value):
+        '''This method validate the given token
+        as its from the authencated user's. 
+        
+        :param value: [JWT token from the client]
+        :type value: [str]
+
+        ChangeLog:
+            -- Wednesday 09 May 2018 08:47:08 AM IST
+            @jawahar273 [Version 0.3]
+            -1- rename {valitication_jwt => validation_jwt}
+        '''
         try:
 
             result = VerifyJSONWebTokenSerializer().validate({'token': value})

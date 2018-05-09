@@ -400,7 +400,7 @@ BM_OPEN_WEATHER_MAP = env('BM_OPEN_WEATHER_MAP_API', default='')
 # @optional keys
 BM_WEATHER_DATA_CACHE_TYPE = env('BM_WEATHER_DATA_CACHE_TYPE', default='day')
 BM_AIRPOLLUTION_DATA_NEED_CACHE = env.bool('BM_AIRPOLLUTION_DATA_NEED_CACHE',
-                                      default=True)
+                                           default=True)
 
 #  Celery network request timeout
 BM_CONNECTION_TIMEOUT = env.float('BM_CONNECTION_TIMEOUT', default=5.0)
