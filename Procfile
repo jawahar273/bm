@@ -1,3 +1,3 @@
 
-web: daphne config.asgi:application --port $PORT
+web: daphne config.asgi:application
 worker: celery -A bm.taskapp.celery worker -E  --loglevel=info
