@@ -179,8 +179,22 @@ class PackageSettings(models.Model):
         return '{}`s package setting'.format(self.user.username)
 
 
-class UploadCount(models.Model):
+class UploadKeyList(models.Model):
+
+    date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
-        return '{}'.format(self.id)
+        return 'ID: {}'.format(self.id)
+
+
+class UploadKey(models.Model):
+
+    content_key = models.IntegerField()
+    upload_key_list = models.ForeignKey(UploadKeyList,
+                                        related_name='upload_keys',
+                                        on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'ID: {}, content key:'.format(self.id,
+                                             self.content_key)
 

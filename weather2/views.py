@@ -26,7 +26,7 @@ def get_openweather_data(lat, lon, gcode_name):
             -1- Init Code.
             -2- return async result celery.
     '''
-    _celery = bm_celery.__getattribute__('celery_get_%s_data' % (gcode_name))
+    _celery = bm_celery.getattr('celery_get_%s_data' % (gcode_name))
     return _celery.delay(lat, lon).get(timeout=20)
 
 
