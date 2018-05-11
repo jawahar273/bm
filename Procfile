@@ -1,4 +1,4 @@
 
 
-web: daphne config.asgi:application --port $PORT --bind $HOST -v2
+web: daphne config.asgi:application --port $PORT --bind $HOST
 worker: celery -A bm.taskapp.celery worker -E  --loglevel=info
