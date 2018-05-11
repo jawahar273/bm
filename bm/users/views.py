@@ -49,7 +49,7 @@ def display_home_page(request):
     '''
     An index function to show the home.
     '''
-    msg = 'Mail Gun has a problem so, no new account are allowed to register'
+    msg = settings.BM_TO_USER_MESSAGE_WARNING
     messages.warning(request, msg)
     return render(request, 'pages/home.html')
 
