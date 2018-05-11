@@ -8,7 +8,7 @@ import sys
 
 import django
 from channels.routing import get_default_application
-from asgiref.wsgi import WsgiToAsgi
+
 django.setup()
 # application = get_default_application()
 
@@ -31,7 +31,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 application = get_default_application()
-if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.production':
-    application = Sentry(WsgiToAsgi(application))
+# if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.production':
+#     application = Sentry(application)
 # Apply ASGI middleware here.
 
