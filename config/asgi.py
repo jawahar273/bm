@@ -18,6 +18,8 @@ django.setup()
 app_path = os.path.dirname(os.path.abspath(__file__)).replace('/config', '')
 sys.path.append(os.path.join(app_path, 'bm'))
 
+# senty can not be use as it is design for WSGI
+# not to be compantable with ASGI.
 if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.production':
     from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 
