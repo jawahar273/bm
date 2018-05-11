@@ -15,10 +15,10 @@ whitenoise==3.3.1
 
 
 # Forms
-django-crispy-forms==1.7.0
+# django-crispy-forms==1.7.0
 
 # Models
-django-model-utils==3.0.0
+# django-model-utils==3.0.0
 
 # Images
 Pillow==4.3.0
