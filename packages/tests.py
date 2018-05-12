@@ -1,7 +1,7 @@
 
-from django.test import TestCase
+from test_plus.test import TestCase
 
-from packages.utlity import to_hexdigit
+from packages.utils import to_hexdigit
 
 # Create your tests here.
 

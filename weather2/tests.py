@@ -14,5 +14,5 @@ class TestAirPollution(TestCase):
                                                  settings.BM_STANDARD_DATEFORMAT)
 
         response = self.get('http://localhost:8000/api/weather/air-pollution/%s/13/80/' % todays_date)
-        self.assertEqual(response['status_code'], 200)
-        # self.assertIsInstance(response, dict)
+        self.assertEqual(response.accepted_media_type, 'application/json')
+        # self.assertEqual(response.status_code, 200)

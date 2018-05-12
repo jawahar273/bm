@@ -16,7 +16,7 @@
 - Change file name `utlitys.py` to `utils.py` packages.
 
 ## 0.2.1
-- Changing the `packages.view` into readable sub folders.
+- Changing the `packages.view` into sub folders.
 
 ## 0.2.0
 - JWT for auth

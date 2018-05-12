@@ -414,7 +414,8 @@ BM_CURRENCY_DETAIL_JSON_FILE = 'commmon-currency.json'
 BM_CURRENT_USER_UPLOAD_NAME = env('BM_CURRENT_USER_UPLOAD_NAME',
                                   default='current-upload-user:')
 # #SECS
+# @review
 BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT = env.int(('BM_CURRENT_USER_UPLOAD_CACHE'
                                                 '_TIMEOUT'), default=90)
 # Message to user
-BM_TO_USER_MESSAGE_WARNING = env('BM_TO_USER_MESSAGE_WARNING')
+BM_TO_USER_MESSAGE_WARNING = env('BM_TO_USER_MESSAGE_WARNING', default='')
