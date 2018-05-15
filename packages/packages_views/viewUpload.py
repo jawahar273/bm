@@ -26,7 +26,7 @@ def upload_term_condition(request):
             'File will be saved based on your requirement.',
             'Perment file are to removed '  # cnt
             'within the intervale of %s'  # cnt
-            ' hrs.' % (to_hrs(mins=settings.EXPIRY_TIME_FLAT_FILT_IN_MINS
+            ' hrs.' % (to_hrs(mins=settings.BM_EXPIRY_TIME_FLAT_FILT_IN_MINS
                               )),  # end
             # 'On reuploading try not to change the file'  # cnt
             # ' name if is it perment file',  # end
@@ -36,7 +36,7 @@ def upload_term_condition(request):
         ],
         'warning': [
             'Please remeber once uploaded it is done.',
-            'Reuploading cause only unnessary errors.'
+            'Reuploading cause may unnessary errors for now.'
         ],
         'paytm': [
             'Do not change column\'s name of paytm, we will take care of the'

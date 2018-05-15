@@ -376,7 +376,7 @@ LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
 BM_FLAT_FILE_INTERFACE = 'pandas'
-
+BM_EXPIRY_TIME_FLAT_FILT_IN_MINS = env.int('BM_EXPIRY_TIME_FLAT_FILT_IN_MINS', default=480)
 BM_PAYTM_USE_FILEDS = {
     'Date': 'date',
     'Activity': 'group',
