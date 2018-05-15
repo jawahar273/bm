@@ -377,13 +377,6 @@ LOGOUT_ON_PASSWORD_CHANGE = True
 # Relative to flat file setting
 BM_FLAT_FILE_INTERFACE = 'pandas'
 
-# @must review key
-EXPIRY_TIME_FLAT_FILT_IN_MINS = 240  # 4hrs time limit
-
-# @must review key
-PAYTM_USE_FILEDS = ['Date', 'Activity',
-                    'Source/Destination', 'Debit',
-                    'Status']
 BM_PAYTM_USE_FILEDS = {
     'Date': 'date',
     'Activity': 'group',

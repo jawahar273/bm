@@ -26,6 +26,8 @@ if settings.DEBUG:
     schema_view = get_swagger_view(title='Deliver API')
     api_url += [url(r'^docs$', schema_view)]
 
+handler500 = 'rest_framework.exceptions.server_error'
+handler400 = 'rest_framework.exceptions.bad_request'
 
 api_url += [
 
