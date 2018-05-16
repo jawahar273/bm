@@ -83,7 +83,7 @@ headpain.
 |                          | process the flat file    |
 |                          | (only paytm).            |
 +--------------------------+--------------------------+
-BM_EXPIRY_TIME_FLAT_FILT_IN_MINS
+
 .. _Rate Limit: https://openweathermap.org/price/
 .. _requests: http://docs.python-requests.org/en/master/
 
