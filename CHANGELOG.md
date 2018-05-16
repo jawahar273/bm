@@ -4,10 +4,13 @@
 - allow xslx format (excel file).[miner version]
 - deploy heroku automaticaly by `heroku button`.[patch]
 - dynamic setting flat file class in settings[patch]
-- change the cache timeing based on Geo-Location[patch]
+- set the cache timeing based on Geo-Location[patch]
 <!-- If about current planning all done then it next major version
  -->
- 
+
+## 0.3.1
+- Removing the unnessary debugger.
+
 ## 0.3.0
 - uploading flat file with celery(paytm only).
 - Update code proper message in new entry.

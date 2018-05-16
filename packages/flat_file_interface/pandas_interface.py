@@ -19,6 +19,7 @@ from packages.utils import to_percentage
 
 CHANNEL_LAYER = get_channel_layer()
 
+
 class PandasInterfaceException(BaseExcelInterFaceException):
     pass
 
@@ -119,7 +120,7 @@ class PandasExcelAPI(BaseExcelClass):
 
     def insert_db(self):
         # [self.pre_process_ItemList()]
-        super(PandasExcelAPI, self).insert_db(user_id)
+        super(PandasExcelAPI, self).insert_db(self.user_id)
         user_id = self.user_id
         data = self.dataContent.to_dict('date')
         row = self.get_info()['row']

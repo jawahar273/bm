@@ -12,3 +12,4 @@ Contents:
    
    month_budget_amount
    package_setting
+   upload_flat_files

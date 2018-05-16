@@ -21,14 +21,30 @@ class BaseExcelClass(ABC):
 
     @abstractmethod
     def read_excel(self, name, **kargs):
+        '''Read the given file using name from in the
+        server.
+
+        :param name: [file name of the data contains]
+        :type name: [str]
+        '''
         pass
 
     @abstractmethod
     def read_csv(self, name, **kargs):
+        '''Read the given file using name from in the
+        server.
+
+        :param name: [file name of the data contains]
+        :type name: [str]
+        '''
         pass
 
     @abstractmethod
     def data(self):
+        '''This method return the data of the read
+        part.
+
+        '''
         pass
 
     @abstractmethod

@@ -85,7 +85,7 @@ class ItemsList(models.Model):
 
     date = models.DateField(default=datetime.date.today,
                             validators=[
-                                RegexValidator(settings.BM_STANDARD_DATEFORMAT)
+                                    RegexValidator(settings.BM_STANDARD_DATEFORMAT)
                                 ]
                             )
 
@@ -141,7 +141,7 @@ def validate_max_time_interval(value):
     '''This method is used as validator
     to check range of times.
     '''
-    if value < Geoloc.min_interval_time() and value > Geoloc.max_interval_time():
+    if (value < Geoloc.min_interval_time() and value > Geoloc.max_interval_time()):
         return ValidationError('Can not Exceed the max or'
                                'min of interval of 10 mins 8 hours'
                                'repecatively' % (Geoloc.max_interval_time,
@@ -182,9 +182,12 @@ class PackageSettings(models.Model):
 class UploadKeyList(models.Model):
 
     date = models.DateTimeField(default=datetime.datetime.now)
+    user = models.ForeignKey(USERMODEL, blank=True,
+                             related_name='upload_key_list',
+                             on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'ID: {}'.format(self.id)
+        return 'ID: {}, User: {}'.format(self.id, self.user.id)
 
 
 class UploadKey(models.Model):

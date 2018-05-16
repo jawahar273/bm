@@ -168,7 +168,6 @@ def itemlist_get_by_months(request, start, end):
     response = []
     # %Y-%m-%d formate checking.
     regex_date = settings.BM_REGEX_DATE_FORMAT
-    # regex_date = r'(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])'
     # whole date fomate
     checking_start = re.search(regex_date, start)
 
