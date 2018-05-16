@@ -70,20 +70,20 @@ headpain.
 +--------------------------+--------------------------+
 | BM_FLAT_FILE_            |                          |
 | INTERFACE_CLASS          | (planned name: [3]_ )    |
-| (pandas)                 | Set the                  |
+| (default: pandas)        | Set the                  |
 |                          | name of the class to     |
 |                          | process the upload       |
 |                          | files. [4]_              |
 +--------------------------+--------------------------+
-| EXPIRY_TIME_FLAT_FILT_IN | depreated                |
-| _MINS                    |                          |
+| BM_EXPIRY_TIME_FLAT_FILT |  Expiry for upload flat  |
+| _IN_MINS(default: 480)   |  file in the system.     |
 +--------------------------+--------------------------+
 | BM_PAYTM_USE_FILEDS      | list of field which      |
 |                          | will be used in          |
 |                          | process the flat file    |
 |                          | (only paytm).            |
 +--------------------------+--------------------------+
-
+BM_EXPIRY_TIME_FLAT_FILT_IN_MINS
 .. _Rate Limit: https://openweathermap.org/price/
 .. _requests: http://docs.python-requests.org/en/master/
 
