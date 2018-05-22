@@ -103,7 +103,8 @@ class ItemsList(models.Model):
 
     def __str__(self):
 
-        return 'Unique ID-{}: {}, {}'.format(self.id, self.name, self.date)
+        return 'Unique ID-{}: {}, {}, Group: {}'.format(self.id, self.name,
+                                                        self.date, self.group)
 
 
 class Item(models.Model):

@@ -70,6 +70,12 @@ class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
         fields = ('id', 'name', 'place',
                   'group', 'date', 'total_amount')
 
+class ItemsGroupAndDate(serializers.ModelSerializer):
+    
+    class Meta:
+
+        model = ItemsList
+        fields = ('id', 'group', 'date')
 
 class PackageSettingsSerializer(serializers.ModelSerializer):
     '''
