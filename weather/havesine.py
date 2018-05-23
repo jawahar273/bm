@@ -3,7 +3,7 @@ import math
 
 
 class Haversine:
-    '''
+    """
     use the haversine class to calculate the distance between
     two lon/lat coordnate pairs.
     output distance available in kilometers, meters, miles, and feet.
@@ -16,7 +16,8 @@ class Haversine:
     `link <https://nathanrooy.github.io/posts/2016-09-07/haversine-with-python/>`_
     to know more of its formula by its author Nathan A. Rooy.
 
-    '''
+    """
+
     def __init__(self, coord1, coord2):
         lon1, lat1 = coord1
         lon2, lat2 = coord2
@@ -28,9 +29,10 @@ class Haversine:
         delta_phi = math.radians(lat2 - lat1)
         delta_lambda = math.radians(lon2 - lon1)
 
-        a = math.sin(delta_phi / 2.0) ** 2 +\
-            math.cos(phi_1) * math.cos(phi_2) *\
-            math.sin(delta_lambda / 2.0) ** 2
+        a = (
+            math.sin(delta_phi / 2.0) ** 2
+            + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda / 2.0) ** 2
+        )
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
         self.meters = R * c  # output distance in meters

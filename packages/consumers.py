@@ -13,7 +13,7 @@ from packages.utils import to_query_string_dict
 
 
 class BMNotifcationConsumer(AsyncWebsocketConsumer):
-    '''Bm Notification is a async web socket class
+    """Bm Notification is a async web socket class
     which is used to send the notificaion to client app.
     
     :param groups: [name of the group]
@@ -23,11 +23,11 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         -- Wednesday 09 May 2018 08:44:15 AM IST
         @jawahar273 [Version 0.3]
         -1- Removing the __init__ of the class.
-    '''
+    """
     groups = ["broadcast"]
 
     async def connect(self):
-        '''This method is called on init connection
+        """This method is called on init connection
         between the client and server.
         
         .. notes:
@@ -39,19 +39,18 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
             @jawahar273 [Version 0.3]
             -1- Updating docset.
 
-        '''
+        """
 
-        self.channel_name = 'bm.notification.channel'
-        query_string = to_query_string_dict(self.scope['query_string'])
-        self.JWTtoken = query_string['token']
+        self.channel_name = "bm.notification.channel"
+        query_string = to_query_string_dict(self.scope["query_string"])
+        self.JWTtoken = query_string["token"]
         user_status = self.validation_jwt(self.JWTtoken)
 
-        if not user_status['status']:
+        if not user_status["status"]:
 
             await self.accept()
             await asyncio.sleep(1)
-            await self.send('Unauthenticated user. '
-                            'Connection closing')
+            await self.send("Unauthenticated user. " "Connection closing")
             await self.close()
 
         else:
@@ -61,9 +60,8 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
             # await self.upload_status({'status': '125'})
             # await self.upload_status({'status': '434'})
 
-
     def validation_jwt(self, value):
-        '''This method validate the given token
+        """This method validate the given token
         as its from the authencated user's. 
         
         :param value: [JWT token from the client]
@@ -73,25 +71,16 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
             -- Wednesday 09 May 2018 08:47:08 AM IST
             @jawahar273 [Version 0.3]
             -1- rename {valitication_jwt => validation_jwt}
-        '''
+        """
         try:
 
-            result = VerifyJSONWebTokenSerializer().validate({'token': value})
+            result = VerifyJSONWebTokenSerializer().validate({"token": value})
 
-            return {
-
-                'status': True,
-                'user': result['user']
-
-            }
+            return {"status": True, "user": result["user"]}
 
         except ValidationError:
 
-            return {
-
-                'status': False
-
-            }
+            return {"status": False}
 
     async def receive(self, text_data=None):
 
@@ -103,7 +92,6 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
     async def upload_status(self, event):
 
-        status = event['status']
+        status = event["status"]
 
         await self.send(text_data=status)
-

@@ -5,10 +5,12 @@ __APIException = None
 __APIExceptionNotImplemented = None
 
 # rework based on importlib
-if settings.BM_FLAT_FILE_INTERFACE == 'pandas':
-    from packages.flat_file_interface.pandas_interface import (PandasExcelAPI,
-                                                               PandasInterfaceException,
-                                                               PandasInterfaceNotImplement)
+if settings.BM_FLAT_FILE_INTERFACE == "pandas":
+    from packages.flat_file_interface.pandas_interface import (
+        PandasExcelAPI,
+        PandasInterfaceException,
+        PandasInterfaceNotImplement,
+    )
 
     __APIClass = PandasExcelAPI
     __APIException = PandasInterfaceException
@@ -24,7 +26,7 @@ class FlatFileInterFaceAPI(__APIClass):
 
     def read_file(self, file_format, name, **kargs):
 
-        if file_format == 'csv':
+        if file_format == "csv":
             self.read_csv(name, **kargs)
         else:
             self.read_excel(name, **kargs)

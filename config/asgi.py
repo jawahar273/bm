@@ -15,12 +15,12 @@ django.setup()
 
 # This allows easy placement of apps within the interior
 # bm directory.
-app_path = os.path.dirname(os.path.abspath(__file__)).replace('/config', '')
-sys.path.append(os.path.join(app_path, 'bm'))
+app_path = os.path.dirname(os.path.abspath(__file__)).replace("/config", "")
+sys.path.append(os.path.join(app_path, "bm"))
 
 # senty can not be use as it is design for WSGI
 # not to be compantable with ASGI.
-if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.production':
+if os.environ.get("DJANGO_SETTINGS_MODULE") == "config.settings.production":
     from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
@@ -36,4 +36,3 @@ application = get_default_application()
 # if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.production':
 #     application = Sentry(application)
 # Apply ASGI middleware here.
-

@@ -11,9 +11,14 @@ class AirPollutionDataSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = AirPollutionData
-        fields = ('data_base', 'precision',
-                  'pressure', 'value', 'weather_date',
-                  'gas_type')
+        fields = (
+            "data_base",
+            "precision",
+            "pressure",
+            "value",
+            "weather_date",
+            "gas_type",
+        )
 
 
 class AirPollutionSerializer(serializers.ModelSerializer):
@@ -23,5 +28,4 @@ class AirPollutionSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = AirPollution
-        fields = ('data', 'last_update',
-                  'location_lat', 'location_lon')
+        fields = ("data", "last_update", "location_lat", "location_lon")

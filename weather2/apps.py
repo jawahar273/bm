@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class Weather2Config(AppConfig):
-    name = 'weather2'
+    name = "weather2"

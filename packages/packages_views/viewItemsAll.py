@@ -10,18 +10,20 @@ from rest_framework.decorators import api_view
 
 
 from packages.models import Item, ItemsList
-from packages.serializers import (ItemSerializer,
-                                  ItemsListSerializer,
-                                  ItemsListSerializerOnlyForListFun)
+from packages.serializers import (
+    ItemSerializer,
+    ItemsListSerializer,
+    ItemsListSerializerOnlyForListFun,
+)
 from packages.utils import flatter_list
 
 
 class ItemsListCreateView(viewsets.ModelViewSet):
-    '''Get the ItemsListModel value.
+    """Get the ItemsListModel value.
     .. Notes::
         overriding of `list` is handle in get_serializer_class.
 
-    '''
+    """
 
     def get_queryset(self):
 
@@ -31,7 +33,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
         serializer_class = None
 
-        if self.action == 'list':
+        if self.action == "list":
 
             serializer_class = ItemsListSerializerOnlyForListFun
 
@@ -45,18 +47,19 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
         if not save_object.is_valid():
 
-            error_msg = ''
+            error_msg = ""
             content_key = list(save_object.errors.keys())[0]
             error_msg = save_object.errors[content_key]
-            error_msg += ' Check \'%s\'  field' % (content_key.title())
+            error_msg += " Check '%s'  field" % (content_key.title())
 
-            return Response({'detail': error_msg},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": error_msg}, status=status.HTTP_400_BAD_REQUEST)
 
         if not save_object.save():
 
-            return Response({'detail': 'unable to save the request data'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "unable to save the request data"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         return Response(save_object.data)
 
@@ -66,8 +69,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
         if update:
 
-            serializers = ItemsListSerializer(update,
-                                              data=custom_request_data)
+            serializers = ItemsListSerializer(update, data=custom_request_data)
         else:
 
             serializers = ItemsListSerializer(data=custom_request_data)
@@ -76,19 +78,19 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
     def create(self, request):
 
-        request.data.update({'user': request.user.id})
+        request.data.update({"user": request.user.id})
 
         return self.create_or_update_entry(request.data)
 
     def update(self, request, pk=None):
 
-        request.data.update({'user': request.user.id})
+        request.data.update({"user": request.user.id})
 
         return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, pk=None):
 
-        request.data.update({'user': request.user.id})
+        request.data.update({"user": request.user.id})
 
         return self.create_or_update_entry(request.data, self.get_object())
 
@@ -101,8 +103,7 @@ class ItemsListCreateView(viewsets.ModelViewSet):
 
         except Http404:
 
-            Response({'detail': 'content not found'},
-                     status=status.HTTP_404_NOT_FOUND)
+            Response({"detail": "content not found"}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -113,56 +114,55 @@ class ItemCreateView(viewsets.ModelViewSet):
     queryset = Item.objects.all()
 
 
-@api_view(['get'])
+@api_view(["get"])
 def get_months(request, start, end=None):
-    '''
+    """
     ... deperated :: in the favour of ItemList view..
-    '''
+    """
 
     response = []
     status_code = status.HTTP_200_OK
-    # %Y-%m-%d formate checking. 
+    # %Y-%m-%d formate checking.
     regex_date = settings.BM_REGEX_DATE_FORMAT
     # whole date fomate
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
-        _queryset = ItemsList.objects.filter(user_id=request.user.id,
-                                             date__range=(start, end))
-        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
-                                                        many=True)
+        _queryset = ItemsList.objects.filter(
+            user_id=request.user.id, date__range=(start, end)
+        )
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset, many=True)
         serializers.is_valid()
 
         return Response(serializers.data, status=status_code)
 
     elif start and not end:
-        _date = start.rsplit('-', 1)[0]
-        _date = datetime.datetime.strptime(_date, '%Y-%m').date()
-        _queryset = ItemsList.objects.filter(user_id=request.user.id,
-                                             date__year=_date.year,
-                                             date__month=_date.month,)
-        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
-                                                        many=True)
+        _date = start.rsplit("-", 1)[0]
+        _date = datetime.datetime.strptime(_date, "%Y-%m").date()
+        _queryset = ItemsList.objects.filter(
+            user_id=request.user.id, date__year=_date.year, date__month=_date.month
+        )
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset, many=True)
         serializers.is_valid()
 
         return Response(serializers.data, status=status_code)
 
     else:
-        response = {'detail': 'Wrong date formate please check it again'}
+        response = {"detail": "Wrong date formate please check it again"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=status_code)
 
 
-@api_view(['get'])
+@api_view(["get"])
 def itemlist_get_by_months(request, start, end):
-    '''
+    """
      get the list of items based on the month from starting and ending.
      Extenstion for
      ItemsList object.
      old-method-name: get_months
-    '''
+    """
 
     response = []
     # %Y-%m-%d formate checking.
@@ -172,44 +172,46 @@ def itemlist_get_by_months(request, start, end):
 
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
-        _queryset = ItemsList.objects.filter(user=request.user.id,
-                                             date__range=(start, end))
+        _queryset = ItemsList.objects.filter(
+            user=request.user.id, date__range=(start, end)
+        )
 
-        serializers = ItemsListSerializerOnlyForListFun(data=_queryset,
-                                                        many=True)
+        serializers = ItemsListSerializerOnlyForListFun(data=_queryset, many=True)
         serializers.is_valid()
         status_code = status.HTTP_200_OK
 
         return Response(serializers.data, status=status_code)
 
     elif checking_start and not end:
-        response = {'detail': 'Need both date ranges'}
+        response = {"detail": "Need both date ranges"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=status_code)
 
     else:
-        response = {'detail': 'Wrong date formate please check it again'}
+        response = {"detail": "Wrong date formate please check it again"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=status_code)
 
 
-@api_view(['get'])
+@api_view(["get"])
 def get_all_group_in_itemslist(request):
-    '''
+    """
      get the list of group/catagories items from itemsList object
-    '''
+    """
 
     status_code = status.HTTP_200_OK
     # _queryset = ItemsList.objects.filter(
     # user=request.user.id).values_list('group').order_by('group').distinct()
 
     # _queryset = flatter_list(_queryset)
-    queryset = ItemsList.objects.filter(user=request.user.id)\
-                                .values('group', 'date')\
-                                .order_by('group', '-date')\
-                                .distinct('group')
+    queryset = (
+        ItemsList.objects.filter(user=request.user.id)
+        .values("group", "date")
+        .order_by("group", "-date")
+        .distinct("group")
+    )
     # need to conver the date object to string formate
     # user bm.user.utils.to_date_format
     return Response(queryset, status=status_code)

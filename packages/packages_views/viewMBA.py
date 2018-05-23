@@ -14,7 +14,7 @@ from packages.utils import validate_bm_standard_date_format
 
 
 class MonthBudgetAmountView(viewsets.ModelViewSet):
-    '''
+    """
     All the filter are based on current loged in user.
     :model:`packages.MonthBudgetAmount`
 
@@ -27,11 +27,11 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
     update:
     Get the specific object and the udpate field, change the value.
 
-    '''
+    """
 
-    lookup_field = 'month_year'
+    lookup_field = "month_year"
     serializer_class = MonthBudgetAmountSerializer
-    filter_fields = ('budget_amount',)
+    filter_fields = ("budget_amount",)
     # filter_backends = (DjangoFilterBackend)
 
     def get_queryset(self):
@@ -39,36 +39,40 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         return MonthBudgetAmount.objects.filter(user=self.request.user.id)
 
     def get_valid_date_or_error_response(self, month_year=None):
-        '''Chech the date is a valid based on the application's
+        """Chech the date is a valid based on the application's
         standards.
 
         :param str month_year: the date from the user.
         :rtype: JSON
-        '''
+        """
 
         regex_date = settings.BM_REGEX_DATE_FORMAT
 
         if not re.search(regex_date, month_year):
 
-            return Response({'detail': 'Wrong date fomate'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Wrong date fomate"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
     def save_or_error_response(self, save_object):
 
         if not save_object.is_valid():
 
-            return Response({'detail': 'wrong data given'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "wrong data given"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not save_object.save():
 
-            return Response({'detail': 'unable to save the request data'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "unable to save the request data"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         return Response(save_object.data, status=status.HTTP_200_OK)
 
     def return_only_monthYear(self, month_year=None):
 
-        month_year = month_year.rsplit('-', 1)[0]
+        month_year = month_year.rsplit("-", 1)[0]
         return datetime.datetime.strptime(month_year, "%Y-%m").date()
 
     def create_or_update_entry(self, custom_request_data, update=None):
@@ -76,8 +80,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         serializers = None
 
         if update:
-            serializers = MonthBudgetAmountSerializer(update,
-                                                      data=custom_request_data)
+            serializers = MonthBudgetAmountSerializer(update, data=custom_request_data)
         else:
             serializers = MonthBudgetAmountSerializer(data=custom_request_data)
 
@@ -91,8 +94,9 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
             return serializers
 
         month_year = self.return_only_monthYear(month_year)
-        queryset = MonthBudgetAmount.objects.filter(month_year=month_year,
-                                                    user=request.user.id)
+        queryset = MonthBudgetAmount.objects.filter(
+            month_year=month_year, user=request.user.id
+        )
         serializers = MonthBudgetAmountSerializer(data=queryset, many=True)
         serializers.is_valid()
 
@@ -100,7 +104,7 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
     def create(self, request):
 
-        request.data.update({'user': request.user.id})
+        request.data.update({"user": request.user.id})
 
         return self.create_or_update_entry(request.data)
 
@@ -111,8 +115,8 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
         if serializers:
             return serializers
 
-        request.data.update({'user': request.user.id})
-        request.data.update({'month_year': month_year})
+        request.data.update({"user": request.user.id})
+        request.data.update({"month_year": month_year})
         return self.create_or_update_entry(request.data, self.get_object())
 
     def partial_update(self, request, month_year=None):
@@ -121,19 +125,19 @@ class MonthBudgetAmountView(viewsets.ModelViewSet):
 
         if serializers:
             return serializers
-        request.data.update({'user': request.user.id})
+        request.data.update({"user": request.user.id})
 
         return self.create_or_update_entry(request.data, self.get_object())
 
 
-@api_view(['get'])
+@api_view(["get"])
 def get_range_mba(request, start, end=None):
-    '''
+    """
      both the argument are nessary and pass the month and year with '01' as
      starting date.
      .. deprecated::
         this function is deprecated and will be removed.
-    '''
+    """
 
     response = []
     status_code = status.HTTP_200_OK
@@ -144,8 +148,9 @@ def get_range_mba(request, start, end=None):
 
     if checking_start and end and re.search(regex_date, end):
         # check based on regex expression
-        response = MonthBudgetAmount.objects.filter(date__range=(start, end),
-                                                    user=request.user.id)
+        response = MonthBudgetAmount.objects.filter(
+            date__range=(start, end), user=request.user.id
+        )
 
         serializers = MonthBudgetAmountSerializer(data=response, many=True)
         serializers.is_valid()
@@ -153,12 +158,12 @@ def get_range_mba(request, start, end=None):
         return Response(serializers.data, status=status_code)
 
     elif checking_start and not end:
-        response = {'detail': 'need ranges of date'}
+        response = {"detail": "need ranges of date"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(serializers.data, status=status_code)
 
     else:
-        response = {'detail': 'Wrong date formate please check it again'}
+        response = {"detail": "Wrong date formate please check it again"}
         status_code = status.HTTP_400_BAD_REQUEST
         return Response(response, status=status_code)

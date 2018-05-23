@@ -13,12 +13,12 @@ class MonthBudgetAmountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MonthBudgetAmount
-        fields = ('budget_amount', 'month_year', 'user', )
+        fields = ("budget_amount", "month_year", "user")
 
         def get_month(self, obj):
-            return 'user: {}-{}-{}'.format(obj.user,
-                                           obj.month_year.year,
-                                           obj.month_year.month)
+            return "user: {}-{}-{}".format(
+                obj.user, obj.month_year.year, obj.month_year.month
+            )
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('amount', 'name')
+        fields = ("amount", "name")
 
 
 class ItemsListSerializer(WritableNestedModelSerializer):
@@ -42,7 +42,7 @@ class ItemsListSerializer(WritableNestedModelSerializer):
 
             return (i[0] for i in e)
 
-        amount = sum(flat(object.items.values_list('amount')))
+        amount = sum(flat(object.items.values_list("amount")))
         object.total_amount = amount
         object.save()
 
@@ -51,13 +51,21 @@ class ItemsListSerializer(WritableNestedModelSerializer):
     class Meta:
 
         model = ItemsList
-        fields = ('id', 'name', 'place', 'group',
-                  'date', 'items', 'total_amount', 'user', )
+        fields = (
+            "id",
+            "name",
+            "place",
+            "group",
+            "date",
+            "items",
+            "total_amount",
+            "user",
+        )
 
     def to_representation(self, instance):
 
         ret = super().to_representation(instance)
-        ret.pop('user')
+        ret.pop("user")
 
         return ret
 
@@ -67,22 +75,23 @@ class ItemsListSerializerOnlyForListFun(serializers.ModelSerializer):
     class Meta:
 
         model = ItemsList
-        fields = ('id', 'name', 'place',
-                  'group', 'date', 'total_amount')
+        fields = ("id", "name", "place", "group", "date", "total_amount")
+
 
 class ItemsGroupAndDate(serializers.ModelSerializer):
-    
+
     class Meta:
 
         model = ItemsList
-        fields = ('id', 'group', 'date')
+        fields = ("id", "group", "date")
+
 
 class PackageSettingsSerializer(serializers.ModelSerializer):
-    '''
+    """
     The profile setting is not stable yet.
-    '''
+    """
 
     class Meta:
 
         model = PackageSettings
-        fields = '__all__'
+        fields = "__all__"

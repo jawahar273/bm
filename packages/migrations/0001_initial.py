@@ -13,63 +13,145 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='Item',
+            name="Item",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='', max_length=10)),
-                ('amount', models.DecimalField(decimal_places=2, default=1, max_digits=6)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(default="", max_length=10)),
+                (
+                    "amount",
+                    models.DecimalField(decimal_places=2, default=1, max_digits=6),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ItemsList',
+            name="ItemsList",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True)),
-                ('place', models.CharField(max_length=50)),
-                ('group', models.CharField(blank=True, max_length=30)),
-                ('date', models.DateField(default=datetime.date.today, validators=[django.core.validators.RegexValidator('%Y-%m-%d')])),
-                ('total_amount', models.DecimalField(decimal_places=2, default=0, max_digits=7)),
-                ('entry_type', models.PositiveSmallIntegerField(default=0)),
-                ('user', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='itemlist_USERMODEL', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, unique=True)),
+                ("place", models.CharField(max_length=50)),
+                ("group", models.CharField(blank=True, max_length=30)),
+                (
+                    "date",
+                    models.DateField(
+                        default=datetime.date.today,
+                        validators=[django.core.validators.RegexValidator("%Y-%m-%d")],
+                    ),
+                ),
+                (
+                    "total_amount",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=7),
+                ),
+                ("entry_type", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="itemlist_USERMODEL",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'ordering': ['-id'],
-                'get_latest_by': ['-date'],
-            },
+            options={"ordering": ["-id"], "get_latest_by": ["-date"]},
         ),
         migrations.CreateModel(
-            name='MonthBudgetAmount',
+            name="MonthBudgetAmount",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('budget_amount', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
-                ('month_year', models.DateField(default=datetime.date(2018, 4, 1), validators=[django.core.validators.RegexValidator('(19|20)\\d\\d([- /.])(0[1-9]|1[012])\\2(0[1-9]|[12][0-9]|3[01])')])),
-                ('user', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='mba_USERMODEL', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "budget_amount",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=10),
+                ),
+                (
+                    "month_year",
+                    models.DateField(
+                        default=datetime.date(2018, 4, 1),
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                "(19|20)\\d\\d([- /.])(0[1-9]|1[012])\\2(0[1-9]|[12][0-9]|3[01])"
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="mba_USERMODEL",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PackageSettings',
+            name="PackageSettings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('currency_details', models.CharField(blank=True, default='USD', max_length=5)),
-                ('force_mba_update', models.CharField(default='Y', max_length=1)),
-                ('active_paytm', models.CharField(default='N', max_length=1)),
-                ('geoloc_interval', models.PositiveSmallIntegerField(default=60)),
-                ('user', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='package_settings', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "currency_details",
+                    models.CharField(blank=True, default="USD", max_length=5),
+                ),
+                ("force_mba_update", models.CharField(default="Y", max_length=1)),
+                ("active_paytm", models.CharField(default="N", max_length=1)),
+                ("geoloc_interval", models.PositiveSmallIntegerField(default=60)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="package_settings",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='item',
-            name='items_list',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='packages.ItemsList'),
+            model_name="item",
+            name="items_list",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="items",
+                to="packages.ItemsList",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='monthbudgetamount',
-            unique_together=set([('month_year', 'user')]),
+            name="monthbudgetamount", unique_together=set([("month_year", "user")])
         ),
     ]

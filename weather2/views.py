@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_openweather_data(lat, lon, gcode_name):
-    '''Get the openweather air pollution data.
+    """Get the openweather air pollution data.
        See also :class: `.set_caches_redis`.
     :return: async result of celery
     :rtype: :class: `.celery.result.AsyncResult`.
@@ -25,14 +25,14 @@ def get_openweather_data(lat, lon, gcode_name):
             @jawahar273 [Version 0.1]
             -1- Init Code.
             -2- return async result celery.
-    '''
-    temp = ('celery_get_%s_data' % (gcode_name))
+    """
+    temp = "celery_get_%s_data" % (gcode_name)
     _celery = getattr(bm_celery, temp)
     return _celery.delay(lat, lon).get(timeout=20)
 
 
 def get_count_days(last_upate):
-    '''Get the days count between today and
+    """Get the days count between today and
     last update(in openweather api) datetimestramp.
 
     :param last_upate: [date in string]
@@ -43,15 +43,14 @@ def get_count_days(last_upate):
             @jawahar273 [Version 0.1]
             -1- Init Code.
             -2- return async result celery.
-    '''
+    """
 
-    last_upate = datetime.strptime(last_upate,
-                                   settings.BM_ISO_8601_TIMESTAMP)
+    last_upate = datetime.strptime(last_upate, settings.BM_ISO_8601_TIMESTAMP)
     return (datetime.now() - last_upate).days - 1
 
 
 def set_caches_redis(lat, lon, gcode_name, caches_name):
-    '''set the caches to the server with
+    """set the caches to the server with
     data which is feached from the open weather
     (air pollution[beta api]).
 
@@ -76,12 +75,12 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
         -- Wednesday 09 May 2018 09:23:49 AM IST
             @jawahar273 [Version 0.4]
             -1- adding return value
-    '''
+    """
 
     # get the weather data from the openweather.
     data = get_openweather_data(lat, lon, gcode_name)
 
-    if data['code'] == status.HTTP_200_OK:
+    if data["code"] == status.HTTP_200_OK:
 
         #  If the day type is selected keep that it use the
         #  UTC for time zone.
@@ -91,35 +90,37 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
         confi_cache_timeout_type = settings.BM_WEATHER_DATA_CACHE_TYPE
         set_timeout = None
 
-        if confi_cache_timeout_type == 'date':
+        if confi_cache_timeout_type == "date":
             temp_time = settings.BM_ISO_8601_TIMESTAMP
-            temp_date = datetime.strptime(data['time'], temp_time)
+            temp_date = datetime.strptime(data["time"], temp_time)
 
             set_timeout = datetime.now() - temp_date
             set_timeout = set_timeout.total_seconds()
 
-        elif confi_cache_timeout_type == 'day':
+        elif confi_cache_timeout_type == "day":
 
             set_timeout = (24 - datetime.now().hour) * 3600
 
         #  days timeout code here
-        cache.set(caches_name, data['content_data'], set_timeout)
+        cache.set(caches_name, data["content_data"], set_timeout)
 
         return True
 
-    elif data['code'] == status.HTTP_500_INTERNAL_SERVER_ERROR:
+    elif data["code"] == status.HTTP_500_INTERNAL_SERVER_ERROR:
 
-        logger.error('Error in the celery data, Nothing is stored'
-                     ' of the data in caches system')
+        logger.error(
+            "Error in the celery data, Nothing is stored"
+            " of the data in caches system"
+        )
     else:
 
-        logger.error('Error in the celery data. May the reason:' + data)
+        logger.error("Error in the celery data. May the reason:" + data)
 
     return False
 
 
 def get_caches_redis(caches_content, gcode_name):
-    '''get the cache that is related to
+    """get the cache that is related to
     air pollution which is stored in the server
     by using the name of the caches.
 
@@ -138,7 +139,7 @@ def get_caches_redis(caches_content, gcode_name):
             -1- Update return value of this function.
             -2- Adding exception if the weather data content
                 is None.
-    '''
+    """
 
     # get the time last update and todays date use that
     # as a sequance number to find the correct value in
@@ -146,28 +147,29 @@ def get_caches_redis(caches_content, gcode_name):
 
     try:
 
-        num_days = get_count_days(caches_content['time'])
+        num_days = get_count_days(caches_content["time"])
 
     except TypeError:
 
         return empty_gas_type()
 
-    if num_days >= len(caches_content['data']):  # max_days count
+    if num_days >= len(caches_content["data"]):  # max_days count
 
-        logger.error('Computated days should not exceed'
-                     ' the max_days count. Last update date'
-                     ' {}, Gas Type: {}'
-                     ' '.format(caches_content['time'],
-                                gcode_name))
+        logger.error(
+            "Computated days should not exceed"
+            " the max_days count. Last update date"
+            " {}, Gas Type: {}"
+            " ".format(caches_content["time"], gcode_name)
+        )
 
         return empty_gas_type()
 
-    return caches_content['data'][num_days]
+    return caches_content["data"][num_days]
 
 
-@api_view(['get'])
+@api_view(["get"])
 def get_air_pollution(request, weather_date, lat, lon):
-    '''get the air quality data from the caches system
+    """get the air quality data from the caches system
     or from the open weather api[beta api].
 
     :param request: default django request object
@@ -203,15 +205,16 @@ def get_air_pollution(request, weather_date, lat, lon):
             -1- Change in condition flow.
             -2- Fixing little bug.
 
-    '''
+    """
 
     if not re.search(settings.BM_REGEX_DATE_FORMAT, weather_date):
 
-        return Response({'detail': 'wrong date formate.'
-                         ' Please Check date fromate'},
-                        status=status.HTTP_400_BAD_REQUEST)
-    CO_code_name = 'co'
-    SO2_code_name = 'so2'
+        return Response(
+            {"detail": "wrong date formate." " Please Check date fromate"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    CO_code_name = "co"
+    SO2_code_name = "so2"
     result = {}
     status_code = status.HTTP_200_OK
 
@@ -223,16 +226,17 @@ def get_air_pollution(request, weather_date, lat, lon):
         CO_data = get_openweather_data(lat, lon, CO_code_name)
         SO2_data = get_openweather_data(lat, lon, SO2_code_name)
 
-        CO_num_days = get_count_days(CO_data['time'])
-        SO2_num_days = get_count_days(SO2_data['time'])
+        CO_num_days = get_count_days(CO_data["time"])
+        SO2_num_days = get_count_days(SO2_data["time"])
 
-        if CO_num_days >= len(CO_data['data']):
+        if CO_num_days >= len(CO_data["data"]):
 
-            logger.error('Computated days should not exceed'
-                         ' the max_days count. Last update date'
-                         ' {}, Gas Type: {}'
-                         ' '.format(CO_data['time'],
-                                    CO_code_name))
+            logger.error(
+                "Computated days should not exceed"
+                " the max_days count. Last update date"
+                " {}, Gas Type: {}"
+                " ".format(CO_data["time"], CO_code_name)
+            )
 
             CO_data = empty_gas_type()
 
@@ -240,13 +244,14 @@ def get_air_pollution(request, weather_date, lat, lon):
 
             CO_data = CO_data[CO_num_days]
 
-        if SO2_num_days >= len(SO2_data['data']):
+        if SO2_num_days >= len(SO2_data["data"]):
 
-            logger.error('Computated days should not exceed'
-                         ' the max_days count. Last update date'
-                         ' {}, Gas Type: {}'
-                         ' '.format(SO2_data['time'],
-                                    SO2_code_name))
+            logger.error(
+                "Computated days should not exceed"
+                " the max_days count. Last update date"
+                " {}, Gas Type: {}"
+                " ".format(SO2_data["time"], SO2_code_name)
+            )
 
             SO2_data = empty_gas_type()
 
@@ -257,11 +262,10 @@ def get_air_pollution(request, weather_date, lat, lon):
         result[CO_code_name] = CO_data
         result[SO2_code_name] = SO2_data
 
-        return Response({'detail': result},
-                        status=status_code)
+        return Response({"detail": result}, status=status_code)
     # ---------------------------------
-    CO_CACHES_NAME = 'airPollution_CO_%s_%s' % (lat, lon)
-    SO2_CACHES_NAME = 'airPollution_SO2_%s_%s' % (lat, lon)
+    CO_CACHES_NAME = "airPollution_CO_%s_%s" % (lat, lon)
+    SO2_CACHES_NAME = "airPollution_SO2_%s_%s" % (lat, lon)
 
     CO_caches_content = cache.get(CO_CACHES_NAME, None)
     SO2_caches_content = cache.get(SO2_CACHES_NAME, None)
@@ -273,16 +277,13 @@ def get_air_pollution(request, weather_date, lat, lon):
     if not CO_caches_content:
 
         # setting the caches
-        logger.debug('setting cache for CO gas')
-        CO_caches_status = set_caches_redis(lat, lon,
-                                            CO_code_name,
-                                            CO_CACHES_NAME)
+        logger.debug("setting cache for CO gas")
+        CO_caches_status = set_caches_redis(lat, lon, CO_code_name, CO_CACHES_NAME)
         if CO_caches_status:
 
             CO_caches_content = cache.get(CO_CACHES_NAME)
-            result[CO_code_name] = get_caches_redis(CO_caches_content,
-                                                    CO_code_name)
-            logger.debug('setting the CO result after setting caches')
+            result[CO_code_name] = get_caches_redis(CO_caches_content, CO_code_name)
+            logger.debug("setting the CO result after setting caches")
 
         else:
 
@@ -290,24 +291,20 @@ def get_air_pollution(request, weather_date, lat, lon):
 
     else:
 
-        result[CO_code_name] = get_caches_redis(CO_caches_content,
-                                                CO_code_name)
-        logger.debug('setting the CO result')
+        result[CO_code_name] = get_caches_redis(CO_caches_content, CO_code_name)
+        logger.debug("setting the CO result")
 
     #  checking the caches is present or not
     if not SO2_caches_content:
 
-        logger.debug('setting cache for SO2 gas')
-        SO2_caches_status = set_caches_redis(lat, lon,
-                                             SO2_code_name,
-                                             SO2_CACHES_NAME)
+        logger.debug("setting cache for SO2 gas")
+        SO2_caches_status = set_caches_redis(lat, lon, SO2_code_name, SO2_CACHES_NAME)
 
         if SO2_caches_status:
 
             SO2_caches_content = cache.get(SO2_CACHES_NAME)
-            result[SO2_code_name] = get_caches_redis(SO2_caches_content,
-                                                     SO2_code_name)
-            logger.debug('setting the SO2 result after setting cahces')
+            result[SO2_code_name] = get_caches_redis(SO2_caches_content, SO2_code_name)
+            logger.debug("setting the SO2 result after setting cahces")
 
         else:
 
@@ -315,9 +312,7 @@ def get_air_pollution(request, weather_date, lat, lon):
 
     else:
 
-        result[SO2_code_name] = get_caches_redis(SO2_caches_content,
-                                                 SO2_code_name)
-        logger.debug('setting the SO2 result')
+        result[SO2_code_name] = get_caches_redis(SO2_caches_content, SO2_code_name)
+        logger.debug("setting the SO2 result")
 
-    return Response({'detail': result},
-                    status=status_code)
+    return Response({"detail": result}, status=status_code)
