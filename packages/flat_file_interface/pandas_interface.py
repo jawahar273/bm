@@ -1,17 +1,11 @@
 import datetime
 
-# import os
-# import sys
 from django.conf import settings
-
 import pandas as pd
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-# import numpy as np
-
-# sys.path.append('..')
-from packages.models import ItemsList
+from packages.models import ItemsList, UploadKey, UploadKeyList
 from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (
     BaseExcelClass,
@@ -125,6 +119,9 @@ class PandasExcelAPI(BaseExcelClass):
         data = self.dataContent.to_dict("date")
         row = self.get_info()["row"]
 
+        upload_key = UploadKeyList(user_id=user_id)
+        upload_key.save()
+
         for inx in range(0, row):
             name = data["name"][inx]
             group = data["group"][inx]
@@ -141,8 +138,11 @@ class PandasExcelAPI(BaseExcelClass):
                 date=date,
                 user_id=user_id,
             )
-            # print(items.total_amount, inx)
+
             items.save()
+
+            UploadKey(upload_keys=upload_key.id, content_key=items.id).save()
+
             self.as_msg_client(inx, row)
 
         self.dataContent = None

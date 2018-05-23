@@ -1,6 +1,6 @@
 [run]
-include = bm/*
+include = bm/*, packages/*, weather2/*
 omit = *migrations*, *tests*
-plugins =
-    django_coverage_plugin
-django_coverage_plugin
+
+[html]
+directory = coverage

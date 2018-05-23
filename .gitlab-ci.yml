@@ -9,23 +9,23 @@ stages:
   - test
   - deploy
 
-
 .script: &build_script
   - python3 --version
   - ls
   - virtualenv -p /usr/bin/python3 test-dev
   - source test-dev/bin/activate
   - pip3 install -r requirements/local.txt
-  - hostname
-  # - python3 manager.py runserver_plus
-  
-
+  - pip3 install -r requirements/test.txt
+  - pytest
+  - coverage run manage.py test
+  - coverage report -m
 
 dev:
-  stage: build
+  stage: test
   script: *build_script
   only:
     - master
+
 
 .script: &build_script2
   - virtualenv -p /usr/bin/python3 test-prod

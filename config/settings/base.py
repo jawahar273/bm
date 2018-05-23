@@ -356,7 +356,11 @@ OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = True
 
 # Relative to flat file setting
-BM_FLAT_FILE_INTERFACE = "pandas"
+BM_FLAT_FILE_INTERFACE = {
+    "api_class": "packages.flat_file_interface.pandas_interface.PandasExcelAPI",
+    "api_exception": "packages.flat_file_interface.pandas_interface.PandasInterfaceException",
+    "api_not_implemented": "packages.flat_file_interface.pandas_interface.PandasInterfaceNotImplement",
+}
 BM_EXPIRY_TIME_FLAT_FILT_IN_MINS = env.int(
     "BM_EXPIRY_TIME_FLAT_FILT_IN_MINS", default=480
 )

@@ -179,7 +179,7 @@ class PackageSettings(models.Model):
 
 class UploadKeyList(models.Model):
 
-    date = models.DateTimeField(default=datetime.datetime.now)
+    date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         USERMODEL, blank=True, related_name="upload_key_list", on_delete=models.CASCADE
     )

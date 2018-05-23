@@ -1,24 +1,17 @@
 from django.conf import settings
 
-__APIClass = None
-__APIException = None
-__APIExceptionNotImplemented = None
+from bm.users.utils import import_class
 
 # rework based on importlib
-if settings.BM_FLAT_FILE_INTERFACE == "pandas":
-    from packages.flat_file_interface.pandas_interface import (
-        PandasExcelAPI,
-        PandasInterfaceException,
-        PandasInterfaceNotImplement,
-    )
 
-    __APIClass = PandasExcelAPI
-    __APIException = PandasInterfaceException
-    __APIExceptionNotImplemented = PandasInterfaceNotImplement
+_class_path = settings.BM_FLAT_FILE_INTERFACE
+APIClass = import_class(_class_path["api_class"])
+APIException = import_class(_class_path["api_exception"])
+APIExceptionNotImplemented = import_class(_class_path["api_not_implemented"])
 # in plan for future alternative class.
 
 
-class FlatFileInterFaceAPI(__APIClass):
+class FlatFileInterFaceAPI(APIClass):
     """docstring for FlatFileInterFaceAPI"""
 
     def __init__(self):
@@ -32,9 +25,9 @@ class FlatFileInterFaceAPI(__APIClass):
             self.read_excel(name, **kargs)
 
 
-class FlatFileInterFaceException(__APIException):
+class FlatFileInterFaceException(APIException):
     pass
 
 
-class FlatFileInterFaceNotImplemented(__APIExceptionNotImplemented):
+class FlatFileInterFaceNotImplemented(APIExceptionNotImplemented):
     pass
