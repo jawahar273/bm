@@ -20,7 +20,7 @@ pytest-sugar==0.9.1
 
 psycopg2==2.7.4
 
-django-rest-swagger
+django-rest-swagger==2.2.0
 
 sphinx_rtd_theme
 
