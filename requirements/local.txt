@@ -22,7 +22,7 @@ psycopg2==2.7.4
 
 django-rest-swagger==2.2.0
 
-sphinx_rtd_theme
+sphinx_rtd_theme==0.3.1
 
 # local shell testing
 websocket-client==0.47.0
