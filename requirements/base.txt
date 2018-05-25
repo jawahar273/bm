@@ -69,4 +69,4 @@ flower==0.9.2
 requests==2.18.4
 
 channels==2.1.1
-channels_redis==2.1.1
+channels_redis==2.2.1
