@@ -1,8 +1,12 @@
+image: python:latest
+
 before_script:
   - apt-get update
   - apt-get install -y python3-pip 
   - pip3 install virtualenv
-
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
 
 stages:
   - build
@@ -11,9 +15,6 @@ stages:
 
 .script: &build_script
   - python3 --version
-  - ls
-  - virtualenv -p /usr/bin/python3 test-dev
-  - source test-dev/bin/activate
   - pip3 install -r requirements/local.txt
   - pip3 install -r requirements/test.txt
   - pytest
@@ -28,8 +29,6 @@ dev:
 
 
 .script: &build_script2
-  - virtualenv -p /usr/bin/python3 test-prod
-  - source test-prod/bin/activate
   - pip3 install -r requirements/production.txt
 
 
