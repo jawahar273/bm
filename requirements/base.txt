@@ -58,7 +58,7 @@ drf-writable-nested==0.4.2
 pandas==0.23.0
 
 # djangorestframework
-djangorestframework==3.7.3
+djangorestframework==3.8.2
 django-cors-headers
 djangorestframework-jwt==1.11.0
 
