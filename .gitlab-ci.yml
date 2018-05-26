@@ -1,4 +1,7 @@
 image: python:latest
+image: postgres:latest
+image: redis:latest
+image: rabbitmq:latest
 
 before_script:
   - apt-get update
@@ -9,30 +12,37 @@ before_script:
   - source venv/bin/activate
 
 stages:
-  - build
   - test
-  - deploy
+  # - build
+  # - deploy
 
 .script: &build_script
   - python3 --version
   - pip3 install -r requirements/local.txt
   - pip3 install -r requirements/test.txt
+  - export DJANGO_SETTINGS_MODULE="config.settings.test"
   - pytest
   - coverage report -m
 
 dev:
   stage: test
   script: *build_script
+  services:
+    - python:latest
+    - postgres:latest
+    - redis:latest
+    - rabbitmq:latest
+
   only:
     - master
 
 
-.script: &build_script2
-  - pip3 install -r requirements/production.txt
+# .script: &build_script2
+#   - pip3 install -r requirements/production.txt
 
 
-prod:
-  stage: build
-  script: *build_script2
-  only:
-    - master
+# prod:
+#   stage: build
+#   script: *build_script2
+#   only:
+#     - master

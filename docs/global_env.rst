@@ -28,6 +28,9 @@ Remeber the intercommunication between client and server must be in secure conne
 |                          | openweather website by   |
 |                          | signup                   |
 +--------------------------+--------------------------+
+| BM_DB_CONN_MAX_AGE(5mins)| Setting max connection   |
+|                          | timeout for DB.          |
++--------------------------+--------------------------+
 
 
 Must Review Enviroment

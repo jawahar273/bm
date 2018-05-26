@@ -10,3 +10,5 @@ django-coverage-plugin==1.5.0
 # pytest
 pytest-django==3.2.1
 pytest-sugar==0.9.1
+
+locustio==0.8.1

@@ -4,10 +4,8 @@
 # Verified bug on Python 3.5.1
 wheel==0.31.1
 
-
-
 # Bleeding edge Django
-django==1.11 # pyup: >=1.10,<1.11
+django>=2.0.5, <2.2
 django-crispy-forms==1.7.2
 # Configuration
 django-environ==0.4.4
@@ -42,8 +40,8 @@ awesome-slugify==1.6.5
 pytz==2018.4
 
 # Redis support
-django-redis==4.9.0
 redis>=2.10.5
+django-redis==4.9.0
 
 
 celery==4.1.1

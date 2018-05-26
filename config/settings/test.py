@@ -12,7 +12,11 @@ from .base import *  # noqa
 # Turn debug off so tests run faster
 DEBUG = False
 TEMPLATES[0]["OPTIONS"]["debug"] = False
+# Intalling apps
+INSTALLED_APPS += []
 
+# Middle Ware testing
+MIDDLEWARE += []
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
@@ -61,5 +65,26 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [
     ]
 ]
 
+# ----------------------------
 
-INSTALLED_APPS += env.list("BM_OPTIONAL_TEST_APPS", default=[])
+
+# INSTALLED_APPS += env.list("BM_OPTIONAL_TEST_APPS", default=[])
+CORS_ORIGIN_WHITELIST = ("127.0.0.1", "localhost:4300")
+
+CLIENT_REDIRECT_DOMAIN = "http://localhost:4300/"
+CLIENT_REDIRECT_URL = "reset"
+
+CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+CELERY_ALWAYS_EAGER = True
+
+#  Django Channel config local
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("localhost", 6379)]},
+        # "ROUTING": "packages.routing.packages_ws_urlpatterns"
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"

@@ -23,6 +23,7 @@ router.register("mba", MonthBudgetAmountView, base_name="mba")
 
 regex_date_valid = r"[0-9\-]{10}"
 
+app_name = "packages"
 urlpatterns = [
     url(r"^settings/", PackageSettingsView, name="package_settings"),
     url(

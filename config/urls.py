@@ -29,7 +29,7 @@ if settings.DEBUG:
     from rest_framework_swagger.views import get_swagger_view
 
     schema_view = get_swagger_view(title="Deliver API")
-    api_url += [url(r"^docs$", schema_view)]
+    api_url += [url(r"^docs$", schema_view), url(r"^silk/", include("silk.urls"))]
 
 handler500 = "rest_framework.exceptions.server_error"
 handler400 = "rest_framework.exceptions.bad_request"
@@ -43,9 +43,9 @@ api_url += [
     url(r"^rest-auth/login-auth/$", obtain_jwt_token),
     url(r"^rest-auth/login-refresh/$", refresh_jwt_token),
     url(r"^rest-auth/login-verify/$", verify_jwt_token),
-    url(r"^package/", include("packages.urls", namespace="packages")),
+    url(r"^package/", include("packages.urls")),
     # url(r'^weather/', include('weather.urls', namespace='weather')),
-    url(r"^weather/", include("weather2.urls", namespace="weather")),
+    url(r"^weather/", include("weather2.urls")),
 ]
 
 
@@ -98,7 +98,7 @@ if settings.DEBUG:
         ),
         # User management
         url(r"^accounts/", include("allauth.urls")),
-        url(r"^users/", include("bm.users.urls", namespace="users")),
+        url(r"^users/", include("bm.users.urls")),
     ]
 
     if "debug_toolbar" in settings.INSTALLED_APPS:

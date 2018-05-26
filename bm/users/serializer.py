@@ -34,7 +34,6 @@ class UserSerializer(UserDetailsSerializer):
 
     def get_profile_url(self, object):
         const_url = "https://www.gravatar.com/avatar/"
-        # IPython.embed()
         url = object.email.lower().encode()
         url = hashlib.md5(url).hexdigest()
         return "{}{}?d=identicon".format(const_url, url)

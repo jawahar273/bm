@@ -125,7 +125,8 @@ DATABASES = {
     )
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
-
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("BM_DB_CONN_MAX_AGE", 60 * 5)
+# 5 minutes
 
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
