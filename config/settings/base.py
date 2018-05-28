@@ -259,7 +259,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_ADAPTER = "bm.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "bm.users.adapters.SocialAccountAdapter"
-ACCOUNT_ADAPTER = "config.adapter.BMAccountAdapterCustom"
+# ACCOUNT_ADAPTER = "config.adapter.BMAccountAdapterCustom"
 
 # Custom user app defaults
 # Select the correct user model
