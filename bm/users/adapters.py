@@ -10,7 +10,7 @@ class AccountAdapter(DefaultAccountAdapter):
 
     def send_mail(self, template_prefix, email, context):
         context["activate_url"] = (
-            settings.BM_CLIENT_CROSS_DOMAIN_NAME + "confirm-email/" + context["key"]
+            settings.CLIENT_REDIRECT_DOMAIN + "confirm-email/" + context["key"]
         )
         msg = self.render_mail(template_prefix, email, context)
         msg.send()
