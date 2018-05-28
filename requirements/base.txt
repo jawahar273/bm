@@ -27,11 +27,11 @@ argon2-cffi==18.1.0
 
 # For user registration, either via email or social
 # Well-built with regular release cycles!
-django-allauth==0.36.0
+django-allauth>=0.36.0
 
 
 # Python-PostgreSQL Database Adapter
-psycopg2==2.7.4
+psycopg2-binary==2.7.4
 
 # Unicode slugification
 awesome-slugify==1.6.5
