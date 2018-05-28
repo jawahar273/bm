@@ -4,6 +4,7 @@ from packages.packages_views.viewItemsAll import (
     ItemCreateView,
     itemlist_get_by_months,
     get_all_group_in_itemslist,
+    delete_bulk,
 )
 from packages.packages_views.viewMiscellaneous import get_currency
 from packages.packages_views.viewSettings import PackageSettingsView

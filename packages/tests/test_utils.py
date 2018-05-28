@@ -1,7 +1,7 @@
 
 from test_plus.test import TestCase
 
-from packages.utils import to_hexdigit, to_percentage
+from packages.utils import to_hexdigit, to_percentage, validate_less_than_today
 
 
 # Create your tests here.
@@ -18,3 +18,9 @@ class TestPackagesUtils(TestCase):
 
         def test__str__(self):
             print("done in testing packages utils")
+
+    def test_todays(self):
+        value = validate_less_than_today("2018-05-01")
+        self.assertTrue(value)
+        value = validate_less_than_today("2020-05-01")
+        self.assertFalse(vale)
