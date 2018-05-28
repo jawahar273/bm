@@ -35,7 +35,7 @@ if settings.SWAGGER_DOCS:
 handler500 = "rest_framework.exceptions.server_error"
 handler400 = "rest_framework.exceptions.bad_request"
 
-# app_name="users"
+app_name = "users"
 api_url += [
     url(r"^rest-auth/", include("rest_auth.urls")),
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
