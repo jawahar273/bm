@@ -254,3 +254,5 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [REDIS_LOCATION]},
     }
 }
+
+SWAGGER_DOCS = env.bool("BM_SWAGGER_DOCS", default=False)

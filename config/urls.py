@@ -25,15 +25,17 @@ from bm.users.views import (
 rest_router = routers.DefaultRouter()
 
 api_url = []
-if settings.DEBUG:
+if settings.SWAGGER_DOCS:
     from rest_framework_swagger.views import get_swagger_view
 
     schema_view = get_swagger_view(title="Deliver API")
-    api_url += [url(r"^docs$", schema_view), url(r"^silk/", include("silk.urls"))]
+    api_url += [url(r"^docs$", schema_view)]
+
 
 handler500 = "rest_framework.exceptions.server_error"
 handler400 = "rest_framework.exceptions.bad_request"
 
+# app_name="users"
 api_url += [
     url(r"^rest-auth/", include("rest_auth.urls")),
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
@@ -60,11 +62,12 @@ urlpatterns = [
         redirect_password_rest_done,
         name="password_reset_confirm",
     ),
-    url(
-        r"^accounts/confirm-email/(?P<key>[-:\w]+)/$",
-        handling_mail_confirm,
-        name="redirect_on_mail_confirm",
-    ),
+    # https://stackoverflow.com/questions/27984901/how-to-customize-activate-url-on-django-allauth#34249336
+    # url(
+    #     r"^accounts/confirm-email/(?P<key>[-:\w]+)/$",
+    #     handling_mail_confirm,
+    #     name="account_confirm_email",
+    # ),
     url(r"^$", display_home_page, name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -99,6 +102,7 @@ if settings.DEBUG:
         # User management
         url(r"^accounts/", include("allauth.urls")),
         url(r"^users/", include("bm.users.urls")),
+        url(r"^silk/", include("silk.urls")),
     ]
 
     if "debug_toolbar" in settings.INSTALLED_APPS:

@@ -124,3 +124,5 @@ CHANNEL_LAYERS = {
         # "ROUTING": "packages.routing.packages_ws_urlpatterns"
     }
 }
+
+SWAGGER_DOCS = env.bool("BM_SWAGGER_DOCS", default=True)

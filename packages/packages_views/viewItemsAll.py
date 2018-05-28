@@ -196,7 +196,7 @@ def itemlist_get_by_months(request, start: str, end: str):
 
 
 @api_view(["get"])
-def get_all_group_in_itemslist(request) -> Response:
+def get_all_group_in_itemslist(request, start: str, end: str = None) -> Response:
     """
      get the list of group/catagories items from itemsList object
     """
@@ -205,16 +205,32 @@ def get_all_group_in_itemslist(request) -> Response:
     # _queryset = ItemsList.objects.filter(
     # user=request.user.id).values_list('group').order_by('group').distinct()
 
-    # _queryset = flatter_list(_queryset)
-    queryset = (
-        ItemsList.objects.filter(user=request.user.id)
-        .values("group", "date")
-        .order_by("group", "-date")
-        .distinct("group")
-    )
-    # need to conver the date object to string formate
-    # user bm.user.utils.to_date_format
-    return Response(queryset, status=status_code)
+    regex_date = settings.BM_REGEX_DATE_FORMAT
+    # whole date fomate
+    checking_start = re.search(regex_date, start)
+
+    if checking_start and end and re.search(regex_date, end):
+        # check based on regex expression
+
+        queryset = (
+            ItemsList.objects.filter(user=request.user.id, date__range=(start, end))
+            .values("group", "date")
+            .order_by("group", "-date")
+            .distinct("group")
+        )
+        # need to conver the date object to string formate
+        # user bm.user.utils.to_date_format
+        return Response(queryset, status=status_code)
+
+    elif checking_start and not end:
+        response = {"detail": "Need both date ranges"}
+        status_code = status.HTTP_400_BAD_REQUEST
+
+        return Response(response, status=status_code)
+
+    else:
+        response = {"detail": "Wrong date formate please check it again"}
+        status_code = status.HTTP_400_BAD_REQUEST
 
 
 @api_view(["delete"])
@@ -236,7 +252,8 @@ def delete_bulk(request) -> Response:
         and deleting them.
 
     """
-    response = ItemsList.object.filter(user=request.user_id, id__in=request.data)
+
+    response = ItemsList.objects.filter(user=request.user.id, id__in=request.data)
     response.delete()
 
-    return Response({}, status_code=204)
+    return Response({}, status=204)
