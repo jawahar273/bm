@@ -156,7 +156,7 @@ def get_months(request, start, end=None):
 
 
 @api_view(["get"])
-def itemlist_get_by_months(request, start, end):
+def itemlist_get_by_months(request, start: str, end: str):
     """
      get the list of items based on the month from starting and ending.
      Extenstion for
@@ -196,7 +196,7 @@ def itemlist_get_by_months(request, start, end):
 
 
 @api_view(["get"])
-def get_all_group_in_itemslist(request):
+def get_all_group_in_itemslist(request) -> Response:
     """
      get the list of group/catagories items from itemsList object
     """
@@ -215,3 +215,28 @@ def get_all_group_in_itemslist(request):
     # need to conver the date object to string formate
     # user bm.user.utils.to_date_format
     return Response(queryset, status=status_code)
+
+
+@api_view(["delete"])
+def delete_bulk(request) -> Response:
+    """This function is will be used to
+    delete bulk number of item list model
+
+
+    :param request: [description]
+    :type request: [type]
+
+    ChangeLog:
+        --Sunday 27 May 2018 11:27:13 PM IST
+        @jawahar273 [Version 0.1]
+        -1- Init Code.
+
+    PlanLog:
+        -1- Filter two set by batch
+        and deleting them.
+
+    """
+    response = ItemsList.object.filter(user=request.user_id, id__in=request.data)
+    response.delete()
+
+    return Response({}, status_code=204)

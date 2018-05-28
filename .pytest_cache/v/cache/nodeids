@@ -10,10 +10,10 @@
   "bm/users/tests/test_urls.py::TestUserURLs::test_redirect_reverse",
   "bm/users/tests/test_urls.py::TestUserURLs::test_update_resolve",
   "bm/users/tests/test_urls.py::TestUserURLs::test_update_reverse",
-  "bm/users/tests/test_utils.py::test_import_class",
+  "bm/users/tests/test_utils.py::TestUserURLs::test_import_class",
   "bm/users/tests/test_views.py::TestUserRedirectView::test_get_redirect_url",
   "bm/users/tests/test_views.py::TestUserUpdateView::test_get_object",
-  "bm/users/tests/test_views.py::TestUserUpdateView::test_get_success_url",
   "packages/tests/test_utils.py::TestPackagesUtils::test_to_hexdigit",
-  "packages/tests/test_utils.py::TestPackagesUtils::test_to_percentage"
+  "packages/tests/test_utils.py::TestPackagesUtils::test_to_percentage",
+  "packages/tests/test_utils.py::TestPackagesUtils::test_todays"
 ]

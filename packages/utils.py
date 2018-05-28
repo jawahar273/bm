@@ -3,6 +3,8 @@ import datetime
 
 from django.conf import settings
 
+from bm.users.utils import to_datetime_object
+
 
 def flatter_list(items):
     """
@@ -63,13 +65,25 @@ def validate_bm_standard_date_format(value):
 def validate_less_than_today(value):
     """This function which help in validate
     the given date less than today.
+
+    ChangeLog:
+        --Sunday 27 May 2018 11:44:47 PM IST
+        @jawahar273 [Version 0.2]
+        -1- Init Code.
     """
 
     if not validate_bm_standard_date_format(value):
+        raise ValueError("Given date format is wrong")
+
+    today = datetime.datetime.today()
+    date_format = settings.BM_STANDARD_DATEFORMAT
+    date_given = to_datetime_object(value, date_format)
+    lowest_year = settings.BM_LOWEST_YEAR_POSSIBLE
+
+    if date_given >= today and lowest_year < date_given:
         return False
 
-    today = datetime.date.today()
-    # need implement
+    return True
 
 
 def to_query_string_dict(value):

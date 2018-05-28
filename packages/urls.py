@@ -14,6 +14,7 @@ from packages.views import (
     upload_term_condition,
     is_paytm_active,
     upload_flat_file,
+    delete_bulk,
 )
 
 
@@ -53,6 +54,7 @@ urlpatterns = [
         upload_flat_file,
         name="upload_file",
     ),
+    url(r"^delete-bulk/", delete_bulk, name="delete_bulk"),
 ]
 
 urlpatterns.extend(router.urls)

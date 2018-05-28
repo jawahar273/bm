@@ -1,8 +1,8 @@
-import datetime as datetime
+import datetime
 import importlib
 
 
-def to_date_format(date, date_format):
+def to_date_format(date, date_format: str) -> str:
     """converting the date object into
     given date format.
 
@@ -13,7 +13,32 @@ def to_date_format(date, date_format):
     :returns: [description]
     :rtype: {[str]}
     """
-    return datetime.datetime.strftime(date, date_format)
+    try:
+        return datetime.datetime.strftime(date, date_format)
+    except ValueError as e:
+        return None
+
+
+def to_datetime_object(date: str, date_format: str) -> datetime.datetime:
+    """converting the date format  into
+    given date object.
+
+    :param date: [date]
+    :type date: [str]
+    :param date_format: [date format]
+    :type date_format: [str]
+    :returns: [description]
+    :rtype: {[datetime.datetime]}
+
+    ChangeLog:
+        --Sunday 27 May 2018 11:44:28 PM IST
+        @jawahar273 [Version 0.1]
+        -1- Init Code.
+    """
+    try:
+        return datetime.datetime.strptime(date, date_format)
+    except ValueError as e:
+        return None
 
 
 def import_class(value):

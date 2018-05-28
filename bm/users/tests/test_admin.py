@@ -5,7 +5,6 @@ from test_plus.test import TestCase
 from ..admin import MyUserCreationForm
 
 
-@skip("")
 class TestMyUserCreationForm(TestCase):
 
     def setUp(self):

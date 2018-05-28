@@ -1,5 +1,4 @@
 image: python:latest
-image: postgres:latest
 image: redis:latest
 image: rabbitmq:latest
 
@@ -28,7 +27,6 @@ dev:
   script: *build_script
   services:
     - python:latest
-    - postgres:latest
     - redis:latest
     - rabbitmq:latest
 
