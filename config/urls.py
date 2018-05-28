@@ -63,11 +63,11 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     # https://stackoverflow.com/questions/27984901/how-to-customize-activate-url-on-django-allauth#34249336
-    # url(
-    #     r"^accounts/confirm-email/(?P<key>[-:\w]+)/$",
-    #     handling_mail_confirm,
-    #     name="account_confirm_email",
-    # ),
+    url(
+        r"^confirm-email/(?P<key>[-:\w]+)/$",
+        handling_mail_confirm,
+        name="account_confirm_email",
+    ),
     url(r"^$", display_home_page, name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

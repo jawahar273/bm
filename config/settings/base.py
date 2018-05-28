@@ -125,7 +125,7 @@ DATABASES = {
     )
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DATABASES["default"]["CONN_MAX_AGE"] = env.int("BM_DB_CONN_MAX_AGE", 60 * 5)
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("BM_DB_CONN_MAX_AGE", 60)
 # 5 minutes
 
 # GENERAL CONFIGURATION
@@ -259,6 +259,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_ADAPTER = "bm.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "bm.users.adapters.SocialAccountAdapter"
+ACCOUNT_ADAPTER = "config.adapter.BMAccountAdapterCustom"
 
 # Custom user app defaults
 # Select the correct user model
