@@ -238,7 +238,7 @@ CORS_ORIGIN_WHITELIST = (env("BM_CLIENT_CROSS_DOMAIN_NAME"),)
 # ('https://jawahar273.github.io/bm-client')
 
 #  this redirection work with one domain only.
-CLIENT_REDIRECT_DOMAIN = "{CORS_ORIGIN_WHITELIST}/"
+CLIENT_REDIRECT_DOMAIN = "{%s}/" % (CORS_ORIGIN_WHITELIST)
 
 #   @must review key
 CLIENT_REDIRECT_URL = env("BM_CLIENT_PASSWORD_RESET_URL", default="reset")
