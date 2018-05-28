@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.urls import path
 
 # from django.contrib.auth import views as auth_views
 
@@ -35,10 +36,10 @@ if settings.SWAGGER_DOCS:
 handler500 = "rest_framework.exceptions.server_error"
 handler400 = "rest_framework.exceptions.bad_request"
 
-app_name = "users"
+
 api_url += [
     url(r"^rest-auth/", include("rest_auth.urls")),
-    url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
+    path(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     #  url(r'^auth-jwt/', obtain_jwt_token),
     #  by replacing the with `rest-auth/login/` to obtain jwt
     #  token and making process painless.
