@@ -226,7 +226,7 @@ RAVEN_CONFIG = {
 }
 
 # Custom Admin URL, use {% url 'admin:index' %}
-ADMIN_URL = env("DJANGO_ADMIN_URL")
+ADMIN_URL = "%s%s" % (env("DJANGO_ADMIN_URL"), "/")
 
 # Your production stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
@@ -238,7 +238,7 @@ CORS_ORIGIN_WHITELIST = (env("BM_CLIENT_CROSS_DOMAIN_NAME"),)
 # ('https://jawahar273.github.io/bm-client')
 
 #  this redirection work with one domain only.
-CLIENT_REDIRECT_DOMAIN = "{%s}/" % (CORS_ORIGIN_WHITELIST)
+CLIENT_REDIRECT_DOMAIN = "%s%s" % (CORS_ORIGIN_WHITELIST, "/")
 
 #   @must review key
 CLIENT_REDIRECT_URL = env("BM_CLIENT_PASSWORD_RESET_URL", default="reset")

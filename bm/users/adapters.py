@@ -9,9 +9,9 @@ class AccountAdapter(DefaultAccountAdapter):
         return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
 
     def send_mail(self, template_prefix, email, context):
-        context["activate_url"] = (
-            settings.CLIENT_REDIRECT_DOMAIN + "confirm-email/" + context["key"]
-        )
+        context[
+            "activate_url"
+        ] = settings.CLIENT_REDIRECT_DOMAIN + "confirm-email/{}/".format(context["key"])
         msg = self.render_mail(template_prefix, email, context)
         msg.send()
 

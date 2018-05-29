@@ -42,7 +42,11 @@ def redirect_password_rest_done(request, uidb64, token):
 
 @csrf_exempt
 def handling_mail_confirm(request, key):
-
+    """
+    1. May deprecate
+    .. notes:: 
+        Redirect directly done in adapter of user.
+    """
     url = urllib.parse.urljoin(
         settings.CLIENT_REDIRECT_DOMAIN, "%s/%s" % ("confirm-email", key)
     )

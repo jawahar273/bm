@@ -64,6 +64,7 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     # https://stackoverflow.com/questions/27984901/how-to-customize-activate-url-on-django-allauth#34249336
+    # @review
     url(
         r"^confirm-email/(?P<key>[-:\w]+)/$",
         handling_mail_confirm,
