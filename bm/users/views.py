@@ -49,8 +49,7 @@ def handling_mail_confirm(request, key):
     return redirect(url)
 
 
-@csrf_exempt
-def handling_user(request):
+def handling_user():
     temp = "Forbiden access"
     return Response({"detail": temp}, status=status.HTTP_403_FORBIDDEN)
 
@@ -94,6 +93,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     slug_field = "username"
     slug_url_kwarg = "username"
 
+    def get_redirect_url(self):
+        return handling_user
+
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     """
@@ -104,6 +106,9 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self):
         return reverse("users:detail", kwargs={"username": self.request.user.username})
+
+    def get_object(self):
+        return None
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -119,7 +124,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         # Only get the User record for the user making the request
-        return User.objects.get(username=self.request.user.username)
+        # return User.objects.get(username=self.request.user.username)
+        return None
 
 
 class UserListView(LoginRequiredMixin, ListView):
@@ -131,6 +137,9 @@ class UserListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = "username"
     slug_url_kwarg = "username"
+
+    def get_object(self):
+        return None
 
 
 def password_reset_done(request):
