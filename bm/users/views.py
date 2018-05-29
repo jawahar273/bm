@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 
 # from rest_framework import viewsets
 from rest_framework.response import Response
@@ -46,6 +47,12 @@ def handling_mail_confirm(request, key):
         settings.CLIENT_REDIRECT_DOMAIN, "%s/%s" % ("confirm-email", key)
     )
     return redirect(url)
+
+
+@csrf_exempt
+def handling_user(request):
+    temp = "Forbiden access"
+    return Response({"detail": temp}, status=status.HTTP_403_FORBIDDEN)
 
 
 def display_home_page(request):

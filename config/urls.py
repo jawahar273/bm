@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-from django.urls import path
 
 # from django.contrib.auth import views as auth_views
 
@@ -39,7 +38,7 @@ handler400 = "rest_framework.exceptions.bad_request"
 
 api_url += [
     url(r"^rest-auth/", include("rest_auth.urls")),
-    path(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
+    url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     #  url(r'^auth-jwt/', obtain_jwt_token),
     #  by replacing the with `rest-auth/login/` to obtain jwt
     #  token and making process painless.
@@ -56,6 +55,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     # Your stuff: custom urls includes go here
+    url(r"^users/", include("bm.users.urls")),
     url(r"^api/", include(api_url)),
     url(r"verfied-success/$", redirect_after_email_confirm, name="verfied-success"),
     url(
@@ -102,7 +102,6 @@ if settings.DEBUG:
         ),
         # User management
         url(r"^accounts/", include("allauth.urls")),
-        url(r"^users/", include("bm.users.urls")),
         url(r"^silk/", include("silk.urls")),
     ]
 
