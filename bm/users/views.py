@@ -21,7 +21,6 @@ from .models import User
 
 
 @csrf_exempt
-@api_view(["GET"])
 def redirect_password_rest_done(request, uidb64, token):
     """This function is to redirect the to  the
     client side for password resting.

@@ -30,3 +30,5 @@ websocket-client==0.48.0
 
 pre-commit==1.9.0
 django-silk==3.0
+
+tbvaccine==0.2.2

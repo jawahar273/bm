@@ -1,5 +1,6 @@
 # import urllib
 import hashlib
+from django.conf import settings
 
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -24,10 +25,17 @@ class UserSerializer(UserDetailsSerializer):
     gender = serializers.ChoiceField(GENDER_CHOICES)
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ("profile_url", "gender")
+
+        fields = (
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "profile_url",
+            "gender",
+        )
         read_only_fields = UserDetailsSerializer.Meta.read_only_fields + (
             "username",
-            "pk",
             "email",
         )
         # exclude = ('pk', )

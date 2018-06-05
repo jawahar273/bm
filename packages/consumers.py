@@ -1,6 +1,7 @@
 import asyncio
 
 from django.core.cache import cache
+from django.conf import settings
 
 from rest_framework_jwt.serializers import VerifyJSONWebTokenSerializer
 from rest_framework.exceptions import ValidationError
@@ -15,7 +16,7 @@ from packages.utils import to_query_string_dict
 class BMNotifcationConsumer(AsyncWebsocketConsumer):
     """Bm Notification is a async web socket class
     which is used to send the notificaion to client app.
-    
+
     :param groups: [name of the group]
     :type groups: list
 
@@ -29,7 +30,7 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         """This method is called on init connection
         between the client and server.
-        
+
         .. notes:
             Channel name not be set in `__init__`. If you know
             what are you doing.
@@ -41,10 +42,14 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
         """
 
-        self.channel_name = "bm.notification.channel"
         query_string = to_query_string_dict(self.scope["query_string"])
+
         self.JWTtoken = query_string["token"]
         user_status = self.validation_jwt(self.JWTtoken)
+        temp = "{}.{}".format(
+            settings.BM_NOTIFICATION_CHANNEL_NAME, user_status["user"].id
+        )
+        cache.set(temp, self.channel_name, BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT)
 
         if not user_status["status"]:
 
@@ -56,14 +61,15 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         else:
 
             await self.accept()
-            # await self.upload_status({'status': '45'})
+
+            # await self.upload_status({'status': '0'})
             # await self.upload_status({'status': '125'})
             # await self.upload_status({'status': '434'})
 
     def validation_jwt(self, value):
         """This method validate the given token
         as its from the authencated user's. 
-        
+
         :param value: [JWT token from the client]
         :type value: [str]
 
@@ -88,7 +94,8 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
 
-        pass
+        await asyncio.sleep(30)
+        await self.close()
 
     async def upload_status(self, event):
 

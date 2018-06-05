@@ -14,8 +14,8 @@ APIExceptionNotImplemented = import_class(_class_path["api_not_implemented"])
 class FlatFileInterFaceAPI(APIClass):
     """docstring for FlatFileInterFaceAPI"""
 
-    def __init__(self):
-        super(FlatFileInterFaceAPI, self).__init__()
+    def __init__(self, user_id):
+        super(FlatFileInterFaceAPI, self).__init__(user_id)
 
     def read_file(self, file_format, name, **kargs):
 

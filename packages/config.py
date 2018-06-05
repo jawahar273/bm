@@ -9,7 +9,7 @@ class PaymentTypeNumber:
     | Paytm  Payment      |    1     |
     +------------+-------------------+
     """
-    settings = {"default": {"id": 0}, "paytm": {"id": 1}, "excel": {"id": 2}}
+    settings = {"default": 0, "paytm": 1, "excel": 2}
 
     @staticmethod
     def default_type():

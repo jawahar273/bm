@@ -367,6 +367,7 @@ BM_FLAT_FILE_INTERFACE = {
 BM_EXPIRY_TIME_FLAT_FILT_IN_MINS = env.int(
     "BM_EXPIRY_TIME_FLAT_FILT_IN_MINS", default=480
 )
+BM_PAYTM_USE_LIST = ["Date", "Activity", "Source/Destination", "Debit", "Status"]
 BM_PAYTM_USE_FILEDS = {
     "Date": "date",
     "Activity": "group",
@@ -401,7 +402,11 @@ BM_CURRENT_USER_UPLOAD_NAME = env(
 # #SECS
 # @review
 BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT = env.int(
-    ("BM_CURRENT_USER_UPLOAD_CACHE" "_TIMEOUT"), default=90
+    ("BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT"), default=90
 )
 # Message to user
 BM_TO_USER_MESSAGE_WARNING = env("BM_TO_USER_MESSAGE_WARNING", default="")
+
+BM_NOTIFICATION_CHANNEL_NAME = env(
+    "BM_NOTIFICATION_CHANNEL_NAME", default="bm.notification.channel"
+)

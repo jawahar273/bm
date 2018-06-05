@@ -1,17 +1,22 @@
 import datetime
 
 from django.conf import settings
+from django.db.utils import IntegrityError
+from django.db import transaction
 import pandas as pd
+import numpy as np
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 
-from packages.models import ItemsList, UploadKey, UploadKeyList
+from bm.users.models import User
+from packages.models import ItemsList  # , UploadKey, UploadKeyList
 from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (
     BaseExcelClass,
     BaseExcelInterFaceException,
 )
 from packages.utils import to_percentage
+from packages.config import PaymentTypeNumber
 
 CHANNEL_LAYER = get_channel_layer()
 
@@ -34,8 +39,12 @@ class PandasExcelAPI(BaseExcelClass):
         super(PandasExcelAPI, self).__init__(user_id)
         self.read_flag = False  # to make read function called first
         self.dataContent = None
-        self.payment_type = 2  # flag for excel type
+        self.payment_type = PaymentTypeNumber.paytm_type()
+        # flag for excel type
         self.user_id = user_id
+        self.channel_name = "{}.{}".format(
+            settings.BM_NOTIFICATION_CHANNEL_NAME, user_id
+        )
 
     def read_excel(self, name, **kargs):
         """
@@ -60,7 +69,7 @@ class PandasExcelAPI(BaseExcelClass):
         super().mapping_fields(options)
         assert self.read_flag, "Please call read method first"
         self.payment_type = entry_type
-        if entry_type == PaymentTypeNumber.paytm_type()["id"]:
+        if entry_type == PaymentTypeNumber.paytm_type():
             self.paytm_process()
         else:
             raise PandasInterfaceNotImplement(
@@ -76,6 +85,7 @@ class PandasExcelAPI(BaseExcelClass):
         #  drop unwanted columns as preprocessing.
         #  self.dataContent.drop(pre_drop_fileds, axis=1, inplace=True)
         #  drop the if the status other than `SUCCESS`.
+
         self.dataContent.drop(
             self.dataContent[self.dataContent.Status != "SUCCESS"].index, inplace=True
         )
@@ -113,14 +123,14 @@ class PandasExcelAPI(BaseExcelClass):
     # def pre_process_ItemList(self, data, inx):
 
     def insert_db(self):
-        # [self.pre_process_ItemList()]
         super(PandasExcelAPI, self).insert_db(self.user_id)
         user_id = self.user_id
         data = self.dataContent.to_dict("date")
         row = self.get_info()["row"]
+        # temp = User.objects.get(id=user_id)
 
-        upload_key = UploadKeyList(user_id=user_id)
-        upload_key.save()
+        # upload_key = UploadKeyList(user=temp)
+        # upload_key.save()
 
         for inx in range(0, row):
             name = data["name"][inx]
@@ -139,21 +149,33 @@ class PandasExcelAPI(BaseExcelClass):
                 user_id=user_id,
             )
 
-            items.save()
+            try:
 
-            UploadKey(upload_keys=upload_key.id, content_key=items.id).save()
+                with transaction.atomic():
 
-            self.as_msg_client(inx, row)
+                    items.save()
+
+                self.as_msg_client(inx, row)
+
+            except IntegrityError:
+                self.as_msg_client(inx, row)
+
+            # UploadKey(upload_keys=upload_key.id, content_key=items.id).save()
 
         self.dataContent = None
+
+        self.close_connection()
 
     def api_name(self):
         # super().api_name()
         return "Pandas Flat File Interface"
 
-    def as_msg_client(current_value, total_value):
-        channel_name = "bm.notification.channel"
+    def as_msg_client(self, current_value, total_value):
+
         value = to_percentage(current_value, total_value)
         async_to_sync(CHANNEL_LAYER.send)(
-            channel_name, {"type": "upload.status", "satus": str(value)}
+            self.channel_name, {"type": "upload.status", "status": str(value)}
         )
+
+    def close_connection(self):
+        async_to_sync(CHANNEL_LAYER.send)(self.channel_name, {"type": "disconnect"})

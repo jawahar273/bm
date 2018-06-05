@@ -19,5 +19,5 @@ debuger_url = [
     url(regex=r"^~update/$", view=views.UserUpdateView.as_view(), name="update"),
 ]
 
-if settings.DEBUG and False:
+if settings.DEBUG:
     urlpatterns += debuger_url

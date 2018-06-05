@@ -68,11 +68,8 @@ class BaseExcelClass(ABC):
         Inserting the value of excel into db of :model: `packages.ItemsList`.
         """
 
-        if settings.DEBUG:
-
-            print("testing abstrac method")
-
-        if cache.get(settings.BM_CURRENT_USER_UPLOAD_NAME + user_id):
+        temp = "%s%d" % (settings.BM_CURRENT_USER_UPLOAD_NAME, user_id)
+        if cache.get(temp):
             cache.set(
                 settings.BM_CURRENT_USER_UPLOAD_NAME + user_id,
                 user_id,
@@ -84,7 +81,6 @@ class BaseExcelClass(ABC):
         pass
 
     @abstractmethod
-    # @classmethod
     def api_name(self):
         pass
 

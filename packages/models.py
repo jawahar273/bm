@@ -89,7 +89,7 @@ class ItemsList(models.Model):
 
     total_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
-    temp = PaymentTypeNumber.default_type()["id"]
+    temp = PaymentTypeNumber.default_type()
     entry_type = models.PositiveSmallIntegerField(default=temp)
 
     class Meta:
@@ -177,23 +177,23 @@ class PackageSettings(models.Model):
         return "{}`s package setting".format(self.user.username)
 
 
-class UploadKeyList(models.Model):
+# class UploadKeyList(models.Model):
 
-    date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(
-        USERMODEL, blank=True, related_name="upload_key_list", on_delete=models.CASCADE
-    )
+#     user = models.ForeignKey(
+#         USERMODEL, blank=True, related_name="upload_key_list", on_delete=models.CASCADE
+#     )
+#     date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return "ID: {}, User: {}".format(self.id, self.user.id)
+#     def __str__(self):
+#         return "ID: {}, User: {}".format(self.id, self.user.id)
 
 
-class UploadKey(models.Model):
+# class UploadKey(models.Model):
 
-    content_key = models.IntegerField()
-    upload_key_list = models.ForeignKey(
-        UploadKeyList, related_name="upload_keys", on_delete=models.CASCADE
-    )
+#     content_key = models.IntegerField()
+#     upload_key_list = models.ForeignKey(
+#         UploadKeyList, related_name="upload_keys", on_delete=models.CASCADE
+#     )
 
-    def __str__(self):
-        return "ID: {}, content key:".format(self.id, self.content_key)
+#     def __str__(self):
+#         return "ID: {}, content key:".format(self.id, self.content_key)

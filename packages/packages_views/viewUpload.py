@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import FileUploadParser
 
-
 from packages.models import PackageSettings
 
 from packages.utils import to_hrs
@@ -43,10 +42,8 @@ def upload_term_condition(request):
     return Response({"detail": terms}, status=status.HTTP_200_OK)
 
 
-@api_view(["post"])
-@parser_classes((FileUploadParser,))
 def upload_flat_file(
-    request, file_name, file_format=None, use_fields=None, entry_type=2
+    request, file_name, file_format=None, use_fields=None, entry_type=None
 ):
     """
     Upload the file and insert them on the database based
@@ -67,12 +64,14 @@ def upload_flat_file(
     :return: output of the result form celery
     """
 
-    output = celery_upload_flat_file.delay(request, file_name, file_format, entry_type)
-
-    return output.ready().get(timeout=4)
+    output = celery_upload_flat_file.delay(
+        request, file_name, file_format, use_fields, entry_type
+    )
+    output.ready()
 
 
 @api_view(["post"])
+@parser_classes((FileUploadParser,))
 def is_paytm_active(request, file_name, file_format=None):
     """This function is kind of inhertices of the
     :py:func:upload_flat_file (refer parameters)
@@ -87,12 +86,16 @@ def is_paytm_active(request, file_name, file_format=None):
             {"detail": "paytm uploading is diabled"},
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
+    success_msg = "paytm file has been uploaded. Please wait.."
 
     #  entry type == 1 is equal to paytm
-    return upload_flat_file(
+
+    upload_flat_file(
         request,
         file_name,
         file_format,
-        use_fields=settings.PAYTM_USE_FILEDS,
-        entry_type=PaymentTypeNumber.paytm_type()["id"],
+        use_fields=settings.BM_PAYTM_USE_LIST,
+        entry_type=PaymentTypeNumber.paytm_type(),
     )
+
+    return Response({"detail": success_msg}, status=status.HTTP_200_OK)

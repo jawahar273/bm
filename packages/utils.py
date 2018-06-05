@@ -94,5 +94,4 @@ def to_query_string_dict(value):
     for inx in value:
         inx = inx.split("=")
         content[inx[0]] = inx[1]
-
     return content

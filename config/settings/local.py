@@ -46,7 +46,7 @@ CACHES = {
 # ------------------------------------------------------------------------------
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "silk.middleware.SilkyMiddleware",
+    # "silk.middleware.SilkyMiddleware",
 ]
 INSTALLED_APPS += ["debug_toolbar", "rest_framework_swagger", "silk"]
 
@@ -100,9 +100,7 @@ CORS_ORIGIN_WHITELIST = ("127.0.0.1", "localhost:4300")
 
 # remove this one
 
-DEFAULT_FROM_EMAIL = env(
-    "DJANGO_DEFAULT_FROM_EMAIL", default="bm <noreply@jawahar.pythonanywhere.com>"
-)
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="bm <noreply@localhost>")
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[bm]")
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
@@ -110,7 +108,7 @@ SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 
 # must have protocol and end slash
-CLIENT_REDIRECT_DOMAIN = "http://localhost:4300/"
+CLIENT_REDIRECT_DOMAIN = "http://localhost:4300"
 CLIENT_REDIRECT_URL = "reset"
 
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True

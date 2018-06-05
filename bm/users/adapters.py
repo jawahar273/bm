@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.urls import reverse
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
@@ -14,6 +15,14 @@ class AccountAdapter(DefaultAccountAdapter):
         ] = settings.CLIENT_REDIRECT_DOMAIN + "confirm-email/{}/".format(context["key"])
         msg = self.render_mail(template_prefix, email, context)
         msg.send()
+
+    # def get_email_confirmation_url(self, request, emailconfirmation):
+
+    #     url = reverse(
+    #         "account_confirm_email",
+    #         args=[emailconfirmation.key])
+
+    #     return settings.CLIENT_REDIRECT_DOMAIN + url
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
