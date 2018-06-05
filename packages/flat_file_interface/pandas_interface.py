@@ -1,5 +1,7 @@
 import datetime
+import logging
 
+from django.core.cache import cache
 from django.conf import settings
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -19,6 +21,7 @@ from packages.utils import to_percentage
 from packages.config import PaymentTypeNumber
 
 CHANNEL_LAYER = get_channel_layer()
+logger = logging.getLogger(__name__)
 
 
 class PandasInterfaceException(BaseExcelInterFaceException):
@@ -42,9 +45,8 @@ class PandasExcelAPI(BaseExcelClass):
         self.payment_type = PaymentTypeNumber.paytm_type()
         # flag for excel type
         self.user_id = user_id
-        self.channel_name = "{}.{}".format(
-            settings.BM_NOTIFICATION_CHANNEL_NAME, user_id
-        )
+        temp = "{}.{}".format(settings.BM_NOTIFICATION_CHANNEL_NAME, user_id)
+        self.channel_name = cache.get(temp)
 
     def read_excel(self, name, **kargs):
         """
@@ -162,6 +164,7 @@ class PandasExcelAPI(BaseExcelClass):
 
             # UploadKey(upload_keys=upload_key.id, content_key=items.id).save()
 
+        logger.log("uploading has finished")
         self.dataContent = None
 
         self.close_connection()

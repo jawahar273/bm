@@ -49,7 +49,9 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
         temp = "{}.{}".format(
             settings.BM_NOTIFICATION_CHANNEL_NAME, user_status["user"].id
         )
-        cache.set(temp, self.channel_name, BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT)
+        cache.set(
+            temp, self.channel_name, settings.BM_CURRENT_USER_UPLOAD_CACHE_TIMEOUT
+        )
 
         if not user_status["status"]:
 
