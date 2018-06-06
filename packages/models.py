@@ -8,6 +8,8 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from allauth.account.signals import user_signed_up
 
@@ -26,6 +28,14 @@ def after_user_signed_up(sender, request, user, **kwargs):
 
 
 USERMODEL = get_user_model()
+
+
+class TimeStrampModel(models.Model):
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
 
 
 class MonthBudgetAmount(models.Model):
@@ -104,6 +114,11 @@ class ItemsList(models.Model):
         )
 
 
+@receiver(post_save, sender=ItemsList)
+def post_save_items_list(sender, instance, **kwargs):
+    pass
+
+
 class Item(models.Model):
     """
     The small token of the purchased item are stored. Parent Model
@@ -175,6 +190,11 @@ class PackageSettings(models.Model):
     def __str__(self):
 
         return "{}`s package setting".format(self.user.username)
+
+
+class ItemsGroupLog(TimeStrampModel):
+
+    group = models.CharField(max_length=30, blank=True, unique=True)
 
 
 # class UploadKeyList(models.Model):

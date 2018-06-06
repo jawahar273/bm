@@ -106,20 +106,32 @@ class PandasExcelAPI(BaseExcelClass):
         self.dataContent.index = np.arange(0, len(self.dataContent))
 
         #  changing the date format.
-        paytm_date_fromat = lambda x: datetime.datetime.strptime(
-            x, "%d/%m/%Y %H:%M:%S"
-        ).strftime("%Y-%m-%d")
-        self.dataContent["date"] = self.dataContent.date.map(paytm_date_fromat)
+        formater = None
+        if settings.BM_PAYTM_DATE_OR_DATETIME == 0:
+
+            formater = settings.BM_STANDARD_DATEFORMAT
+
+        elif settings.BM_PAYTM_DATE_OR_DATETIME == 1:
+
+            formater = settings.BM_ISO_8601_TIMESTAMP
+
+        paytm_date_format = lambda x: datetime.datetime.strptime(
+            x, settings.BM_PAYTM_DATE_FORMAT
+        ).strftime(formater)
+        self.dataContent["date"] = self.dataContent.date.map(paytm_date_format)
 
     def get_info(self):
+
         shape = self.dataContent.shape
         details = {"row": shape[0], "columns": shape[1]}
+
         return details
 
     def get_mem_info(self):
         """
         Only for the this class
         """
+
         return self.dataContent.info()
 
     # def pre_process_ItemList(self, data, inx):
@@ -170,7 +182,7 @@ class PandasExcelAPI(BaseExcelClass):
         self.close_connection()
 
     def api_name(self):
-        # super().api_name()
+
         return "Pandas Flat File Interface"
 
     def as_msg_client(self, current_value, total_value):

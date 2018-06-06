@@ -298,7 +298,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 BM_REGEX_DATE_FORMAT = r"(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])"
 BM_ISO_8601_TIMESTAMP = "%Y-%m-%dT%H:%M:%Sz"
 BM_STANDARD_DATEFORMAT = "%Y-%m-%d"
+
 BM_LOWEST_YEAR_POSSIBLE = env.int("BM_LOWEST_YEAR_POSSIBLE", default=1980)
+BM_PAYTM_DATE_FORMAT = "%d/%m/%Y %H:%M:%S"
+# 0 := date
+# 1 := datetime
+BM_PAYTM_DATE_OR_DATETIME = env.int("BM_PAYTM_DATE_OR_DATETIME", default=0)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
