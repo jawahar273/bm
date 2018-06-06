@@ -114,11 +114,6 @@ class ItemsList(models.Model):
         )
 
 
-@receiver(post_save, sender=ItemsList)
-def post_save_items_list(sender, instance, **kwargs):
-    pass
-
-
 class Item(models.Model):
     """
     The small token of the purchased item are stored. Parent Model
@@ -195,6 +190,13 @@ class PackageSettings(models.Model):
 class ItemsGroupLog(TimeStrampModel):
 
     group = models.CharField(max_length=30, blank=True, unique=True)
+
+
+@receiver(post_save, sender=ItemsList)
+def post_save_items_list(sender, instance, **kwargs):
+    group_name = instance.group
+    _object = ItemsGroupLog.object.update_or_create(group=group_name)
+    _object.save()
 
 
 # class UploadKeyList(models.Model):
