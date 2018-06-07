@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from allauth.account.signals import user_signed_up
 
@@ -193,10 +192,11 @@ class ItemsGroupLog(TimeStrampModel):
 
 
 @receiver(post_save, sender=ItemsList)
-def post_save_items_list(sender, instance, **kwargs):
+def post_save_items_list(sender, **kwargs):
+
+    instance = kwargs.get("instance")
     group_name = instance.group
-    _object = ItemsGroupLog.object.update_or_create(group=group_name)
-    _object.save()
+    ItemsGroupLog.objects.update_or_create(group=group_name)
 
 
 # class UploadKeyList(models.Model):
