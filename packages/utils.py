@@ -95,3 +95,12 @@ def to_query_string_dict(value):
         inx = inx.split("=")
         content[inx[0]] = inx[1]
     return content
+
+
+def find_dict_value(key_word, _items):
+
+    for key, value in _items.items():
+
+        if key_word == value:
+
+            return key

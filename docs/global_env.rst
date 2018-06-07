@@ -55,8 +55,8 @@ headpain.
 |                          | openweather api key      |
 |                          | `Rate Limit`_. [2]_      |
 +--------------------------+--------------------------+
-| BM_AIRPOLLUTION_DATA_    | Need the cache system    |
-| NEED_CACHE (True)        | for the saving the       |
+| BM_AIRPOLLUTION_DATA_NE  | Need the cache system    |
+| ED_CACHE (True)          | for the saving the       |
 |                          | air pollution data [5]_. |
 +--------------------------+--------------------------+
 |        Celery                                       |
@@ -71,8 +71,8 @@ headpain.
 +--------------------------+--------------------------+
 | Uploading                                           |
 +--------------------------+--------------------------+
-| BM_FLAT_FILE_            |                          |
-| INTERFACE_CLASS          | (planned name: [3]_ )    |
+| BM_FLAT_FILE_IN          |                          |
+| TERFACE_CLASS            | (planned name: [3]_ )    |
 | (default: pandas)        | Set the                  |
 |                          | name of the class to     |
 |                          | process the upload       |
@@ -81,10 +81,19 @@ headpain.
 | BM_EXPIRY_TIME_FLAT_FILT |  Expiry for upload flat  |
 | _IN_MINS(default: 480)   |  file in the system.     |
 +--------------------------+--------------------------+
-| BM_PAYTM_USE_FILEDS      | list of field which      |
+| BM_PAYTM_USE_FILEDS      | List of field which      |
 |                          | will be used in          |
 |                          | process the flat file    |
 |                          | (only paytm).            |
++--------------------------+--------------------------+
+| Pdf settings                                        |
++--------------------------+--------------------------+
+| BM_STANDARD_DATE_TEMPLATE| The standard date format |
+|                          | to display in PDF.       |
++--------------------------+--------------------------+
+| BM_PDF_TITLE             | PDF title                |
++--------------------------+--------------------------+
+| BM_PDF_DESCRIPTION       | PDF description          |
 +--------------------------+--------------------------+
 
 .. _Rate Limit: https://openweathermap.org/price/

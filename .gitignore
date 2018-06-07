@@ -325,3 +325,7 @@ Paytm_Wallet_Txn_History_Csv_*.csv
 Procfile.*
 
 alg-test.py
+
+test_pdf.html
+test_pdf.pdf
+test_pdf.py

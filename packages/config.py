@@ -1,3 +1,5 @@
+PAYMENTTYPE = {"default": 0, "paytm": 1, "excel": 2}
+
 # to class some setting for the package app
 class PaymentTypeNumber:
     """
@@ -9,19 +11,18 @@ class PaymentTypeNumber:
     | Paytm  Payment      |    1     |
     +------------+-------------------+
     """
-    settings = {"default": 0, "paytm": 1, "excel": 2}
 
     @staticmethod
     def default_type():
-        return PaymentTypeNumber.settings["default"]
+        return PAYMENTTYPE["default"]
 
     @staticmethod
     def paytm_type():
-        return PaymentTypeNumber.settings["paytm"]
+        return PAYMENTTYPE["paytm"]
 
     @staticmethod
     def excel_type():
-        return PaymentTypeNumber.settings["excel"]
+        return PAYMENTTYPE["excel"]
 
 
 class PackageSettingsGeoloc:

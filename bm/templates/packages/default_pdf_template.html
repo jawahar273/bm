@@ -1,0 +1,68 @@
+{% load find_dict_value %}
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style type="text/css">
+    @page {
+            size: Letter;
+            margin: 0in 0.44in 0.2in 0.44in;
+    }
+  </style>
+</head>
+
+<body>
+<div  class="w3-container">
+  <h1 style="align-items: center;">{{pdf_title}}</h1>
+  <h2>{{pdf_description}}</h2>
+  
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div>
+  <!-- Table starts here -->
+  <table id="table" class="w3-table w3-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Group</th>
+          <th>Date</th>
+          <th>Place</th>
+          <th>Total amount({{currency_code}})</th>
+          <th>Entry type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for content in pdf_list %}
+            <tr>
+              <td data-title="ID">
+                {{forloop.counter}}
+              </td>
+              <td data-title="Name">
+                {{content.name}}
+              </td>
+              <td data-title="Group">
+                {{content.group}}
+              </td>
+              <td data-title="Place">
+                {{content.place}}
+              </td>
+              <td data-title="Date">
+                {{content.date |date:date_format}}
+              </td>
+              <td data-title="Total amount">
+                  {{content.total_amount}}
+              </td>
+
+              <td data-title="Entry type">
+                  {% find_dict_value_payment content.entry_type %}
+              </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+  </body>
+</html>
