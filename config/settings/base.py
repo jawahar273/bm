@@ -310,7 +310,9 @@ BM_STANDARD_DATE_TEMPLATE = env("BM_STANDARD_DATE_TEMPLATE", default="Y F d")
 BM_PDF_TITLE = env("BM_PDF_TITLE", default="Buget Managers")
 BM_PDF_DESCRIPTION = env("BM_PDF_DESCRIPTION", default="Buget Managers..")
 BM_PDF_FILE_NAME = env("BM_PDF_FILE_NAME", default="BM_PDF_")
-
+BM_PDF_TEMPLATE_NAME = evn(
+    "BM_PDF_TEMPLATE_NAME", default="packages/default_pdf_template.html"
+)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

@@ -2,7 +2,7 @@ import datetime
 import importlib
 
 
-def to_date_format(date, date_format: str) -> str:
+def to_datetime_format(date, date_format: str) -> str:
     """converting the date object into
     given date format.
 
