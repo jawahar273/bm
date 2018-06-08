@@ -176,7 +176,7 @@ class PandasExcelAPI(BaseExcelClass):
 
             # UploadKey(upload_keys=upload_key.id, content_key=items.id).save()
 
-        logger.log("uploading has finished")
+        logger.info("uploading has finished")
         self.dataContent = None
 
         self.close_connection()

@@ -26,10 +26,10 @@
           <th>ID</th>
           <th>Name</th>
           <th>Group</th>
-          <th>Date</th>
           <th>Place</th>
-          <th>Total amount({{currency_code}})</th>
-          <th>Entry type</th>
+          <th>Date</th>
+          <th>Total amount</th>
+          <!-- <th>Entry type</th> -->
         </tr>
       </thead>
       <tbody>
@@ -51,12 +51,13 @@
                 {{content.date |date:date_format}}
               </td>
               <td data-title="Total amount">
+                  {{currency_code}}.
                   {{content.total_amount}}
               </td>
 
-              <td data-title="Entry type">
+<!--               <td data-title="Entry type">
                   {% find_dict_value_payment content.entry_type %}
-              </td>
+              </td> -->
             </tr>
         {% endfor %}
       </tbody>

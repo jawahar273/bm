@@ -1,22 +1,24 @@
+import datetime
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.template import loader
-from django.http import HttpResponse
+
+# from django.http import HttpResponse
 from celery.utils.log import get_task_logger
-from rest_framework.response import Response
-from rest_framework import status
 from weasyprint import HTML
 
+from packages.models import PackageSettings, ItemsList
+
 from bm.taskapp.celery import app
-from bm.users.utils import to_datetime_format
+from bm.users.utils import to_datetime_format, set_cache
 
 logger = get_task_logger(__name__)
 
 
 @app.task(bind=True, track_started=True)
-def celery_generate_pdf_dash_table(self, request):
-    """Generating the PDF based on the seleted value
+def celery_generate_summary(self, request):
+    """Generating the summary based on the seleted value
     dashboard from the server.
 
     """
@@ -30,10 +32,11 @@ def celery_generate_pdf_dash_table(self, request):
 
     user_id = request.user.id
     load_template = loader.get_template("%s" % (settings.BM_PDF_TEMPLATE_NAME))
+
     items_list = ItemsList.objects.filter(user=user_id).values()
 
     html = HTML(
-        string=w.render(
+        string=load_template.render(
             {
                 "pdf_list": items_list,
                 "date_format": settings.BM_STANDARD_DATE_TEMPLATE,
@@ -58,11 +61,9 @@ def celery_generate_pdf_dash_table(self, request):
             headers["Content-Disposition"] = 'inline; filename="%s.pdf"' % (file_name)
             headers["Content-Type"] = "application/pdf"
 
-            return Response({"report": pdf}, status=status.HTTP_200_OK)
+            # making a mail woule better options
+            logger.info("Perparing for sending mail")
 
-    except FileNotFoundError as e:
+    except FileNotFoundError:
 
-        return Response(
-            {"error": "unexpected error in founding error"},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+        logger.error("unexpected error in founding error")

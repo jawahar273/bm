@@ -329,3 +329,5 @@ alg-test.py
 test_pdf.html
 test_pdf.pdf
 test_pdf.py
+
+.*_cache/*

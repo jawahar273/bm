@@ -1,12 +1,14 @@
 import re
 import datetime
-
+from typing import List, Dict
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template import loader
 
 from bm.users.utils import to_datetime_object
 
 
-def flatter_list(items):
+def flatter_list(items: List[List[any]]) -> List[any]:
     """
      fastest way to flatten list of elements
      Eg: [(1, 2), (2, 45)] => [1, 2, 2, 45]
@@ -14,7 +16,7 @@ def flatter_list(items):
     return [item for sublist in items for item in sublist]
 
 
-def to_hexdigit(name):
+def to_hexdigit(name: str) -> str:
     """
     Get the name and conver to md5 string.
 
@@ -44,12 +46,12 @@ def to_hrs(mins=0, secs=0, time_format=False) -> str:
     return "%d" % (hrs)
 
 
-def to_percentage(current_value, total_value):
+def to_percentage(current_value, total_value) -> int:
 
     return int((current_value / total_value) * 100)
 
 
-def validate_bm_standard_date_format(value):
+def validate_bm_standard_date_format(value: str) -> bool:
     """This function which help in
     validate the given date with BM standard date.
 
@@ -62,7 +64,7 @@ def validate_bm_standard_date_format(value):
     return re.search(regex_date, value)
 
 
-def validate_less_than_today(value):
+def validate_less_than_today(value: str) -> bool:
     """This function which help in validate
     the given date less than today.
 
@@ -86,7 +88,7 @@ def validate_less_than_today(value):
     return True
 
 
-def to_query_string_dict(value):
+def to_query_string_dict(value: bytes) -> Dict:
 
     content = {}
     value = value.decode("utf-8")
@@ -97,10 +99,35 @@ def to_query_string_dict(value):
     return content
 
 
-def find_dict_value(key_word, _items):
+def find_dict_value(key_word: str, _items: Dict) -> any:
 
     for key, value in _items.items():
 
         if key_word == value:
 
             return key
+
+
+def sending_mail_pdf(mail_to: List[str], file_pointer: any) -> None:
+    """Sending mail with the PDF attachment.
+
+    :param mail_to: [recetion to send based on the register mail]
+    :type mail_to: [list]
+    :param file_pointer: [file pointer to pdf.]
+    :type file_pointer: [any]
+
+
+    ChangLog:
+        -- Friday 08 June 2018 06:45:10 PM IST
+        @jawahar273 [Version 0.1]
+        -1- Init code.
+    """
+
+    subject = "Expensive attachment from"
+    load_template = loader.get_template(settings.BM_MAIL_SUMMARY_TEMPLATE)
+
+    mail = EmailMultiAlternatives(
+        subject, load_template.render(), settings.DEFAULT_FROM_EMAIL, mail_to
+    )
+    mail.attach_file(file_pointer.read(), "application/pdf")
+    mail.send()

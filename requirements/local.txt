@@ -30,3 +30,5 @@ websocket-client==0.48.0
 
 pre-commit==1.10.1
 django-silk==3.0
+
+mypy==0.600

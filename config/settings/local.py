@@ -46,7 +46,7 @@ CACHES = {
 # ------------------------------------------------------------------------------
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "silk.middleware.SilkyMiddleware",
+    # "silk.middleware.SilkyMiddleware",
 ]
 INSTALLED_APPS += ["debug_toolbar", "rest_framework_swagger", "silk"]
 
@@ -60,6 +60,7 @@ DEBUG_TOOLBAR_CONFIG = {
 # django-extensions
 # ------------------------------------------------------------------------------
 INSTALLED_APPS += ["django_extensions"]
+
 INSTALLED_APPS += env.list("BM_OPTIONAL_LOCAL_APPS", default=[])
 
 # TESTING
@@ -101,7 +102,9 @@ CORS_ORIGIN_WHITELIST = ("127.0.0.1", "localhost:4300")
 # remove this one
 
 DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="bm <noreply@localhost>")
+
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[bm]")
+
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 

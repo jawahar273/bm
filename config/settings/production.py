@@ -118,10 +118,12 @@ SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 # Anymail with Mailgun
 INSTALLED_APPS += ["anymail"]
+
 ANYMAIL = {
     "MAILGUN_API_KEY": env("DJANGO_MAILGUN_API_KEY"),
     "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN"),
 }
+
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 
 # TEMPLATE CONFIGURATION
@@ -176,9 +178,11 @@ CACHES = {
 
 # Sentry Configuration
 SENTRY_DSN = env("DJANGO_SENTRY_DSN")
+
 SENTRY_CLIENT = env(
     "DJANGO_SENTRY_CLIENT", default="raven.contrib.django.raven_compat.DjangoClient"
 )
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
@@ -219,7 +223,9 @@ LOGGING = {
         },
     },
 }
+
 SENTRY_CELERY_LOGLEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+
 RAVEN_CONFIG = {
     "CELERY_LOGLEVEL": env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO),
     "DSN": SENTRY_DSN,

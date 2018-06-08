@@ -1,5 +1,7 @@
 import datetime
 import importlib
+from django.core.cache import cache
+from django.conf import settings
 
 
 def to_datetime_format(date, date_format: str) -> str:
@@ -52,3 +54,13 @@ def import_class(value):
     value, class_name = value.rsplit(".", 1)
     module = importlib.import_module(value)
     return getattr(module, class_name)
+
+
+def set_cache(name: str, date: any, timeout=90):
+
+    cache.set(name, date, timeout)
+
+
+def get_cache(name: str) -> any:
+
+    return cache.get(name)

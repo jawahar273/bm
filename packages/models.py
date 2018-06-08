@@ -29,7 +29,7 @@ def after_user_signed_up(sender, request, user, **kwargs):
 USERMODEL = get_user_model()
 
 
-class TimeStrampModel(models.Model):
+class CommonDetailModel(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
@@ -186,7 +186,7 @@ class PackageSettings(models.Model):
         return "{}`s package setting".format(self.user.username)
 
 
-class ItemsGroupLog(TimeStrampModel):
+class ItemsGroupLog(CommonDetailModel):
 
     group = models.CharField(max_length=30, blank=True, unique=True)
 

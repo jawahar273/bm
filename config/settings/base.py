@@ -273,7 +273,6 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 # ######### CELERY
 INSTALLED_APPS += ["bm.taskapp.celery.CeleryConfig"]
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="amqp://")
-# db+postgres://jawahar:jon2speed@localhost/bm
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://")
 
 # if CELERY_BROKER_URL == 'django://':
@@ -293,26 +292,6 @@ ADMIN_URL = r"^admin/"
 ASGI_APPLICATION = "bm.routing.application"
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
-
-#  Date and time format
-BM_REGEX_DATE_FORMAT = r"(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])"
-BM_ISO_8601_TIMESTAMP = "%Y-%m-%dT%H:%M:%Sz"
-BM_STANDARD_DATEFORMAT = "%Y-%m-%d"
-BM_LOWEST_YEAR_POSSIBLE = env.int("BM_LOWEST_YEAR_POSSIBLE", default=1980)
-BM_PAYTM_DATE_FORMAT = "%d/%m/%Y %H:%M:%S"
-# 0 := date
-# 1 := datetime
-BM_PAYTM_DATE_OR_DATETIME = env.int("BM_PAYTM_DATE_OR_DATETIME", default=0)
-
-# PDF settings
-# https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date
-BM_STANDARD_DATE_TEMPLATE = env("BM_STANDARD_DATE_TEMPLATE", default="Y F d")
-BM_PDF_TITLE = env("BM_PDF_TITLE", default="Buget Managers")
-BM_PDF_DESCRIPTION = env("BM_PDF_DESCRIPTION", default="Buget Managers..")
-BM_PDF_FILE_NAME = env("BM_PDF_FILE_NAME", default="BM_PDF_")
-BM_PDF_TEMPLATE_NAME = evn(
-    "BM_PDF_TEMPLATE_NAME", default="packages/default_pdf_template.html"
-)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -378,10 +357,13 @@ BM_FLAT_FILE_INTERFACE = {
     "api_exception": "packages.flat_file_interface.pandas_interface.PandasInterfaceException",
     "api_not_implemented": "packages.flat_file_interface.pandas_interface.PandasInterfaceNotImplement",
 }
+
 BM_EXPIRY_TIME_FLAT_FILT_IN_MINS = env.int(
     "BM_EXPIRY_TIME_FLAT_FILT_IN_MINS", default=480
 )
+
 BM_PAYTM_USE_LIST = ["Date", "Activity", "Source/Destination", "Debit", "Status"]
+
 BM_PAYTM_USE_FILEDS = {
     "Date": "date",
     "Activity": "group",
@@ -397,6 +379,7 @@ BM_OPEN_WEATHER_MAP = env("BM_OPEN_WEATHER_MAP_API", default="")
 #  day
 # @optional keys
 BM_WEATHER_DATA_CACHE_TYPE = env("BM_WEATHER_DATA_CACHE_TYPE", default="day")
+
 BM_AIRPOLLUTION_DATA_NEED_CACHE = env.bool(
     "BM_AIRPOLLUTION_DATA_NEED_CACHE", default=True
 )
@@ -423,4 +406,33 @@ BM_TO_USER_MESSAGE_WARNING = env("BM_TO_USER_MESSAGE_WARNING", default="")
 
 BM_NOTIFICATION_CHANNEL_NAME = env(
     "BM_NOTIFICATION_CHANNEL_NAME", default="bm.notification.channel"
+)
+
+#  Date and time format
+BM_REGEX_DATE_FORMAT = r"(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])"
+BM_ISO_8601_TIMESTAMP = "%Y-%m-%dT%H:%M:%Sz"
+BM_STANDARD_DATEFORMAT = "%Y-%m-%d"
+BM_LOWEST_YEAR_POSSIBLE = env.int("BM_LOWEST_YEAR_POSSIBLE", default=1980)
+
+BM_PAYTM_DATE_FORMAT = "%d/%m/%Y %H:%M:%S"
+# 0 := date
+# 1 := datetime
+BM_PAYTM_DATE_OR_DATETIME = env.int("BM_PAYTM_DATE_OR_DATETIME", default=0)
+
+# PDF settings
+# https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date
+BM_STANDARD_DATE_TEMPLATE = env("BM_STANDARD_DATE_TEMPLATE", default="Y F d")
+
+BM_PDF_TITLE = env("BM_PDF_TITLE", default="Buget Managers")
+
+BM_PDF_DESCRIPTION = env("BM_PDF_DESCRIPTION", default="Buget Managers..")
+
+BM_PDF_FILE_NAME = env("BM_PDF_FILE_NAME", default="BM_PDF_")
+
+BM_PDF_TEMPLATE_NAME = env(
+    "BM_PDF_TEMPLATE_NAME", default="packages/summary_template.html"
+)
+
+BM_MAIL_SUMMARY_TEMPLATE = env(
+    "BM_MAIL_SUMMARY_TEMPLATE", default="packages/mail_summary_template.html"
 )

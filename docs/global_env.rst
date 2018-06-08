@@ -70,13 +70,10 @@ headpain.
 |                          | for `requests`_ packages |
 +--------------------------+--------------------------+
 | Uploading                                           |
-+--------------------------+--------------------------+
-| BM_FLAT_FILE_IN          |                          |
-| TERFACE_CLASS            | (planned name: [3]_ )    |
-| (default: pandas)        | Set the                  |
-|                          | name of the class to     |
-|                          | process the upload       |
-|                          | files. [4]_              |
++--------------------------+--------------------------+                 |
+| BM_FLAT_FILE_INTERFACE   | The Flat File interface  |
+| (dict: location)         | must have three value of |
+|                          | class's path in dict.    |
 +--------------------------+--------------------------+
 | BM_EXPIRY_TIME_FLAT_FILT |  Expiry for upload flat  |
 | _IN_MINS(default: 480)   |  file in the system.     |
