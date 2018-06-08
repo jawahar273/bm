@@ -128,6 +128,7 @@ def get_months(request, start, end=None):
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
+
         # check based on regex expression
         _queryset = ItemsList.objects.filter(
             user_id=request.user.id, date__range=(start, end)
@@ -138,6 +139,7 @@ def get_months(request, start, end=None):
         return Response(serializers.data, status=status_code)
 
     elif start and not end:
+
         _date = start.rsplit("-", 1)[0]
         _date = datetime.datetime.strptime(_date, "%Y-%m").date()
         _queryset = ItemsList.objects.filter(
@@ -171,6 +173,7 @@ def itemlist_get_by_months(request, start: str, end: str):
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
+
         # check based on regex expression
         _queryset = ItemsList.objects.filter(
             user=request.user.id, date__range=(start, end)
@@ -183,12 +186,14 @@ def itemlist_get_by_months(request, start: str, end: str):
         return Response(serializers.data, status=status_code)
 
     elif checking_start and not end:
+
         response = {"detail": "Need both date ranges"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=status_code)
 
     else:
+
         response = {"detail": "Wrong date formate please check it again"}
         status_code = status.HTTP_400_BAD_REQUEST
 
@@ -210,6 +215,7 @@ def get_all_group_in_itemslist(request, start: str, end: str = None) -> Response
     checking_start = re.search(regex_date, start)
 
     if checking_start and end and re.search(regex_date, end):
+
         # check based on regex expression
 
         queryset = (
@@ -223,12 +229,14 @@ def get_all_group_in_itemslist(request, start: str, end: str = None) -> Response
         return Response(queryset, status=status_code)
 
     elif checking_start and not end:
+
         response = {"detail": "Need both date ranges"}
         status_code = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=status_code)
 
     else:
+
         response = {"detail": "Wrong date formate please check it again"}
         status_code = status.HTTP_400_BAD_REQUEST
 

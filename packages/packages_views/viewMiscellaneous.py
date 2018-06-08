@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
+from packages.tasks import celery_generate_summary
+
 
 @api_view(["get"])
 def get_currency(request):
@@ -21,3 +23,14 @@ def get_currency(request):
     with open(file_location) as file:
 
         return Response(json.loads(file.read()), status=status.HTTP_200_OK)
+
+
+@api_view(["post"])
+def print_summary(request, start: str, end: str):
+
+    output = celery_generate_summary(request, start, end)
+    output.get()
+
+    temp = "summary will be mailed soon as possible"
+
+    return Response({"detail": temp}, status=status.HTTP_200_OK)

@@ -108,8 +108,9 @@ def find_dict_value(key_word: str, _items: Dict) -> any:
             return key
 
 
-def sending_mail_pdf(mail_to: List[str], file_pointer: any) -> None:
-    """Sending mail with the PDF attachment.
+def sending_mail_pdf(mail_to: List[str], file_pointer=None) -> None:
+    """Sending mail with the summary
+    PDF attachment.
 
     :param mail_to: [recetion to send based on the register mail]
     :type mail_to: [list]
@@ -121,6 +122,10 @@ def sending_mail_pdf(mail_to: List[str], file_pointer: any) -> None:
         -- Friday 08 June 2018 06:45:10 PM IST
         @jawahar273 [Version 0.1]
         -1- Init code.
+        -- Friday 08 June 2018 10:55:26 PM IST
+        @jawahar273 [Version 0.2]
+        -1- Sending the mail even if the file
+        pointer is `None`.
     """
 
     subject = "Expensive attachment from"
@@ -129,5 +134,7 @@ def sending_mail_pdf(mail_to: List[str], file_pointer: any) -> None:
     mail = EmailMultiAlternatives(
         subject, load_template.render(), settings.DEFAULT_FROM_EMAIL, mail_to
     )
+
     mail.attach_file(file_pointer.read(), "application/pdf")
+
     mail.send()

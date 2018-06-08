@@ -4,7 +4,8 @@ from rest_framework import routers
 
 
 from packages.views import (
-    ItemsListCreateView,  # ItemCreateView,
+    ItemsListCreateView,
+    # ItemCreateView,
     MonthBudgetAmountView,
     PackageSettingsView,
     itemlist_get_by_months,
@@ -15,6 +16,7 @@ from packages.views import (
     is_paytm_active,
     upload_flat_file,
     delete_bulk,
+    print_summary,
 )
 
 
@@ -61,6 +63,13 @@ urlpatterns = [
         name="upload_file",
     ),
     url(r"^delete-bulk/", delete_bulk, name="delete_bulk"),
+    url(
+        r"^print-summary/(?P<start>{})/(?P<end>{})/$".format(
+            regex_date_valid, regex_date_valid
+        ),
+        print_summary,
+        name="print_summary",
+    ),
 ]
 
 urlpatterns.extend(router.urls)

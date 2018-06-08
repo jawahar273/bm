@@ -5,3 +5,12 @@ repos:
     - id: black
       args: [--line-length=88, --safe]
       python_version: python3.6
+
+# -   repo: https://github.com/python/mypy
+#     rev: v0.600
+#     hooks:
+#       - id: mypy
+#         files: \.py$
+#         args: [--disallow-untyped-defs, --silent-imports]
+#         name: mypy
+#         python_version: python3.6

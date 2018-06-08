@@ -8,19 +8,24 @@ from django.template import loader
 from celery.utils.log import get_task_logger
 from weasyprint import HTML
 
-from packages.models import PackageSettings, ItemsList
-
 from bm.taskapp.celery import app
+from bm.users.models import User
 from bm.users.utils import to_datetime_format, set_cache
+from packages.utils import sending_mail_pdf
+from packages.models import PackageSettings, ItemsList
 
 logger = get_task_logger(__name__)
 
 
 @app.task(bind=True, track_started=True)
-def celery_generate_summary(self, request):
+def celery_generate_summary(self, request, start: str, end: str):
     """Generating the summary based on the seleted value
     dashboard from the server.
 
+    ChangLog:
+        -- Friday 08 June 2018 11:32:07 PM IST
+        @jawahar273 [Version 0.1]
+        -3- Logic bug fix on itemlist model.
     """
 
     logger.info("Initi of parsing of pdf")
@@ -30,10 +35,16 @@ def celery_generate_summary(self, request):
         datetime.datetime.now(), settings.BM_ISO_8601_TIMESTAMP
     )
 
-    user_id = request.user.id
+    file_extention = "pdf"
+
+    _user = User.objects.get(id=request.user.id)
+    user_id = _user.id
+
     load_template = loader.get_template("%s" % (settings.BM_PDF_TEMPLATE_NAME))
 
-    items_list = ItemsList.objects.filter(user=user_id).values()
+    items_list = ItemsList.objects.filter(
+        user=user_id, date__range=(start, end)
+    ).values()
 
     html = HTML(
         string=load_template.render(
@@ -47,22 +58,23 @@ def celery_generate_summary(self, request):
         )
     )
 
-    logger.info("parsering  of html to pdf")
-    html.write_pdf(target="/tmp/%s.pdf" % (file_name))
+    logger.info("parsering  of html to %s " % (file_extention))
+    html.write_pdf(target="/tmp/%s.%a" % (file_name, file_extention))
 
-    logger.info("writing of the pdf")
+    logger.info("writing of the %s" % (file_extention))
 
     fs = FileSystemStorage("/tmp")
+
     try:
 
-        with fs.open("%s.pdf" % (file_name)) as pdf:
-
-            headers = {}
-            headers["Content-Disposition"] = 'inline; filename="%s.pdf"' % (file_name)
-            headers["Content-Type"] = "application/pdf"
+        with fs.open("%s.%s" % (file_name, file_extention)) as file_pointer:
 
             # making a mail woule better options
             logger.info("Perparing for sending mail")
+
+            sending_mail_pdf([_user.email], file_pointer)
+
+            logger.info("Mail has been sended")
 
     except FileNotFoundError:
 
