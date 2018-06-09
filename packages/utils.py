@@ -108,7 +108,7 @@ def find_dict_value(key_word: str, _items: Dict) -> any:
             return key
 
 
-def start_and_end_month(month: int, operation: str):
+def start_and_end_month(month: int, operation: str, date_format: str):
     """This function from the
     before or after current month.
 
@@ -116,36 +116,50 @@ def start_and_end_month(month: int, operation: str):
     :type month: int
     :param operation: [before and after range of moths]
     :type operation: [str]
+    :param date_format: datetiem format for time object.
+    :type date_format: [str]
 
     ChangeLog:
         --Saturday 09 June 2018 01:12:39 PM IST
         @jawahar273 [Version 0.1]
         -1- Init Code.
+        --Saturday 09 June 2018 05:16:36 PM IST
+        @jawahar273 [Version 0.2]
+        -1- New param datetime.
+        -2- Update in code structure.
     """
 
     if operation == "after":
 
-        return datetime.date.today() + datetime.timedelta(month * 365 / 12)
+        temp = datetime.date.today() + datetime.timedelta(month * 365 / 12)
 
     elif operation == "before":
 
-        return datetime.date.today() - datetime.timedelta(month * 365 / 12)
+        temp = datetime.date.today() - datetime.timedelta(month * 365 / 12)
+
+    return to_datetime_object(temp, date_format)
 
 
-def start_month_year(month: int, operation: str):
+def start_month_year(month: int, operation: str, date_format=None):
     """This function is built on the top
     of the `start_and_end_month` to provied
     high level custom return date.
-    
+
     @ref:: `start_and_end_month`
 
     ChangeLog:
         --Saturday 09 June 2018 01:12:39 PM IST
         @jawahar273 [Version 0.1]
         -1- Init Code.
+        --Saturday 09 June 2018 05:17:38 PM IST
+        @jawahar273 [Version 0.2]
+        -1- New param datetime.
     """
+    if not date_format:
+        date_format = settings.BM_STANDARD_START_MONTH_FORMAT
+
     temp = start_and_end_month(month, operation)
-    return "01-%d-%d" % (temp.month, temp.year)
+    return temp
 
 
 def sending_mail_pdf(mail_to: List[str], file_pointer=None) -> None:

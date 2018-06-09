@@ -11,6 +11,8 @@ from rest_framework.decorators import api_view
 from packages.tasks import celery_generate_summary
 from packages.utils import start_month_year
 
+from bm.users.utils import to_datetime_object
+
 
 @api_view(["get"])
 def get_currency(request):
@@ -31,10 +33,13 @@ def get_currency(request):
 def print_summary_config():
 
     current = datetime.datetime.now()
-    start_date = "01-%d-%d" % (current.month, current.year)
+    start_date = to_datetime_object(current, settings.BM_STANDARD_START_MONTH_FORMAT)
 
     last_date = calendar.monthrange(current.year, current.month)
-    last_date = "%d-%d-%d" % (last_date[1], current.month, current.year)
+    # HACK: no need for consier in date format
+    # as the date for this specific case always
+    # has two digit, no problem will occures.
+    last_date = "%d-%d-%d" % (current.year, current.month, last_date[1])
 
     temp = {
         "current_month": (start_date, last_date),

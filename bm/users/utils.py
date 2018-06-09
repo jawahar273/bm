@@ -16,8 +16,11 @@ def to_datetime_format(date, date_format: str) -> str:
     :rtype: {[str]}
     """
     try:
+
         return datetime.datetime.strftime(date, date_format)
+
     except ValueError as e:
+
         return None
 
 
@@ -38,8 +41,11 @@ def to_datetime_object(date: str, date_format: str) -> datetime.datetime:
         -1- Init Code.
     """
     try:
+
         return datetime.datetime.strptime(date, date_format)
+
     except ValueError as e:
+
         return None
 
 
