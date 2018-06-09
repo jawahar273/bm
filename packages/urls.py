@@ -17,6 +17,7 @@ from packages.views import (
     upload_flat_file,
     delete_bulk,
     print_summary,
+    print_summary_range,
 )
 
 
@@ -70,6 +71,7 @@ urlpatterns = [
         print_summary,
         name="print_summary",
     ),
+    url(r"^print-summary-range/$", print_summary_range, name="print_summary_range"),
 ]
 
 urlpatterns.extend(router.urls)

@@ -8,7 +8,11 @@ from packages.packages_views.viewItemsAll import (
     delete_bulk,
 )
 
-from packages.packages_views.viewMiscellaneous import get_currency, print_summary
+from packages.packages_views.viewMiscellaneous import (
+    get_currency,
+    print_summary,
+    print_summary_range,
+)
 
 from packages.packages_views.viewSettings import PackageSettingsView
 from packages.packages_views.viewUpload import (

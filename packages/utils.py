@@ -108,6 +108,46 @@ def find_dict_value(key_word: str, _items: Dict) -> any:
             return key
 
 
+def start_and_end_month(month: int, operation: str):
+    """This function from the
+    before or after current month.
+
+    :param month: [month of generate the eange]
+    :type month: int
+    :param operation: [before and after range of moths]
+    :type operation: [str]
+
+    ChangeLog:
+        --Saturday 09 June 2018 01:12:39 PM IST
+        @jawahar273 [Version 0.1]
+        -1- Init Code.
+    """
+
+    if operation == "after":
+
+        return datetime.date.today() + datetime.timedelta(month * 365 / 12)
+
+    elif operation == "before":
+
+        return datetime.date.today() - datetime.timedelta(month * 365 / 12)
+
+
+def start_month_year(month: int, operation: str):
+    """This function is built on the top
+    of the `start_and_end_month` to provied
+    high level custom return date.
+    
+    @ref:: `start_and_end_month`
+
+    ChangeLog:
+        --Saturday 09 June 2018 01:12:39 PM IST
+        @jawahar273 [Version 0.1]
+        -1- Init Code.
+    """
+    temp = start_and_end_month(month, operation)
+    return "01-%d-%d" % (temp.month, temp.year)
+
+
 def sending_mail_pdf(mail_to: List[str], file_pointer=None) -> None:
     """Sending mail with the summary
     PDF attachment.

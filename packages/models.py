@@ -150,6 +150,7 @@ def validate_max_time_interval(value):
     to check range of times.
     """
     if value < Geoloc.min_interval_time() and value > Geoloc.max_interval_time():
+
         return ValidationError(
             "Can not Exceed the max or"
             "min of interval of 10 mins 8 hours"
