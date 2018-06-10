@@ -46,6 +46,9 @@ def print_summary_config() -> Dict:
     # has two digit, no problem will occures.
     last_date = "%d-%d-%d" % (current.year, current.month, last_date[1])
 
+    # REMEBER: if the dicit key lenght exceeds
+    # more than 20 charachers then manually
+    # offset limit in url
     temp = {
         "current_month": {"start": start_date, "end": last_date},
         "two_months": {"start": start_month_year(2, "before"), "end": last_date},
@@ -58,17 +61,24 @@ def print_summary_config() -> Dict:
 
 @api_view(["get"])
 def print_summary_key(request):
+    """Return the dict key in rest.
 
+    :param request: [request object from django]
+    :type request: [request]
+    :returns: [key value from the .. function:: print_summary_config()]
+    :rtype: {[dict]}
+    """
     cache_name = "print_summary_key"
     temp = get_cache(cache_name)
     if not temp:
 
         set_timeout = (24 - datetime.datetime.now().hour) * 3600
         temp = print_summary_config().keys()
-        # PLAN: handle exception on the cache.
 
         try:
 
+            # Why?: Converting the dict_key object into
+            # list() object to accept as caches
             temp = list(temp)
             set_cache(cache_name, temp, set_timeout)
 
@@ -92,6 +102,7 @@ def print_summary(request, key_value: str):
     :returns: [Simple message to the user]
     :rtype: {[Response]}
     """
+
     temp = print_summary_config()
     output = celery_generate_summary(request, temp[key_value])
     output.get()

@@ -65,7 +65,7 @@ urlpatterns = [
     ),
     url(r"^delete-bulk/", delete_bulk, name="delete_bulk"),
     url(
-        r"^print-summary/(?P<key_value>[a-z]{10, 30})/$",
+        r"^print-summary/(?P<key_value>[a-z\_]{10, 20})/$",
         print_summary,
         name="print_summary",
     ),
