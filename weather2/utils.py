@@ -51,6 +51,7 @@ def get_air_pollution_data(lat, lon, gtype_code):
 
     try:
 
+        # Read the data from the server.
         connect_timeout = settings.BM_CONNECTION_TIMEOUT
         read_timeout = settings.BM_READ_TIMEOUT
 

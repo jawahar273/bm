@@ -11,7 +11,7 @@ from packages.packages_views.viewItemsAll import (
 from packages.packages_views.viewMiscellaneous import (
     get_currency,
     print_summary,
-    print_summary_range,
+    print_summary_key,
 )
 
 from packages.packages_views.viewSettings import PackageSettingsView

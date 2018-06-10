@@ -26,8 +26,11 @@ def get_openweather_data(lat, lon, gcode_name):
             -1- Init Code.
             -2- return async result celery.
     """
+
+    # running the function in celery
     temp = "celery_get_%s_data" % (gcode_name)
     _celery = getattr(bm_celery, temp)
+
     return _celery.delay(lat, lon).get(timeout=20)
 
 
@@ -80,6 +83,7 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
     # get the weather data from the openweather.
     data = get_openweather_data(lat, lon, gcode_name)
 
+    # checking the status is 200
     if data["code"] == status.HTTP_200_OK:
 
         #  If the day type is selected keep that it use the
@@ -90,6 +94,8 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
         confi_cache_timeout_type = settings.BM_WEATHER_DATA_CACHE_TYPE
         set_timeout = None
 
+        # in setting the cach timeout type is
+        # date then calculate the exipre secs
         if confi_cache_timeout_type == "date":
             temp_time = settings.BM_ISO_8601_TIMESTAMP
             temp_date = datetime.strptime(data["time"], temp_time)
@@ -97,6 +103,8 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
             set_timeout = datetime.now() - temp_date
             set_timeout = set_timeout.total_seconds()
 
+        # find the remaning secs before the
+        # midnight
         elif confi_cache_timeout_type == "day":
 
             set_timeout = (24 - datetime.now().hour) * 3600
@@ -106,12 +114,14 @@ def set_caches_redis(lat, lon, gcode_name, caches_name):
 
         return True
 
+    # Incase any error throws 500 error.
     elif data["code"] == status.HTTP_500_INTERNAL_SERVER_ERROR:
 
         logger.error(
             "Error in the celery data, Nothing is stored"
             " of the data in caches system"
         )
+
     else:
 
         logger.error("Error in the celery data. May the reason:" + data)
@@ -153,6 +163,8 @@ def get_caches_redis(caches_content, gcode_name):
 
         return empty_gas_type()
 
+    # check the number of days greater or
+    # equal the caches_content['data'].length
     if num_days >= len(caches_content["data"]):  # max_days count
 
         logger.error(

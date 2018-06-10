@@ -34,13 +34,24 @@ EMAIL_HOST = "localhost"
 
 # CACHING
 # ------------------------------------------------------------------------------
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#         "LOCATION": "",
+#     }
+# }
+
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PICKLE_VERSION": -1,
+        },
     }
 }
-
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------

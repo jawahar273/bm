@@ -1,4 +1,5 @@
 import datetime
+from typing import Dict
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -18,7 +19,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(bind=True, track_started=True)
-def celery_generate_summary(self, request, start: str, end: str):
+def celery_generate_summary(self, request, content: Dict) -> None:
     """Generating the summary based on the seleted value
     dashboard from the server.
 
@@ -29,7 +30,8 @@ def celery_generate_summary(self, request, start: str, end: str):
     """
 
     logger.info("Initi of parsing of pdf")
-
+    start = content["start"]
+    end = content["end"]
     file_name = settings.BM_PDF_FILE_NAME
     file_name += to_datetime_format(
         datetime.datetime.now(), settings.BM_ISO_8601_TIMESTAMP

@@ -17,7 +17,7 @@ from packages.views import (
     upload_flat_file,
     delete_bulk,
     print_summary,
-    print_summary_range,
+    print_summary_key,
 )
 
 
@@ -65,13 +65,11 @@ urlpatterns = [
     ),
     url(r"^delete-bulk/", delete_bulk, name="delete_bulk"),
     url(
-        r"^print-summary/(?P<start>{})/(?P<end>{})/$".format(
-            regex_date_valid, regex_date_valid
-        ),
+        r"^print-summary/(?P<key_value>[a-z]{10, 30})/$",
         print_summary,
         name="print_summary",
     ),
-    url(r"^print-summary-range/$", print_summary_range, name="print_summary_range"),
+    url(r"^print-summary-key/$", print_summary_key, name="print_summary_key"),
 ]
 
 urlpatterns.extend(router.urls)

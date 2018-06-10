@@ -62,9 +62,9 @@ def import_class(value):
     return getattr(module, class_name)
 
 
-def set_cache(name: str, date: any, timeout=90):
+def set_cache(name: str, data: any, timeout=90):
 
-    cache.set(name, date, timeout)
+    cache.set(name, data, timeout)
 
 
 def get_cache(name: str) -> any:

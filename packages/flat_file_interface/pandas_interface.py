@@ -8,9 +8,8 @@ from django.db import transaction
 import pandas as pd
 import numpy as np
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync, sync_to_async
+from asgiref.sync import async_to_sync
 
-from bm.users.models import User
 from packages.models import ItemsList  # , UploadKey, UploadKeyList
 from packages.config import PaymentTypeNumber
 from packages.flat_file_interface.base_excel_interface import (
@@ -51,6 +50,7 @@ class PandasExcelAPI(BaseExcelClass):
     def read_excel(self, name, **kargs):
         """
         """
+
         super().read_excel(name, **kargs)
         sheet_name = kargs.get("sheet_name", 0)
         names = kargs.get("names", None)
@@ -58,6 +58,7 @@ class PandasExcelAPI(BaseExcelClass):
         self.dataContent = pd.read_excel(name, sheet_name, names)
 
     def read_csv(self, name, **kargs):
+
         super().read_csv(name, **kargs)
         usecols = kargs.get("usecols", None)
         #  usecols=None
@@ -65,21 +66,28 @@ class PandasExcelAPI(BaseExcelClass):
         self.dataContent = pd.read_csv(name, usecols=usecols)
 
     def data(self):
+
         return self.dataContent
 
     def mapping_fields(self, entry_type, options=None):
+
         super().mapping_fields(options)
         assert self.read_flag, "Please call read method first"
         self.payment_type = entry_type
+
         if entry_type == PaymentTypeNumber.paytm_type():
+
             self.paytm_process()
+
         else:
+
             raise PandasInterfaceNotImplement(
                 "other than paytm csv " "function is not been" " implemented"
             )
         # self.dataContent.rename(options, inplace=True)
 
     def paytm_process(self):
+
         self.payment_type = 1
         # pre_drop_fileds =
         post_drop_fileds = ["Status"]
@@ -107,6 +115,7 @@ class PandasExcelAPI(BaseExcelClass):
 
         #  changing the date format.
         formater = None
+
         if settings.BM_PAYTM_DATE_OR_DATETIME == 0:
 
             formater = settings.BM_STANDARD_DATEFORMAT
@@ -137,6 +146,7 @@ class PandasExcelAPI(BaseExcelClass):
     # def pre_process_ItemList(self, data, inx):
 
     def insert_db(self):
+
         super(PandasExcelAPI, self).insert_db(self.user_id)
         user_id = self.user_id
         data = self.dataContent.to_dict("date")
@@ -147,6 +157,7 @@ class PandasExcelAPI(BaseExcelClass):
         # upload_key.save()
 
         for inx in range(0, row):
+
             name = data["name"][inx]
             group = data["group"][inx]
             place = "online"
@@ -172,6 +183,7 @@ class PandasExcelAPI(BaseExcelClass):
                 self.as_msg_client(inx, row)
 
             except IntegrityError:
+
                 self.as_msg_client(inx, row)
 
             # UploadKey(upload_keys=upload_key.id, content_key=items.id).save()

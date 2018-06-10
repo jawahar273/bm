@@ -1,11 +1,12 @@
 import re
 import datetime
 from typing import List, Dict
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 
-from bm.users.utils import to_datetime_object
+from bm.users.utils import to_datetime_format
 
 
 def flatter_list(items: List[List[any]]) -> List[any]:
@@ -53,7 +54,8 @@ def to_percentage(current_value, total_value) -> int:
 
 def validate_bm_standard_date_format(value: str) -> bool:
     """This function which help in
-    validate the given date with BM standard date.
+    validate the given date with
+    BM standard date.
 
     :params value (str): date in string
     :return: where is given format is valide or not
@@ -75,6 +77,7 @@ def validate_less_than_today(value: str) -> bool:
     """
 
     if not validate_bm_standard_date_format(value):
+
         raise ValueError("Given date format is wrong")
 
     today = datetime.datetime.today()
@@ -83,6 +86,7 @@ def validate_less_than_today(value: str) -> bool:
     lowest_year = settings.BM_LOWEST_YEAR_POSSIBLE
 
     if date_given >= today and lowest_year < date_given:
+
         return False
 
     return True
@@ -93,9 +97,12 @@ def to_query_string_dict(value: bytes) -> Dict:
     content = {}
     value = value.decode("utf-8")
     value = value.split(",")
+
     for inx in value:
+
         inx = inx.split("=")
         content[inx[0]] = inx[1]
+
     return content
 
 
@@ -128,7 +135,7 @@ def start_and_end_month(month: int, operation: str, date_format: str):
         -1- New param datetime.
         -2- Update in code structure.
     """
-
+    temp = None
     if operation == "after":
 
         temp = datetime.date.today() + datetime.timedelta(month * 365 / 12)
@@ -137,13 +144,14 @@ def start_and_end_month(month: int, operation: str, date_format: str):
 
         temp = datetime.date.today() - datetime.timedelta(month * 365 / 12)
 
-    return to_datetime_object(temp, date_format)
+    return to_datetime_format(temp, date_format)
 
 
 def start_month_year(month: int, operation: str, date_format=None):
     """This function is built on the top
-    of the `start_and_end_month` to provied
-    high level custom return date.
+    of the .. function:: start_and_end_month()
+    to provied high level custom
+    return date.
 
     @ref:: `start_and_end_month`
 
@@ -156,9 +164,11 @@ def start_month_year(month: int, operation: str, date_format=None):
         -1- New param datetime.
     """
     if not date_format:
+
         date_format = settings.BM_STANDARD_START_MONTH_FORMAT
 
-    temp = start_and_end_month(month, operation)
+    temp = start_and_end_month(month, operation, date_format)
+
     return temp
 
 
