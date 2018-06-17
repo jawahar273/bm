@@ -1,8 +1,8 @@
 import os
 
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from celery.utils.log import get_task_logger
-
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -12,7 +12,6 @@ from packages.flat_file_interface.api import (
     FlatFileInterFaceNotImplemented,
 )
 from packages.utils import to_hexdigit
-
 from bm.taskapp.celery import app
 
 logger = get_task_logger(__name__)
@@ -38,6 +37,8 @@ def celery_upload_flat_file(
     """
     logger.info("Starting the upload file")
 
+    temp_location = FileSystemStorage("/tmp")
+
     def upload_file_handler(file_pointer, _file_name):
         """These file are upload and written to the server.
         
@@ -49,7 +50,7 @@ def celery_upload_flat_file(
         """
         logger.info("Writing %s to media folder" % (_file_name))
 
-        with open("%s.%s" % (_file_name, file_format), "wb") as file:
+        with temp_location.open("%s.%s" % (_file_name, file_format), "wb") as file:
 
             for chunk in file_pointer.chunks():
 
@@ -85,9 +86,10 @@ def celery_upload_flat_file(
 
         return Response({"detail": msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    file_location = os.path.join("%s" % (settings.MEDIA_ROOT), to_hexdigit(file_name))
+    # NEED OPTIMIATION:
+    file_location = os.path.join(temp_location.base_location, to_hexdigit(file_name))
 
-    upload_file_handler(access_file, file_location)
+    upload_file_handler(access_file, to_hexdigit(file_name))
 
     try:
 

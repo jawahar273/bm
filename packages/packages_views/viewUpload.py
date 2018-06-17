@@ -18,21 +18,13 @@ from packages.tasks import celery_upload_flat_file
 def upload_term_condition(request):
 
     terms = {
-        "current": ["Default file will saved with md5 as its names."],
-        "planning": [
-            "File will be saved based on your requirement.",
-            "Perment file are to removed "  # cnt
-            "within the intervale of %s"  # cnt
-            " hrs." % (to_hrs(mins=settings.BM_EXPIRY_TIME_FLAT_FILT_IN_MINS)),  # end
-            # 'On reuploading try not to change the file'  # cnt
-            # ' name if is it perment file',  # end
-            # 'Cancling the upload',
+        "current": [
+            "Default file will saved with md5 as its names.",
+            "File will be saved on tmp file system.",
         ],
+        "planning": [],
         "beta": [],
-        "warning": [
-            "Please remeber once uploaded it is done.",
-            "Reuploading cause may unnessary errors for now.",
-        ],
+        "warning": [],
         "paytm": [
             "Do not change column's name of paytm, we will take care of the"
             " that one for you."

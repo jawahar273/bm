@@ -1,5 +1,6 @@
 import datetime
 from typing import Dict
+import os
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -72,7 +73,10 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
 
     fs = FileSystemStorage("/tmp")
 
-    html.write_pdf(target=fs.base_location + "/%s.%s" % (file_name, file_extention))
+    write_pdf_loc = os.path.join(
+        fs.base_location, "%s.%s" % (file_name, file_extention)
+    )
+    html.write_pdf(target=write_pdf_loc)
 
     try:
 
