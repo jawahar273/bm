@@ -55,14 +55,18 @@ class PandasExcelAPI(BaseExcelClass):
         sheet_name = kargs.get("sheet_name", 0)
         names = kargs.get("usecols", None)
         self.read_flag = True
-        self.dataContent = pd.read_excel(name, sheet_name, names)
+        self.dataContent = pd.read_excel(
+            name, sheet_name, names, skiprows=range(0, 4), skipfooter=1
+        )
 
     def read_csv(self, name, **kargs):
 
         super().read_csv(name, **kargs)
         usecols = kargs.get("usecols", None)
         self.read_flag = True
-        self.dataContent = pd.read_csv(name, usecols=usecols)
+        self.dataContent = pd.read_csv(
+            name, usecols=usecols, skiprows=range(0, 4), skipfooter=1
+        )
 
     def data(self):
 

@@ -1,15 +1,11 @@
 
 from django.conf import settings
-
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework.decorators import api_view, parser_classes
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import FileUploadParser, FormParser
 
 from packages.models import PackageSettings
-
-from packages.utils import to_hrs
 from packages.config import PaymentTypeNumber
 from packages.tasks import celery_upload_flat_file
 
@@ -63,7 +59,7 @@ def upload_flat_file(
 
 
 @api_view(["post"])
-@parser_classes((FileUploadParser,))
+@parser_classes((FileUploadParser, FormParser))
 def is_paytm_active(request, file_name, file_format=None):
     """This function is kind of inhertices of the
     :py:func:upload_flat_file (refer parameters)
