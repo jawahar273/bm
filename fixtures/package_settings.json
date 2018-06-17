@@ -1,9 +1,8 @@
 [
   {
     "model": "packages.PackageSettings",
-    "pk": 1,
     "fields": {
-      "user": 1,
+      "user": 2,
       "currency_details": "",
       "active_paytm": "N",
       "geoloc_interval": 60
