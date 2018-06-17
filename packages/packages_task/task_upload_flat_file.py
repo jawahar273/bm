@@ -41,15 +41,18 @@ def celery_upload_flat_file(
 
     def upload_file_handler(file_pointer, _file_name):
         """These file are upload and written to the server.
-        
-        [description]
+
+
         :param file_pointer: [python native file pointer]
         :type file_pointer: [object]
         :param _file_name: [file name of the upload folder]
         :type _file_name: [string]
         """
         logger.info("Writing %s to media folder" % (_file_name))
+        print("start3")
+        import IPython
 
+        IPython.embed()
         with temp_location.open("%s.%s" % (_file_name, file_format), "wb") as file:
 
             for chunk in file_pointer.chunks():
@@ -87,7 +90,13 @@ def celery_upload_flat_file(
         return Response({"detail": msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
     # NEED OPTIMIATION:
-    file_location = os.path.join(temp_location.base_location, to_hexdigit(file_name))
+    print("start2")
+    import IPython
+
+    IPython.embed()
+    file_location = os.path.join(
+        temp_location.base_location, "%s.%s" % (to_hexdigit(file_name), file_format)
+    )
 
     upload_file_handler(access_file, to_hexdigit(file_name))
 

@@ -20,8 +20,11 @@ class FlatFileInterFaceAPI(APIClass):
     def read_file(self, file_format, name, **kargs):
 
         if file_format == "csv":
+
             self.read_csv(name, **kargs)
-        else:
+
+        elif file_format == "xslx":
+
             self.read_excel(name, **kargs)
 
 
