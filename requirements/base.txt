@@ -54,7 +54,7 @@ django-rest-auth==0.9.3 # intergate with rest framework and allauth package
 drf-writable-nested==0.4.2
 
 # django-import-export==1.0.0
-pandas==0.23.0
+pandas==0.23.1
 
 # djangorestframework
 djangorestframework==3.8.2
