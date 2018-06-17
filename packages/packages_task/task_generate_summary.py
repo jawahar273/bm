@@ -19,7 +19,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(bind=True, track_started=True)
-def celery_generate_summary(self, request, content: Dict) -> None:
+def celery_generate_summary(self, request, content: Dict, cache_name: str) -> None:
     """Generating the summary based on the seleted value
     dashboard from the server.
 
@@ -32,14 +32,18 @@ def celery_generate_summary(self, request, content: Dict) -> None:
     logger.info("Initi of parsing of pdf")
     start = content["start"]
     end = content["end"]
+    content.update({"today": datetime.date.today()})
     file_name = settings.BM_PDF_FILE_NAME
+    file_name += "to"
     file_name += to_datetime_format(
-        datetime.datetime.now(), settings.BM_ISO_8601_TIMESTAMP
+        datetime.date.today(), settings.BM_STANDARD_DATEFORMAT
     )
+    file_name += "from"
+    file_name += content["end"]
 
     file_extention = "pdf"
 
-    _user = User.objects.get(id=request.user.id)
+    _user = request.user
     user_id = _user.id
 
     load_template = loader.get_template("%s" % (settings.BM_PDF_TEMPLATE_NAME))
@@ -55,17 +59,20 @@ def celery_generate_summary(self, request, content: Dict) -> None:
                 "date_format": settings.BM_STANDARD_DATE_TEMPLATE,
                 "pdf_title": settings.BM_PDF_TITLE,
                 "pdf_description": settings.BM_PDF_DESCRIPTION,
-                "currency_code": PackageSettings.get(user=user_id).currency_details,
+                "currency_code": PackageSettings.objects.get(
+                    user=user_id
+                ).currency_details,
             }
         )
     )
 
     logger.info("parsering  of html to %s " % (file_extention))
-    html.write_pdf(target="/tmp/%s.%a" % (file_name, file_extention))
 
     logger.info("writing of the %s" % (file_extention))
 
     fs = FileSystemStorage("/tmp")
+
+    html.write_pdf(target=fs.base_location + "/%s.%s" % (file_name, file_extention))
 
     try:
 
@@ -74,7 +81,9 @@ def celery_generate_summary(self, request, content: Dict) -> None:
             # making a mail woule better options
             logger.info("Perparing for sending mail")
 
-            sending_mail_pdf([_user.email], file_pointer)
+            sending_mail_pdf([_user.email], content, file_pointer)
+
+            set_cache(cache_name, "", 10 * 60)
 
             logger.info("Mail has been sended")
 

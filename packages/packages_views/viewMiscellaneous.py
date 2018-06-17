@@ -103,10 +103,23 @@ def print_summary(request, key_value: str):
     :rtype: {[Response]}
     """
 
-    temp = print_summary_config()
-    output = celery_generate_summary(request, temp[key_value])
-    output.get()
+    cache_name = "print_summary_timeout_"
+    cache_name = "%s%d" % (cache_name, request.user.id)
+    msg = None
 
-    temp = "summary will be mailed soon as possible"
+    # CHECK: get the cache means that the
+    # mail has been send.
+    if get_cache(cache_name):
 
-    return Response({"detail": temp}, status=status.HTTP_200_OK)
+        msg = "your request has been processed."
+        msg += " Please check your mail for attachment."
+
+    else:
+
+        temp = print_summary_config()
+        output = celery_generate_summary.delay(request, temp[key_value], cache_name)
+        output.get()
+
+        msg = "summary will be mailed soon as possible"
+
+    return Response({"detail": msg}, status=status.HTTP_200_OK)

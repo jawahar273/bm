@@ -1,9 +1,10 @@
 import re
 import datetime
 from typing import List, Dict
+from io import BytesIO
 
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from django.template import loader
 
 from bm.users.utils import to_datetime_format
@@ -172,7 +173,7 @@ def start_month_year(month: int, operation: str, date_format=None):
     return temp
 
 
-def sending_mail_pdf(mail_to: List[str], file_pointer=None) -> None:
+def sending_mail_pdf(mail_to: List[str], content: Dict, file_pointer=None) -> None:
     """Sending mail with the summary
     PDF attachment.
 
@@ -191,14 +192,19 @@ def sending_mail_pdf(mail_to: List[str], file_pointer=None) -> None:
         -1- Sending the mail even if the file
         pointer is `None`.
     """
+    from django.utils.html import strip_tags
 
-    subject = "Expensive attachment from"
+    subject = "Expensive attachment from %s to %s" % (
+        content["today"],
+        content["start"],
+    )
     load_template = loader.get_template(settings.BM_MAIL_SUMMARY_TEMPLATE)
 
-    mail = EmailMultiAlternatives(
-        subject, load_template.render(), settings.DEFAULT_FROM_EMAIL, mail_to
-    )
+    text_content = load_template.render(content)
+    text_content = strip_tags(text_content)
 
-    mail.attach_file(file_pointer.read(), "application/pdf")
+    mail = EmailMessage(subject, text_content, settings.DEFAULT_FROM_EMAIL, mail_to)
+
+    mail.attach_file(file_pointer.name, "application/pdf")
 
     mail.send()

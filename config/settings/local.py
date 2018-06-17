@@ -29,7 +29,7 @@ SECRET_KEY = env(
 
 EMAIL_PORT = 1025
 
-EMAIL_HOST = "localhost"
+EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
 
 
 # CACHING
@@ -85,7 +85,7 @@ CELERY_ALWAYS_EAGER = True
 
 # Your local stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 if DEBUG:
     EMAIL_HOST = "127.0.0.1"
     EMAIL_HOST_USER = ""

@@ -9,6 +9,9 @@
  -->
 
 ## 0.3.2
+- Export of summary statement
+
+## 0.3.2
 - dynamic setting flat file class in settings.
 - little update in testing.
 
