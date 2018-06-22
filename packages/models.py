@@ -12,7 +12,7 @@ from django.db.models.signals import post_save
 
 from allauth.account.signals import user_signed_up
 
-from packages.config import PaymentTypeNumber, PackageSettingsGeoloc as Geoloc
+from packages.config import PaymentTypeNumber
 
 
 @receiver(user_signed_up)
@@ -145,19 +145,6 @@ def validate_country_code_(value):
             return ValidationError(temp)
 
 
-def validate_max_time_interval(value):
-    """This method is used as validator
-    to check range of times.
-    """
-    if value < Geoloc.min_interval_time() and value > Geoloc.max_interval_time():
-
-        return ValidationError(
-            "Can not Exceed the max or"
-            "min of interval of 10 mins 8 hours"
-            "repecatively" % (Geoloc.max_interval_time, Geoloc.min_interval_time)
-        )
-
-
 class PackageSettings(models.Model):
     """
     This setting field may not stable until their is fixed ones.
@@ -173,14 +160,6 @@ class PackageSettings(models.Model):
     force_mba_update = models.CharField(default="Y", max_length=1)
 
     active_paytm = models.CharField(default="N", max_length=1)
-
-    #  get/set the interval to get the geolocation from the user.
-    #  getting the config.
-    temp_geoloc = Geoloc.interval_time()
-    #  Value must be stored as minutes.
-    geoloc_interval = models.PositiveSmallIntegerField(
-        default=temp_geoloc, validators=[validate_max_time_interval]
-    )
 
     def __str__(self):
 
