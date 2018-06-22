@@ -4,12 +4,12 @@
 - allow xslx format (excel file).[miner version]
 - deploy heroku automaticaly by `heroku button`.[patch]
 
-- set the cache timeing based on Geo-Location[patch]
 <!-- If about current planning all done then it next major version
  -->
 
 ## 0.3.2
 - Export of summary statement
+- Deprecated interval time in packages.
 
 ## 0.3.2
 - dynamic setting flat file class in settings.
