@@ -8,7 +8,7 @@ from rest_framework.parsers import FileUploadParser
 from packages.models import PackageSettings
 from packages.config import PaymentTypeNumber
 from packages.tasks import celery_upload_flat_file
-from bm.user.utils import set_cache, get_cache
+from bm.users.utils import set_cache, get_cache
 
 
 @api_view(["get"])
@@ -68,6 +68,7 @@ def is_paytm_active(request, file_name, file_format=None):
     """
 
     KEYWORD_CACHES = "paytm_generated"
+    CACHE_TIMEOUT = 300
 
     if get_cache(KEYWORD_CACHES):
 
@@ -78,6 +79,8 @@ def is_paytm_active(request, file_name, file_format=None):
         )
 
         return Response({"detail": temp_msg})
+
+    set_cache(KEYWORD_CACHES, True, CACHE_TIMEOUT)
 
     pack_setting = PackageSettings.objects.filter(user_id=request.user.id)
     pack_setting = pack_setting.first()
