@@ -43,7 +43,7 @@ def celery_upload_flat_file(
 
         logger.info("Starting the feed file data to Database")
         # pasing user id.
-        ffi_api = FlatFileInterFaceAPI(request.user_id)
+        ffi_api = FlatFileInterFaceAPI(request["user_id"])
         ffi_api.read_file(file_format, file_location, usecols=use_fields)
 
         try:
