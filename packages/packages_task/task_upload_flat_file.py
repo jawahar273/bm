@@ -36,7 +36,7 @@ def celery_upload_flat_file(
 
     # NEED OPTIMIATION:
     file_location = os.path.join(
-        temp_location.base_location, "%s.%s" % (to_hexdigit(file_name), file_format)
+        temp_location, "%s.%s" % (to_hexdigit(file_name), file_format)
     )
 
     try:
