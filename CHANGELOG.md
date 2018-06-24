@@ -10,6 +10,7 @@
 ## 0.3.2
 - Export of summary statement
 - Deprecated interval time in packages.
+- Cache for checking for generated statement.
 
 ## 0.3.2
 - dynamic setting flat file class in settings.

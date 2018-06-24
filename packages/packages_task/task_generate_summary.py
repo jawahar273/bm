@@ -28,17 +28,24 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
         -- Friday 08 June 2018 11:32:07 PM IST
         @jawahar273 [Version 0.1]
         -3- Logic bug fix on itemlist model.
+        -- Sunday 24 June 2018 10:35:19 AM IST
+        @jawahar273 [Version 0.2]
+        -1- Changing the file path in global.
     """
 
     logger.info("Initi of parsing of pdf")
     start = content["start"]
     end = content["end"]
-    content.update({"today": datetime.date.today()})
+    content.update(
+        {
+            "today": to_datetime_format(
+                datetime.date.today(), settings.BM_STANDARD_DATEFORMAT
+            )
+        }
+    )
     file_name = settings.BM_PDF_FILE_NAME
     file_name += "to"
-    file_name += to_datetime_format(
-        datetime.date.today(), settings.BM_STANDARD_DATEFORMAT
-    )
+    file_name += content["today"]
     file_name += "from"
     file_name += content["end"]
 
@@ -63,7 +70,6 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
                 "currency_code": PackageSettings.objects.get(
                     user=user_id
                 ).currency_details,
-                "content": content,
             }
         )
     )

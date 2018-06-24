@@ -313,6 +313,8 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PAGINATION_CLASS": ("rest_framework.pagination." "LimitOffsetPagination"),
     "PAGE_SIZE": 100,
+    "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.UserRateThrottle",),
+    "DEFAULT_THROTTLE_RATES": {"user": "10000/day", "per_minute": "2000/min"},
 }
 
 REST_AUTH_SERIALIZERS = {

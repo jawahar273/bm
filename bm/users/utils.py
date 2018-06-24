@@ -1,5 +1,7 @@
 import datetime
 import importlib
+from dateutil.relativedelta import relativedelta
+
 from django.core.cache import cache
 from django.conf import settings
 
@@ -70,3 +72,19 @@ def set_cache(name: str, data: any, timeout=90):
 def get_cache(name: str) -> any:
 
     return cache.get(name)
+
+
+def diff_date_months(date1: str, date2: str):
+    """Get the count between date
+    in days, months, years.
+
+    :param date1: [date format]
+    :type date1: [str]
+    :param date2: [date format]
+    :type date2: [str]
+    """
+
+    date1 = datetime.datetime.strptime(date1, settings.BM_STANDARD_DATEFORMAT)
+    date2 = datetime.datetime.strptime(date2, settings.BM_STANDARD_DATEFORMAT)
+
+    return relativedelta(date1, date2).months

@@ -3,11 +3,12 @@ import datetime
 from typing import List, Dict
 from io import BytesIO
 
+from django.utils.html import strip_tags
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template import loader
 
-from bm.users.utils import to_datetime_format
+from bm.users.utils import to_datetime_format, diff_date_months
 
 
 def flatter_list(items: List[List[any]]) -> List[any]:
@@ -192,15 +193,14 @@ def sending_mail_pdf(mail_to: List[str], content: Dict, file_pointer=None) -> No
         -1- Sending the mail even if the file
         pointer is `None`.
     """
-    from django.utils.html import strip_tags
 
-    subject = "Expensive attachment from %s to %s" % (
-        content["today"],
-        content["start"],
+    subject = "Expensive attachment of %d months" % (
+        diff_date_months(content["today"], content["start"])
     )
     load_template = loader.get_template(settings.BM_MAIL_SUMMARY_TEMPLATE)
 
-    text_content = load_template.render(content)
+    text_content = load_template.render({"content": content})
+
     text_content = strip_tags(text_content)
 
     mail = EmailMessage(subject, text_content, settings.DEFAULT_FROM_EMAIL, mail_to)

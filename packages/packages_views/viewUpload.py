@@ -8,6 +8,7 @@ from rest_framework.parsers import FileUploadParser
 from packages.models import PackageSettings
 from packages.config import PaymentTypeNumber
 from packages.tasks import celery_upload_flat_file
+from bm.user.utils import set_cache, get_cache
 
 
 @api_view(["get"])
@@ -65,6 +66,19 @@ def is_paytm_active(request, file_name, file_format=None):
     :py:func:upload_flat_file (refer parameters)
     which is useful for specific file uploading that is Paytm
     """
+
+    KEYWORD_CACHES = "paytm_generated"
+
+    if get_cache(KEYWORD_CACHES):
+
+        temp_msg = (
+            "Please check out your register mail for",
+            " summary statement which has been requested or",
+            " Please wait for a while.",
+        )
+
+        return Response({"detail": temp_msg})
+
     pack_setting = PackageSettings.objects.filter(user_id=request.user.id)
     pack_setting = pack_setting.first()
 
