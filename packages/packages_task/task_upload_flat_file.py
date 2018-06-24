@@ -7,6 +7,7 @@ from packages.flat_file_interface.api import (
     FlatFileInterFaceException,
     FlatFileInterFaceNotImplemented,
 )
+
 from packages.utils import to_hexdigit
 from bm.taskapp.celery import app
 
@@ -20,8 +21,8 @@ def celery_upload_flat_file(
     """Uploading the flat file is done in async with
     the help of 3rd party libary `Celery`.
 
-    :param request: [Request object form view djagno]
-    :type request: [request]
+    :param request: [passing custom dict `DotDict`]
+    :type request: [DotDict]
     :param file_name: [name of the file in uploading]
     :type file_name: [str]
     :param file_format: [flat file extention]
@@ -41,7 +42,8 @@ def celery_upload_flat_file(
     try:
 
         logger.info("Starting the feed file data to Database")
-        ffi_api = FlatFileInterFaceAPI(request.user.id)
+        # pasing user id.
+        ffi_api = FlatFileInterFaceAPI(request.user_id)
         ffi_api.read_file(file_format, file_location, usecols=use_fields)
 
         try:

@@ -125,7 +125,7 @@ def upload_flat_file(
 
     result = upload_file_wrapper(request, temp_location, file_name, file_format)
 
-    request = DotDict({"user": request.user})
+    request = DotDict({"user_id": request.user.id})
     file_path = DotDict({"base_location": temp_location.base_location})
 
     output = celery_upload_flat_file.delay(
