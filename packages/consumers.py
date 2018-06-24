@@ -70,7 +70,7 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
     def validation_jwt(self, value):
         """This method validate the given token
-        as its from the authencated user's. 
+        as its from the authencated user's.
 
         :param value: [JWT token from the client]
         :type value: [str]
@@ -94,10 +94,10 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
         pass
 
-    async def disconnect(self, close_code):
+    async def disconnect(self, close_code=None):
 
         # await asyncio.sleep(30)
-        await self.close(close_code)
+        await self.close()
 
     async def upload_status(self, event):
 

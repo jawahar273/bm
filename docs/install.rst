@@ -1,4 +1,7 @@
 Install
 =========
 
-This is where you write how to get a new laptop to run this project.
+Better to `Django CookieCutter`_ in install
+in locally.
+
+.. _Django CookieCutter: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html

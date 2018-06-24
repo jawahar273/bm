@@ -1,10 +1,6 @@
 import os
 
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 from celery.utils.log import get_task_logger
-from rest_framework.response import Response
-from rest_framework import status
 
 from packages.flat_file_interface.api import (
     FlatFileInterFaceAPI,
@@ -19,7 +15,7 @@ logger = get_task_logger(__name__)
 
 @app.task(bind=True, track_started=True)
 def celery_upload_flat_file(
-    self, request, file_name, file_format, use_fields, entry_type
+    self, request, file_name, file_format, use_fields, entry_type, temp_location
 ):
     """Uploading the flat file is done in async with
     the help of 3rd party libary `Celery`.
@@ -37,61 +33,10 @@ def celery_upload_flat_file(
     """
     logger.info("Starting the upload file")
 
-    temp_location = FileSystemStorage(settings.BM_FILESYSTEMSTORAGE_PATH)
-
-    def upload_file_handler(file_pointer, _file_name):
-        """These file are upload and written to the server.
-
-
-        :param file_pointer: [python native file pointer]
-        :type file_pointer: [object]
-        :param _file_name: [file name of the upload folder]
-        :type _file_name: [string]
-        """
-        logger.info("Writing %s to media folder" % (_file_name))
-
-        with temp_location.open("%s.%s" % (_file_name, file_format), "wb") as file:
-
-            for chunk in file_pointer.chunks():
-
-                file.write(chunk)
-
-    # checking the file extention
-    if file_format not in set(["csv", "xslx"]):
-
-        msg = "the given file extenstion is not acceptable"
-        logger.info("File has is not acceptable")
-
-        return Response({"detail": msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
-
-    access_file = request.FILES["file"]
-
-    # checking the file is empty or not
-    if len(access_file) <= 0:
-
-        logger.info("File is empty")
-
-        return Response({"details": "Uploading without file is not allowed"})
-
-    # checking is file to big
-    if access_file.multiple_chunks():
-
-        logger.info(
-            "File has reject due to big size"
-            " of (%.2f MB)." % (access_file.size / (1000 * 1000))
-        )
-        msg = "Uploaded file is too big" " (%.2f MB)." % (  # cnt
-            access_file.size / (1000 * 1000)
-        )  # end
-
-        return Response({"detail": msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
-
     # NEED OPTIMIATION:
     file_location = os.path.join(
         temp_location.base_location, "%s.%s" % (to_hexdigit(file_name), file_format)
     )
-
-    upload_file_handler(access_file, to_hexdigit(file_name))
 
     try:
 
@@ -110,25 +55,11 @@ def celery_upload_flat_file(
                 " (selected maybe unwanted options) %s" % e
             )
 
-            return Response(
-                {"detail": "Method not allowed"},
-                status=status.HTTP_405_METHOD_NOT_ALLOWED,
-            )
-
         ffi_api.insert_db()
 
         ffi_api = None
         logger.info("Flat File feed to Database success")
 
-        return Response(
-            {"details": "success insert to database"}, status=status.HTTP_200_OK
-        )
-
     except FlatFileInterFaceException as e:
 
         logger.error("Flat File feed to Database error" " (unknown) %s" % e)
-
-        return Response(
-            {"detail": "error in processing file"},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
