@@ -98,6 +98,7 @@ def celery_upload_flat_file(
         logger.info("Starting the feed file data to Database")
         ffi_api = FlatFileInterFaceAPI(request.user.id)
         ffi_api.read_file(file_format, file_location, usecols=use_fields)
+
         try:
 
             ffi_api.mapping_fields(entry_type)
@@ -115,10 +116,10 @@ def celery_upload_flat_file(
             )
 
         ffi_api.insert_db()
+
         ffi_api = None
         logger.info("Flat File feed to Database success")
 
-        # UploadCount.objects.cre
         return Response(
             {"details": "success insert to database"}, status=status.HTTP_200_OK
         )

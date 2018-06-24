@@ -59,7 +59,7 @@ def upload_flat_file(
 
 
 @api_view(["post"])
-@parser_classes(FileUploadParser)
+@parser_classes((FileUploadParser,))
 def is_paytm_active(request, file_name, file_format=None):
     """This function is kind of inhertices of the
     :py:func:upload_flat_file (refer parameters)
