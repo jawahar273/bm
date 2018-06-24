@@ -1,5 +1,6 @@
 
 import logging
+import os
 
 from django.conf import settings
 from rest_framework.response import Response
@@ -122,6 +123,9 @@ def upload_flat_file(
     """
 
     temp_location = FileSystemStorage(settings.BM_FILESYSTEMSTORAGE_PATH)
+
+    if os.path.exists(temp_location.base_location):
+        os.makedirs(temp_location.base_location)
 
     result = upload_file_wrapper(request, temp_location, file_name, file_format)
 
