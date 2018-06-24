@@ -63,6 +63,7 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
                 "currency_code": PackageSettings.objects.get(
                     user=user_id
                 ).currency_details,
+                "content": content,
             }
         )
     )
@@ -71,7 +72,7 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
 
     logger.info("writing of the %s" % (file_extention))
 
-    fs = FileSystemStorage("/tmp")
+    fs = FileSystemStorage(settings.BM_FILESYSTEMSTORAGE_PATH)
 
     write_pdf_loc = os.path.join(
         fs.base_location, "%s.%s" % (file_name, file_extention)

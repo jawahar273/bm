@@ -437,3 +437,5 @@ BM_PDF_TEMPLATE_NAME = env(
 BM_MAIL_SUMMARY_TEMPLATE = env(
     "BM_MAIL_SUMMARY_TEMPLATE", default="packages/mail_summary_template.html"
 )
+
+BM_FILESYSTEMSTORAGE_PATH = "/tmp"

@@ -37,7 +37,7 @@ def celery_upload_flat_file(
     """
     logger.info("Starting the upload file")
 
-    temp_location = FileSystemStorage("/tmp")
+    temp_location = FileSystemStorage(settings.BM_FILESYSTEMSTORAGE_PATH)
 
     def upload_file_handler(file_pointer, _file_name):
         """These file are upload and written to the server.
