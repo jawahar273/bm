@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.core.cache import cache
 from django.conf import settings
+from bm.users.dot_dict import DotDict
 
 
 def to_datetime_format(date, date_format: str) -> str:

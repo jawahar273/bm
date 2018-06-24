@@ -96,8 +96,8 @@ class BMNotifcationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
 
-        await asyncio.sleep(30)
-        await self.close()
+        # await asyncio.sleep(30)
+        await self.close(close_code)
 
     async def upload_status(self, event):
 
