@@ -8,7 +8,7 @@ wheel==0.31.1
 django>=2.0.5, <2.2
 django-crispy-forms==1.7.2
 # Configuration
-django-environ==0.4.4
+django-environ==0.4.5
 whitenoise==3.3.1
 
 
