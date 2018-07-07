@@ -2,22 +2,22 @@ import urllib.parse
 
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 # from django.http import HttpResponse
-from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 
 # from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
+from rest_auth.views import PasswordResetView
 from allauth.account import views as allauth_views
 
 from .models import User
+from bm.users.utils import get_cache, set_cache, days_to_secs
 
 
 @csrf_exempt
@@ -143,6 +143,34 @@ class UserListView(LoginRequiredMixin, ListView):
 
     def get_object(self):
         return None
+
+
+class BMPasswordResetView(PasswordResetView):
+
+    def post(self, request, *args, **kwargs):
+
+        cache_name = "confirm_mail_send_for_%s" % (request.data["email"])
+
+        if get_cache(cache_name):
+            return Response(
+                {
+                    "detail": (
+                        "please wait till the",
+                        " mail reach you Or check",
+                        " your mail inbox.",
+                    )
+                }
+            )
+        timeout = settings.ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS
+
+        if timeout > 1:
+            timeout = timeout - 1
+
+        timeout = days_to_secs(timeout)
+
+        set_cache(cache_name, True, timeout)
+
+        return super(BMPasswordResetView, self).post(request, *args, **kwargs)
 
 
 def password_reset_done(request):

@@ -170,6 +170,9 @@ class ItemsGroupLog(CommonDetailModel):
 
     group = models.CharField(max_length=30, blank=True, unique=True)
 
+    def __str__(self):
+        return "Group name: %s" % (self.group)
+
 
 @receiver(post_save, sender=ItemsList)
 def post_save_items_list(sender, **kwargs):
