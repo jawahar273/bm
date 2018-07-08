@@ -57,7 +57,7 @@ CACHES = {
 # ------------------------------------------------------------------------------
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    # "silk.middleware.SilkyMiddleware",
+    "silk.middleware.SilkyMiddleware",
 ]
 INSTALLED_APPS += ["debug_toolbar", "rest_framework_swagger", "silk"]
 

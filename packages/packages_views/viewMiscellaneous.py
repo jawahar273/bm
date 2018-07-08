@@ -23,6 +23,8 @@ from bm.users.utils import (
     days_to_secs,
 )
 
+from bm.users.dot_dict import DotDict
+
 logger = logging.getLogger(__name__)
 
 
@@ -77,6 +79,7 @@ def print_summary_key(request):
     """
     cache_name = "print_summary_key"
     temp = get_cache(cache_name)
+
     if not temp:
 
         set_timeout = (24 - datetime.datetime.now().hour) * 3600
@@ -122,7 +125,7 @@ def print_summary(request, key_value: str):
         msg += " Please check your mail for attachment."
 
     else:
-
+        temp_request = DotDict({"user_id": request.user.id})
         temp = print_summary_config()
         output = celery_generate_summary.delay(request, temp[key_value], cache_name)
         output.get()
@@ -143,6 +146,9 @@ def get_timezone_list(request):
 
         return Response({"detail": cache_content})
 
-    set_cache(cache_name, pytz.common_timezones, days_to_secs(4))
+    content = pytz.common_timezones
+    content = list(content)
+
+    set_cache(cache_name, content, days_to_secs(4))
 
     return Response({"detail": pytz.common_timezones})
