@@ -43,6 +43,7 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
             )
         }
     )
+
     file_name = settings.BM_PDF_FILE_NAME
     file_name += "to"
     file_name += content["today"]
