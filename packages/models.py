@@ -169,6 +169,7 @@ class PackageSettings(models.Model):
 class ItemsGroupLog(CommonDetailModel):
 
     group = models.CharField(max_length=30, blank=True, unique=True)
+    temp = models.CharField(default="1", max_length=1)
 
     def __str__(self):
         return "Group name: %s" % (self.group)
