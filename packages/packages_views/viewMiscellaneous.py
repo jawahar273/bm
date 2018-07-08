@@ -2,7 +2,6 @@ import os
 import datetime
 import calendar
 import logging
-
 from typing import Dict
 
 from django.conf import settings
@@ -14,7 +13,15 @@ from rest_framework.decorators import api_view
 from packages.tasks import celery_generate_summary
 from packages.utils import start_month_year
 
-from bm.users.utils import to_datetime_object, to_datetime_format, get_cache, set_cache
+import pytz
+
+from bm.users.utils import (
+    to_datetime_object,
+    to_datetime_format,
+    get_cache,
+    set_cache,
+    days_to_secs,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +53,7 @@ def print_summary_config() -> Dict:
     # has two digit, no problem will occures.
     last_date = "%d-%d-%d" % (current.year, current.month, last_date[1])
 
-    # REMEBER: if the dicit key lenght exceeds
+    # REMEBER: if the dicit key length exceeds
     # more than 20 charachers then manually
     # offset limit in url
     temp = {
@@ -77,7 +84,7 @@ def print_summary_key(request):
 
         try:
 
-            # Why?: Converting the dict_key object into
+            # Converting the dict_key object into
             # list() object to accept as caches
             temp = list(temp)
             set_cache(cache_name, temp, set_timeout)
@@ -123,3 +130,19 @@ def print_summary(request, key_value: str):
         msg = "summary will be mailed soon as possible"
 
     return Response({"detail": msg}, status=status.HTTP_200_OK)
+
+
+@api_view(["get"])
+def get_timezone_list(request):
+
+    cache_name = "time_zone_list"
+
+    cache_content = get_cache(cache_name)
+
+    if cache_content:
+
+        return Response({"detail": cache_content})
+
+    set_cache(cache_name, pytz.common_timezones, days_to_secs(4))
+
+    return Response({"detail": pytz.common_timezones})

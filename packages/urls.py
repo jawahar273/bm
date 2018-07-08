@@ -10,6 +10,7 @@ from packages.views import (
     PackageSettingsView,
     itemlist_get_by_months,
     get_range_mba,
+    get_timezone_list,
     get_all_group_in_itemslist,
     get_currency,
     upload_term_condition,
@@ -44,6 +45,7 @@ urlpatterns = [
         get_all_group_in_itemslist,
         name="get_group_list",
     ),
+    url(r"^timezone_list/$", get_timezone_list, name="get_timezone_list"),
     url(
         r"^mba/(?P<start>{})/(?P<end>{})/$".format(regex_date_valid, regex_date_valid),
         get_range_mba,

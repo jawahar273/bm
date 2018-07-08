@@ -12,6 +12,7 @@ from packages.packages_views.viewMiscellaneous import (
     get_currency,
     print_summary,
     print_summary_key,
+    get_timezone_list,
 )
 
 from packages.packages_views.viewSettings import PackageSettingsView

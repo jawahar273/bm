@@ -43,7 +43,7 @@ def redirect_password_rest_done(request, uidb64, token):
 def handling_mail_confirm(request, key):
     """
     1. May deprecate
-    .. notes:: 
+    .. notes::
         Redirect directly done in adapter of user.
     """
     url = urllib.parse.urljoin(
