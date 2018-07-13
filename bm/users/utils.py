@@ -52,6 +52,10 @@ def to_datetime_object(date: str, date_format: str) -> datetime.datetime:
         return None
 
 
+def days_to_secs(days: int) -> int:
+    return days * 3600 * 24
+
+
 def import_class(value):
     """Import the given class based on string.
 

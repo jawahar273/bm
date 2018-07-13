@@ -43,6 +43,7 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
             )
         }
     )
+
     file_name = settings.BM_PDF_FILE_NAME
     file_name += "to"
     file_name += content["today"]
@@ -51,8 +52,7 @@ def celery_generate_summary(self, request, content: Dict, cache_name: str) -> No
 
     file_extention = "pdf"
 
-    _user = request.user
-    user_id = _user.id
+    user_id = request.user_id
 
     load_template = loader.get_template("%s" % (settings.BM_PDF_TEMPLATE_NAME))
 

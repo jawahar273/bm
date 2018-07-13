@@ -16,6 +16,7 @@ from rest_framework_jwt.views import verify_jwt_token
 # from allauth.account.views import confirm_email as allauthemailconfirmation
 
 from bm.users.views import (
+    BMPasswordResetView,
     display_home_page,
     redirect_after_email_confirm,
     redirect_password_rest_done,
@@ -37,6 +38,7 @@ handler400 = "rest_framework.exceptions.bad_request"
 
 
 api_url += [
+    url(r"^rest-auth/password/reset/$", BMPasswordResetView.as_view()),
     url(r"^rest-auth/", include("rest_auth.urls")),
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     #  url(r'^auth-jwt/', obtain_jwt_token),
