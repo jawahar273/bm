@@ -51,7 +51,7 @@ celery==4.2.0
 # mysqlclient==1.3.12
 
 django-rest-auth==0.9.3 # intergate with rest framework and allauth package
-drf-writable-nested==0.4.2
+drf-writable-nested==0.4.3
 
 # django-import-export==1.0.0
 pandas==0.23.2
