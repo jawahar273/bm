@@ -15,7 +15,7 @@ pytest-sugar==0.9.1
 django-rest-swagger==2.2.0
 sphinx_rtd_theme==0.4.2
 # local shell testing
-websocket-client==0.48.0
+websocket-client==0.53.0
 django-silk==3.0.1
 pre-commit==1.10.3
 mypy==0.620
