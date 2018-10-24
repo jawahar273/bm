@@ -17,5 +17,6 @@ sphinx_rtd_theme==0.4.2
 # local shell testing
 websocket-client==0.53.0
 django-silk==3.0.1
-pre-commit==1.11.1
 mypy==0.641
+pre-commit==1.12.0
+
