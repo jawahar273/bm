@@ -37,7 +37,7 @@ psycopg2-binary==2.7.7
 awesome-slugify==1.6.5
 
 # Time zones support
-pytz==2018.9
+pytz==2019.1
 
 # Redis support
 redis>=2.10.5
