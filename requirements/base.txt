@@ -69,4 +69,4 @@ requests==2.21.0
 
 channels_redis==2.3.3
 channels==2.1.7
-WeasyPrint==45
+WeasyPrint==47
