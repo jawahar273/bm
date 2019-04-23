@@ -13,7 +13,6 @@ whitenoise==4.1.2
 
 
 # Forms
-
 django-crispy-forms==1.7.2
 
 # Models
@@ -37,7 +36,7 @@ psycopg2-binary==2.8.2
 awesome-slugify==1.6.5
 
 # Time zones support
-pytz==2018.9
+pytz==2019.1
 
 # Redis support
 redis>=2.10.5
@@ -69,4 +68,4 @@ requests==2.21.0
 
 channels==2.2.0
 channels_redis==2.4.0
-WeasyPrint==45
+WeasyPrint==47
