@@ -16,6 +16,6 @@ django-rest-swagger==2.2.0
 sphinx_rtd_theme==0.4.3
 # local shell testing
 websocket-client==0.56.0
-django-silk==3.0.1
+django-silk==3.0.2
 pre-commit==1.15.2
 mypy==0.701
