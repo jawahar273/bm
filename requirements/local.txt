@@ -2,9 +2,9 @@
 -r base.txt
 coverage==4.5.3
 django-coverage-plugin==1.6.0
+Werkzeug==0.15.4
 Sphinx==2.1.1
 django-extensions==2.1.9
-Werkzeug==0.15.2
 django-test-plus==1.1.1
 factory-boy==2.12.0
 django-debug-toolbar==1.11
