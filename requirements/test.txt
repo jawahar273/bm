@@ -2,7 +2,7 @@
 -r base.txt
 
 django-test-plus==1.3.1
-coverage==4.5.4
+coverage==5.1
 flake8==3.7.8 # pyup: != 2.6.0
 factory-boy==2.12.0
 django-coverage-plugin==1.6.0
