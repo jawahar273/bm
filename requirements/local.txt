@@ -14,7 +14,7 @@ ipdb==0.12.2
 pytest-django==3.5.1
 pytest-sugar==0.9.2
 django-rest-swagger==2.2.0
-sphinx_rtd_theme==0.4.3
+sphinx_rtd_theme==0.5.0
 # local shell testing
 websocket-client==0.56.0
 django-silk==3.0.2
